@@ -1,9 +1,7 @@
 <template>
     <div class="main">
         <article class="desc">
-            <h2>
-                Wsparcie dla szpitali, placówek medycznych oraz innych placówek
-            </h2>
+            <h2>Wsparcie dla szpitali, placówek medycznych oraz innych placówek</h2>
             <p>
                 Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej
                 placowki lub wolontariusza w oparciu o realne zapotrzebowanie.
@@ -21,9 +19,7 @@
                         Zgłoś swoją chęć pomocy lorem ipsum olor sit amet
                         consectetur adipiscing elit
                     </p>
-                    <v-btn color="primary" href="/pomagajacy">
-                        Zgłoś pomoc
-                    </v-btn>
+                    <v-btn color="primary" to="/pomagajacy">Zgłoś pomoc</v-btn>
                 </div>
                 <voice-icon />
             </article>
@@ -34,9 +30,7 @@
                         Zgłoś swoje zapotrzebowanie na niezbędne produkty typu
                         maski, rękawiczki, kombinezony
                     </p>
-                    <v-btn color="primary" href="/potrzebujacy">
-                        Zgłoś potrzebę
-                    </v-btn>
+                    <v-btn color="primary" to="/potrzebujacy">Zgłoś potrzebę</v-btn>
                 </div>
                 <heart-icon />
             </article>
@@ -66,8 +60,6 @@ export default class HelloWorld extends Vue {}
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
-    margin: 4rem auto;
-    max-width: 80rem;
     grid-gap: 3rem;
     padding: 2rem;
 
