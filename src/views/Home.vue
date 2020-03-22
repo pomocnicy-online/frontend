@@ -105,8 +105,12 @@ export default class HelloWorld extends Vue {}
 
 .action-item {
     display: grid;
-    grid-template-columns: 20rem 2fr;
+    grid-template-columns: 15rem 2fr;
     grid-gap: 1rem;
+
+    @include at(medium) {
+        grid-template-columns: 20rem 2fr;
+    }
 
     h2 {
         font-size: 16px;
