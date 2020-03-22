@@ -21,7 +21,7 @@
                         Zgłoś swoją chęć pomocy lorem ipsum olor sit amet
                         consectetur adipiscing elit
                     </p>
-                    <v-btn color="primary" href="/pomagajacy">
+                    <v-btn color="primary" to="/pomagajacy">
                         Zgłoś pomoc
                     </v-btn>
                 </div>
@@ -34,7 +34,7 @@
                         Zgłoś swoje zapotrzebowanie na niezbędne produkty typu
                         maski, rękawiczki, kombinezony
                     </p>
-                    <v-btn color="primary" href="/potrzebujacy">
+                    <v-btn color="primary" to="/potrzebujacy/1">
                         Zgłoś potrzebę
                     </v-btn>
                 </div>
