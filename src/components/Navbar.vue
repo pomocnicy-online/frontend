@@ -1,6 +1,6 @@
 <template>
     <div class="nav">
-        <v-app-bar color="transparent" :elevation="0" light class="nav__bar">
+        <v-app-bar color="transparent" elevation="0" light class="nav__bar">
             <v-toolbar-title>
                 <router-link to="/" class="nav__title">HelMed</router-link>
             </v-toolbar-title>
@@ -23,7 +23,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class HelloWorld extends Vue {
-    private readonly navigationList: any = [
+    private readonly navigationList = [
         {
             name: "Potrzebujący",
             route: "/potrzebujacy"
