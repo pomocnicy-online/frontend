@@ -1,3 +1,4 @@
+import "@mdi/font/css/materialdesignicons.css";
 import Vue from "vue";
 import Vuetify from "vuetify";
 
@@ -10,7 +11,8 @@ const opts = {
     theme: {
         themes: {
             light: {
-                primary: colors.cyan.darken1
+                primary: colors.cyan.darken1,
+                accent: colors.grey.base
             }
         }
     }
