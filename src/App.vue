@@ -11,12 +11,15 @@
 </template>
 
 <style lang="scss">
+:root {
+    --text-primary: #4a577b;
+    --screen-medium: 578px;
+}
+
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+    @import url("https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,600&display=swap");
+    font-family: "IBM Plex Sans", sans-serif;
+    color: var(--text-primary);
 }
 
 #nav {
