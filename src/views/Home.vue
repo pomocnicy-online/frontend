@@ -21,9 +21,7 @@
                         Zgłoś swoją chęć pomocy lorem ipsum olor sit amet
                         consectetur adipiscing elit
                     </p>
-                    <v-btn color="primary" to="/pomagajacy">
-                        Zgłoś pomoc
-                    </v-btn>
+                    <v-btn color="primary" to="/pomagajacy">Zgłoś pomoc</v-btn>
                 </div>
                 <voice-icon />
             </article>
@@ -66,8 +64,6 @@ export default class HelloWorld extends Vue {}
     display: grid;
     grid-template-columns: 1fr;
     justify-items: center;
-    margin: 4rem auto;
-    max-width: 80rem;
     grid-gap: 3rem;
     padding: 2rem;
 

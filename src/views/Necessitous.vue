@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <article>
-            <heart-icon />
+            <voice-icon />
             <h2>
                 Potrzebuję pomocy
             </h2>
@@ -14,19 +14,19 @@
             </div>
         </article>
 
-        <contact-form />
+        <contact-form class="contact-form" />
     </div>
 </template>
 
 <script>
-import heartIcon from "@/components/icons/heart";
+import voiceIcon from "@/components/icons/heart";
 import ContactForm from "@/components/ContactForm";
 
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({
     components: {
-        heartIcon,
+        voiceIcon,
         ContactForm
     }
 })
@@ -37,8 +37,25 @@ export default class Necessitous extends Vue {}
 @import "@/common/styles.scss";
 
 .main {
-    padding: 2rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    padding: 2rem;
+
+    @include at(medium) {
+        margin-top: 8rem;
+        grid-template-columns: 1fr 442px;
+    }
+
+    h2 {
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 31px;
+    }
+
+    p {
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 30px;
+    }
 }
 </style>
