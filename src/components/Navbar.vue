@@ -1,7 +1,9 @@
 <template>
     <div class="nav">
-        <v-app-bar color="transparent" :elevation="0" light>
-            <v-toolbar-title class="nav__title">HelMed</v-toolbar-title>
+        <v-app-bar color="transparent" :elevation="0" light class="nav__bar">
+            <v-toolbar-title>
+                <router-link to="/" class="nav__title">HelMed</router-link>
+            </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -24,19 +26,23 @@ export default class HelloWorld extends Vue {
     private readonly navigationList: any = [
         {
             name: "Potrzebujący",
-            route: "/b"
+            route: "/potrzebujacy"
         },
         {
             name: "Pomagający",
-            route: "/a"
+            route: "/pomagajacy"
+        },
+        {
+            name: "Materiały",
+            route: "/materialy"
         },
         {
             name: "Instrukcja szycia",
-            route: "/d"
+            route: "/instrukcja"
         },
         {
             name: "Kontakt",
-            route: "/e"
+            route: "/kontakt"
         }
     ];
 }
@@ -44,14 +50,18 @@ export default class HelloWorld extends Vue {
 
 <style lang="scss" scoped>
 .nav {
-    padding-top: 3.2rem;
-    padding-bottom: 3.2rem;
+    padding: 2rem;
+    &__bar {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
     &__link {
-        color: #4a577b;
+        color: var(--text-primary);
         padding-right: 3.4rem;
     }
     &__title {
-        color: #4a577b;
+        color: var(--text-primary);
+        font-weight: 600;
     }
 }
 </style>
