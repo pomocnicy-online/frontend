@@ -91,7 +91,6 @@ export default class HelloWorld extends Vue {}
 
 .desc {
     max-width: 31rem;
-    // margin-right: 169px;
 
     h2 {
         margin-bottom: 2rem;
