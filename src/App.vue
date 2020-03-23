@@ -1,16 +1,23 @@
 <template>
-    <v-app>
-        <div id="app">
-            <div id="nav">
-                <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link>
-            </div>
-            <router-view />
-        </div>
+    <v-app class="app">
+        <Navbar />
+        <router-view />
     </v-app>
 </template>
 
-<style lang="scss">
+<script>
+// @ is an alias to /src
+import Navbar from "@/components/Navbar.vue";
+
+export default {
+    name: "App",
+    components: {
+        Navbar
+    }
+};
+</script>
+
+<style>
 :root {
     --text-primary: #4a577b;
     --screen-medium: 578px;
@@ -22,16 +29,13 @@
     color: var(--text-primary);
 }
 
-#nav {
-    padding: 30px;
+.app {
+    margin: 1rem auto;
+    max-width: 80rem;
+}
 
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
-    }
+a,
+u {
+    text-decoration: none;
 }
 </style>

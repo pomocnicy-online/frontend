@@ -18,6 +18,7 @@
     "vuetify": "^2.2.18"
   },
   "devDependencies": {
+    "@mdi/font": "^5.0.45",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
