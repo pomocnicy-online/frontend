@@ -1,21 +1,24 @@
 <template>
-    <div class="main">
-        <article>
+    <div class="step-main">
+        <article class="step-desc">
             <voice-icon />
             <h2>Wybierz zapotrzebowanie</h2>
             <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium
+                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby
+                podać w opisie jak najwięcej szczegółowych informacji zeby
+                wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
             </p>
             <div>Picture placeholder</div>
         </article>
         <section>
             <v-container>
-                <header class="header">
-                    <h2>Szczegóły zapotrzebowania</h2>
-                </header>
+                <step-header
+                    name="Szczegóły zapotrzebowania"
+                    current="2"
+                    outOf="3"
+                />
                 <!-- render list of supplies here @seba -->
-                <v-row>
+                <v-row class="step-nav">
                     <v-btn
                         text
                         color="primary"
@@ -23,9 +26,7 @@
                         class="go-next-btn"
                         >Wstecz</v-btn
                     >
-                    <v-btn color="primary" @click="onNext" class="go-next-btn"
-                        >Przejdź dalej</v-btn
-                    >
+                    <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
                 </v-row>
             </v-container>
         </section>
@@ -33,14 +34,16 @@
 </template>
 
 <script lang="ts">
-import voiceIcon from "@/components/icons/heart.vue";
+import voiceIcon from "@/components/icons/voice.vue";
+import StepHeader from "@/components/StepHeader.vue";
 
 import { Component, Vue, Emit } from "vue-property-decorator";
 import { Step } from "./Step";
 
 @Component({
     components: {
-        voiceIcon
+        voiceIcon,
+        StepHeader
     }
 })
 export default class NecessitousDemand extends Vue {
@@ -65,34 +68,7 @@ export default class NecessitousDemand extends Vue {
 <style lang="scss" scoped>
 @import "@/common/styles.scss";
 
-.main {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 2rem;
-
-    @include at(medium) {
-        margin-top: 8rem;
-        grid-template-columns: 1fr 442px;
-    }
-
-    h2 {
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 31px;
-    }
-
-    p {
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-    }
-}
-
-.header {
-    h2 {
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 30px;
-    }
-}
+@include step-main;
+@include step-nav;
+@include step-desc;
 </style>
