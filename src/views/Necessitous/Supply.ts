@@ -13,12 +13,6 @@ export namespace Supply {
         Reusable = "reusable"
     }
 
-    export interface Mask {
-        style: Style;
-        type: UsageType;
-        count: number;
-    }
-
     export enum Style {
         Male = "M",
         Female = "F",
@@ -40,7 +34,15 @@ export namespace Supply {
         Foil = "Foil"
     }
 
+    export interface Mask {
+        __brand: "mask";
+        style: Style;
+        type: UsageType;
+        count: number;
+    }
+
     export interface Glove {
+        __brand: "glove";
         type: UsageType;
         size: Size;
         count: number;
@@ -48,32 +50,38 @@ export namespace Supply {
     }
 
     export interface Suit {
+        __brand: "suit";
         type: UsageType;
         size: Size;
         count: number;
     }
 
     export interface Disinfectant {
+        __brand: "disinfectant";
         type: string;
         count: number;
     }
 
     export interface Cleaning {
+        __brand: "cleaning";
         type: string;
         count: number;
     }
 
     export interface Comestible {
+        __brand: "comestible";
         type: string;
         count: number;
     }
 
     export interface SewingMaterial {
+        __brand: "sewingMaterial";
         type: string;
         count: number;
     }
 
     export interface PsychologicalSupport {
+        __brand: "psychologicalSupport";
         type: string;
         count: number;
     }
