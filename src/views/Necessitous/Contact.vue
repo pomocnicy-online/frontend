@@ -36,7 +36,7 @@ import voiceIcon from "@/components/icons/voice.vue";
 import ContactForm from "@/components/ContactForm.vue";
 import StepHeader from "@/components/StepHeader.vue";
 
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import { Step } from "./Step";
 
 @Component({
@@ -55,6 +55,16 @@ export default class NecessitousContact extends Vue {
         email: "",
         phone: ""
     };
+
+    @Prop()
+    steps!: Step.Dict;
+
+    @Watch("steps", { immediate: true })
+    onStepsChange(steps: Partial<Step.Dict>) {
+        if (steps.contact) {
+            this.contact = steps.contact.data as Step.ContactData;
+        }
+    }
 
     isValid = true;
 

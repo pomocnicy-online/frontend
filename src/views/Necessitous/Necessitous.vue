@@ -14,7 +14,7 @@ import { Necessitous } from "../Necessitious";
 
 @Component
 export default class NecessitousView extends Vue {
-    steps = {} as Step.Dict;
+    steps = {} as Partial<Step.Dict>;
 
     onNextStep(step: Step) {
         this.steps[step.type] = step;
