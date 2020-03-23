@@ -2,35 +2,37 @@
     <div class="main">
         <article>
             <voice-icon />
-            <h2>
-                Potrzebuję pomocy
-            </h2>
+            <h2>Wybierz zapotrzebowanie</h2>
             <p>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                 accusantium
             </p>
-            <div>
-                Picture placeholder
-            </div>
+            <div>Picture placeholder</div>
         </article>
-
-        <contact-form class="contact-form" />
     </div>
 </template>
 
-<script>
-import voiceIcon from "@/components/icons/heart";
-import ContactForm from "@/components/ContactForm";
+<script lang="ts">
+import voiceIcon from "@/components/icons/heart.vue";
 
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Emit } from "vue-property-decorator";
+import { Step } from "./Step";
 
 @Component({
     components: {
-        voiceIcon,
-        ContactForm
+        voiceIcon
     }
 })
-export default class Necessitous extends Vue {}
+export default class NecessitousDemand extends Vue {
+    demand: Step.DemandData = {};
+
+    isValid = true;
+
+    @Emit("nextStep")
+    onSubmit(): Step.Demand {
+        return Step.Demand({ ...this.demand });
+    }
+}
 </script>
 
 <style lang="scss" scoped>
