@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-namespace */
 export type Step = Step.Contact | Step.Demand;
-
 export namespace Step {
     export enum Paths {
         Contact = "1",
