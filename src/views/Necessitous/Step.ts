@@ -7,8 +7,7 @@ export namespace Step {
     export enum Paths {
         Contact = "1",
         Demand = "2",
-        Summary = "3",
-        ThankYou = "4"
+        Summary = "3"
     }
 
     export enum Steps {
@@ -23,8 +22,7 @@ export namespace Step {
                 return Paths.Demand;
             case Steps.Demand:
                 return Paths.Summary;
-            case Steps.Summary:
-                return Paths.ThankYou;
+
             default:
                 throw new Error("Impossible state");
         }

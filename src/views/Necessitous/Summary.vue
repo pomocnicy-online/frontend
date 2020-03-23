@@ -1,11 +1,12 @@
 <template>
-    <div class="main">
-        <article>
+    <div class="step-main">
+        <article class="step-desc">
             <voice-icon />
             <h2>Twoje podsumowanie</h2>
             <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium
+                Już prawie kończymy! Sprawdź tylko czy Twoje zgłoszenie się
+                zgadza. Pamietaj, że stawka jest wysoka, wspólnie ratujemy
+                zdrowie i życie ludzkie. To dobrze, że prosisz o pomoc!
             </p>
             <div>Picture placeholder</div>
         </article>
@@ -30,7 +31,7 @@
                         filled
                     ></v-text-field>
                 </v-row>
-                <v-row>
+                <v-row class="step-nav">
                     <v-btn
                         text
                         color="primary"
@@ -39,7 +40,7 @@
                         >Wstecz</v-btn
                     >
                     <v-btn color="primary" @click="onNext" class="go-next-btn"
-                        >Potiwerdź Zgłoszenie</v-btn
+                        >Potwierdź Zgłoszenie</v-btn
                     >
                 </v-row>
             </v-container>
@@ -48,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import voiceIcon from "@/components/icons/heart.vue";
+import voiceIcon from "@/components/icons/voice.vue";
 
 import { Component, Vue, Emit, Prop } from "vue-property-decorator";
 import { Step } from "./Step";
@@ -83,26 +84,7 @@ export default class NecessitousSummary extends Vue {
 <style lang="scss" scoped>
 @import "@/common/styles.scss";
 
-.main {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 2rem;
-
-    @include at(medium) {
-        margin-top: 8rem;
-        grid-template-columns: 1fr 442px;
-    }
-
-    h2 {
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 31px;
-    }
-
-    p {
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-    }
-}
+@include step-main;
+@include step-nav;
+@include step-desc;
 </style>

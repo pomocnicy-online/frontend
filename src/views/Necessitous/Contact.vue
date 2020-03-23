@@ -1,39 +1,49 @@
 <template>
-    <div class="main">
-        <article>
+    <div class="step-main">
+        <article class="step-desc">
             <voice-icon />
             <h2>Potrzebuję pomocy</h2>
             <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium
+                Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz
+                pomocy indywidualnie, zostaw swoje dane kontaktowe, żeby
+                wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane
+                osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej
             </p>
             <div>Picture placeholder</div>
         </article>
 
-        <contact-form
-            class="contact-form"
-            :name.sync="contact.name"
-            :addressCity.sync="contact.city"
-            :addressStreet.sync="contact.street"
-            :addressNumber.sync="contact.number"
-            :email.sync="contact.email"
-            :phone.sync="contact.phone"
-            @submit="onSubmit"
-        />
+        <section class="contact-form">
+            <step-header
+                name="Wprowadź dane kontaktowe"
+                current="1"
+                outOf="3"
+            />
+            <contact-form
+                :name.sync="contact.name"
+                :addressCity.sync="contact.city"
+                :addressStreet.sync="contact.street"
+                :addressNumber.sync="contact.number"
+                :email.sync="contact.email"
+                :phone.sync="contact.phone"
+                @submit="onSubmit"
+            />
+        </section>
     </div>
 </template>
 
 <script lang="ts">
-import voiceIcon from "@/components/icons/heart.vue";
+import voiceIcon from "@/components/icons/voice.vue";
 import ContactForm from "@/components/ContactForm.vue";
+import StepHeader from "@/components/StepHeader.vue";
 
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import { Step } from "./Step";
 
 @Component({
     components: {
         voiceIcon,
-        ContactForm
+        ContactForm,
+        StepHeader
     }
 })
 export default class NecessitousContact extends Vue {
@@ -46,6 +56,16 @@ export default class NecessitousContact extends Vue {
         phone: ""
     };
 
+    @Prop()
+    steps!: Step.Dict;
+
+    @Watch("steps", { immediate: true })
+    onStepsChange(steps: Partial<Step.Dict>) {
+        if (steps.contact) {
+            this.contact = steps.contact.data as Step.ContactData;
+        }
+    }
+
     isValid = true;
 
     onSubmit() {
@@ -57,26 +77,10 @@ export default class NecessitousContact extends Vue {
 <style lang="scss" scoped>
 @import "@/common/styles.scss";
 
-.main {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding: 2rem;
-
-    @include at(medium) {
-        margin-top: 8rem;
-        grid-template-columns: 1fr 442px;
-    }
-
-    h2 {
-        font-weight: 600;
-        font-size: 24px;
-        line-height: 31px;
-    }
-
-    p {
-        font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-    }
+.contact-form {
+    width: 100%;
 }
+
+@include step-main;
+@include step-desc;
 </style>

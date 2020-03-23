@@ -14,3 +14,46 @@ $breakpoints: (
         @warn "No such breakpoint";
     }
 }
+
+@mixin step-main {
+    .step-main {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 10rem;
+        padding: 2rem;
+
+        @include at(medium) {
+            margin-top: 10rem;
+            grid-template-columns: 1fr 442px;
+        }
+    }
+}
+
+@mixin step-nav {
+    .step-nav {
+        display: flex;
+        justify-content: space-between;
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
+@mixin step-desc {
+    .step-desc {
+        h2 {
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 31px;
+            margin-bottom: 14px;
+            margin-top: 31px;
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 30px;
+        }
+    }
+}
