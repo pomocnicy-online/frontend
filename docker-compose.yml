@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+  frontend: 
+    container_name: mask-app-frontend
+    networks:
+      - frontend
+
+  nginx:
+    container_name: mask-app-nginx
+    build:
+      context: ./nginx
+    ports:
+      - 8080:80
+      - '8081:8081'
+    restart: always
+    depends_on:
+      - frontend
+    networks:
+      - frontend
+
+networks:
+  frontend:
