@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules

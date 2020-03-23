@@ -1,5 +1,18 @@
 # mask-app
 
+### Run development server
+```
+make build-dev
+make dev
+```
+
+### Run production
+```
+make build-prod
+make prod
+```
+
+
 ## Project setup
 ```
 npm install
