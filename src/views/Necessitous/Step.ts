@@ -1,5 +1,9 @@
-export type Step = Step.Contact | Step.Demand;
+import { Supply } from "../Supply";
+
+export type Step = Step.Contact | Step.Demand | Step.Summary;
 export namespace Step {
+    export type Dict = Record<Step["type"], Step>;
+
     export enum Paths {
         Contact = "1",
         Demand = "2",
@@ -37,17 +41,30 @@ export namespace Step {
         }
     };
 
+    export const Summary = (data: SummaryData) => ({
+        type: Steps.Summary,
+        data,
+        path: Paths.Summary
+    });
+    export type Summary = ReturnType<typeof Summary>;
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    export interface SummaryData {}
+
     export const Demand = (data: DemandData) => ({
         type: Steps.Demand,
         data,
         path: Paths.Demand
     });
-
     export type Demand = ReturnType<typeof Demand>;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     export interface DemandData {
-        // ??
+        supplies: SupplyDemand[];
+    }
+
+    export interface SupplyDemand {
+        supply: Supply[];
+        desciption?: string;
     }
 
     export const Contact = (data: ContactData) => ({

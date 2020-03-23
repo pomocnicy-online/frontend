@@ -2,19 +2,34 @@
     <div class="main">
         <article>
             <voice-icon />
-            <h2>Wybierz zapotrzebowanie</h2>
+            <h2>Twoje podsumowanie</h2>
             <p>
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                 accusantium
             </p>
             <div>Picture placeholder</div>
         </article>
-        <section>
+        <div>
             <v-container>
-                <header class="header">
-                    <h2>Szczegóły zapotrzebowania</h2>
-                </header>
-                <!-- render list of supplies here @seba -->
+                <article>
+                    <h2>Twoja placówka czekająca na pomoc:</h2>
+                    <address>
+                        <!-- todo: address from steps data -->
+                    </address>
+                </article>
+                <article>
+                    <h2>Produkty, które zdecydowałeś się przekazać:</h2>
+                    <ul>
+                        <!-- todo: compute supply items count and render here -->
+                    </ul>
+                </article>
+                <v-row>
+                    <v-text-field
+                        v-model="comment"
+                        label="Komentarz"
+                        filled
+                    ></v-text-field>
+                </v-row>
                 <v-row>
                     <v-btn
                         text
@@ -24,41 +39,44 @@
                         >Wstecz</v-btn
                     >
                     <v-btn color="primary" @click="onNext" class="go-next-btn"
-                        >Przejdź dalej</v-btn
+                        >Potiwerdź Zgłoszenie</v-btn
                     >
                 </v-row>
             </v-container>
-        </section>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import voiceIcon from "@/components/icons/heart.vue";
 
-import { Component, Vue, Emit } from "vue-property-decorator";
+import { Component, Vue, Emit, Prop } from "vue-property-decorator";
 import { Step } from "./Step";
+import { Necessitous } from "../Necessitious";
 
 @Component({
     components: {
         voiceIcon
     }
 })
-export default class NecessitousDemand extends Vue {
-    demand: Step.DemandData = {
-        supplies: []
-    };
+export default class NecessitousSummary extends Vue {
+    @Prop()
+    steps!: Step.Dict;
 
-    @Emit("nextStep")
-    onNext(): Step.Demand {
-        return this.step();
+    summary: Step.SummaryData = {};
+    comment = "";
+
+    @Emit("sendData")
+    onNext(): Necessitous.Request {
+        return Necessitous.createRequest({ ...this.steps });
     }
 
     @Emit("prevStep")
-    onPrev(): Step.Demand {
+    onPrev(): Step.Summary {
         return this.step();
     }
 
-    private step = () => Step.Demand({ ...this.demand });
+    private step = () => Step.Summary({ ...this.summary });
 }
 </script>
 
@@ -83,14 +101,6 @@ export default class NecessitousDemand extends Vue {
 
     p {
         font-weight: 300;
-        font-size: 16px;
-        line-height: 30px;
-    }
-}
-
-.header {
-    h2 {
-        font-weight: bold;
         font-size: 16px;
         line-height: 30px;
     }

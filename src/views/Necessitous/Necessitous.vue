@@ -1,30 +1,34 @@
 <template>
-    <router-view @nextStep="onNextStep" @prevStep="onPrevStep" @sendData="onSendData"></router-view>
+    <router-view
+        @nextStep="onNextStep"
+        @prevStep="onPrevStep"
+        @sendData="onSendData"
+        :steps="steps"
+    ></router-view>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { Step } from "./Step";
+import { Necessitous } from "../Necessitious";
 
 @Component
-export default class Necessitous extends Vue {
-    steps = {} as Record<Step["type"], Step>;
+export default class NecessitousView extends Vue {
+    steps = {} as Step.Dict;
 
     onNextStep(step: Step) {
-        this.setStep(step);
+        this.steps[step.type] = step;
         this.$router.push({ path: Step.nextPath(step) });
     }
 
     onPrevStep(step: Step) {
-        this.setStep(step);
         this.$router.push({ path: Step.prevPath(step) });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onSendData() {}
-
-    private setStep(step: Step) {
-        this.steps[step.type] = step;
+    onSendData(data: Necessitous.Request) {
+        Necessitous.send(data).then(() => {
+            //  redirect to home, show thank you modal
+        });
     }
 }
 </script>
