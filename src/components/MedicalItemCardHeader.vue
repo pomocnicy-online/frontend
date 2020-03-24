@@ -23,9 +23,8 @@ export default class MedicalItemCardHeader extends Vue {
 
 <style lang="scss" scoped>
 .medical-card-header {
-    width: 25rem;
     &__title-container {
-        background-color: var(--input-background);
+        background-color: var(--header-card-background);
         height: 5rem;
     }
     &__title {

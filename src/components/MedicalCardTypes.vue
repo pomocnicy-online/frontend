@@ -67,10 +67,6 @@ export default class MedicalCardTypes extends Vue {
         { title: "Winylowe" },
         { title: "Foliowe" }
     ];
-
-    private isInput(title: string) {
-        return !title ? false : true;
-    }
 }
 </script>
 
