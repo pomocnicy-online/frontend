@@ -7,11 +7,13 @@
 
             <v-spacer></v-spacer>
 
-            <v-toolbar-title v-for="item in navigationList" :key="item.name" class="body-1">
+            <v-toolbar-title
+                v-for="item in navigationList"
+                :key="item.name"
+                class="body-1"
+            >
                 <router-link :to="item.route" class="nav__link">
-                    {{
-                    item.name
-                    }}
+                    {{ item.name }}
                 </router-link>
             </v-toolbar-title>
         </v-app-bar>
@@ -26,7 +28,7 @@ export default class HelloWorld extends Vue {
     private readonly navigationList = [
         {
             name: "Potrzebujący",
-            route: "/potrzebujacy"
+            route: "/potrzebujacy/1"
         },
         {
             name: "Pomagający",
