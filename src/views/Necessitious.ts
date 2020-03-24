@@ -3,6 +3,7 @@ import * as O from "fp-ts/es6/Option";
 import * as TE from "fp-ts/es6/TaskEither";
 import * as R from "fp-ts/es6/Record";
 import { pipe } from "fp-ts/es6/pipeable";
+import { flow } from "fp-ts/es6/function";
 
 import { Step } from "./Necessitous/Step";
 import { Supply } from "./Supply";
@@ -13,7 +14,8 @@ export type Necessitous = {
 }[keyof Necessitous.Request];
 
 export namespace Necessitous {
-    const path = "???";
+    // TODO: use URL builder
+    const path = "/api/requests";
 
     export type Request = Partial<{
         medicalCentre: Request.MedicalCentre;
@@ -134,45 +136,47 @@ export namespace Necessitous {
             () =>
                 fetch(path, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify(req)
-                }).then(res => res.json()),
+                })
+                    .then(res => res.json())
+                    .catch(x => {
+                        console.log("promise x");
+                        return x;
+                    }),
             error
         )();
 
-    export const createRequest = (partialSteps: Partial<Step.Dict>): E.Either<Error, Request> =>
-        pipe(
-            partialSteps,
-            E.fromPredicate(isNotPartial, error),
-            E.map(steps => {
-                // TODO: narrow the types, use union builder
-                const contact = steps.contact.data as Step.ContactData;
-                const { supplies } = steps.demand.data as Step.DemandData;
-                const summary = steps.summary.data as Step.SummaryData;
+    export const createRequest = flow(
+        E.fromPredicate(isNotPartial, error),
+        E.map(steps => {
+            // TODO: narrow the types, use union builder
+            const contact = steps.contact.data as Step.ContactData;
+            const { supplies } = steps.demand.data as Step.DemandData;
+            const summary = steps.summary.data as Step.SummaryData;
 
-                const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
-                    medicalCentre: O.some(Request.MedicalCentre(contact)),
-                    maskRequest: pipe(supplies.mask, O.fromNullable, O.map(Request.Mask)),
-                    gloveRequest: pipe(supplies.glove, O.fromNullable, O.map(Request.Glove)),
-                    groceryRequest: pipe(supplies.grocery, O.fromNullable, O.map(Request.Grocery)),
-                    disinfectionMeasureRequest: pipe(
-                        supplies.disinfectant,
-                        O.fromNullable,
-                        O.map(Request.Disinfectant)
-                    ),
-                    suitRequest: pipe(supplies.suit, O.fromNullable, O.map(Request.Suite)),
-                    otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.map(Request.Cleaning)),
-                    psychologicalSupportRequest: pipe(
-                        supplies.psychologicalSupport,
-                        O.fromNullable,
-                        O.map(Request.PsychologicalSupport)
-                    ),
-                    sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.map(Request.SewingSupplies)),
-                    printRequest: pipe(supplies.print, O.fromNullable, O.map(Request.Print)),
-                    otherRequest: pipe(summary.comment, O.fromNullable, O.map(Request.Other))
-                };
+            const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
+                medicalCentre: O.some(Request.MedicalCentre(contact)),
+                maskRequest: pipe(supplies.mask, O.fromNullable, O.map(Request.Mask)),
+                gloveRequest: pipe(supplies.glove, O.fromNullable, O.map(Request.Glove)),
+                groceryRequest: pipe(supplies.grocery, O.fromNullable, O.map(Request.Grocery)),
+                disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.map(Request.Disinfectant)),
+                suitRequest: pipe(supplies.suit, O.fromNullable, O.map(Request.Suite)),
+                otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.map(Request.Cleaning)),
+                psychologicalSupportRequest: pipe(
+                    supplies.psychologicalSupport,
+                    O.fromNullable,
+                    O.map(Request.PsychologicalSupport)
+                ),
+                sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.map(Request.SewingSupplies)),
+                printRequest: pipe(supplies.print, O.fromNullable, O.map(Request.Print)),
+                otherRequest: pipe(summary.comment, O.fromNullable, O.map(Request.Other))
+            };
 
-                return request;
-            }),
-            E.map(R.compact)
-        );
+            return request;
+        }),
+        E.map(R.compact)
+    );
 }
