@@ -46,8 +46,9 @@ export namespace Step {
     });
     export type Summary = ReturnType<typeof Summary>;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    export interface SummaryData {}
+    export interface SummaryData {
+        comment?: string;
+    }
 
     export const Demand = (data: DemandData) => ({
         type: Steps.Demand,
@@ -56,13 +57,21 @@ export namespace Step {
     });
     export type Demand = ReturnType<typeof Demand>;
 
-    export interface DemandData {
-        supplies: SupplyDemand[];
-    }
+    type DiscriminateUnion<
+        U,
+        K extends keyof U,
+        V extends U[K]
+    > = U extends Record<K, V> ? U : never;
 
-    export interface SupplyDemand {
-        supply: Supply[];
-        desciption?: string;
+    export type Supplies = {
+        [T in Supply["__brand"]]: {
+            positions: DiscriminateUnion<Supply, "__brand", T>[];
+            description?: string;
+        };
+    };
+
+    export interface DemandData {
+        supplies: Partial<Supplies>;
     }
 
     export const Contact = (data: ContactData) => ({
@@ -76,7 +85,8 @@ export namespace Step {
         name: string;
         city: string;
         street: string;
-        number: string;
+        building: string;
+        apartment: string;
         email: string;
         phone: string;
     }

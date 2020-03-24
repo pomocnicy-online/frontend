@@ -62,15 +62,14 @@ import { Necessitous } from "../Necessitious";
 })
 export default class NecessitousSummary extends Vue {
     @Prop()
-    steps!: Step.Dict;
+    steps!: Partial<Step.Dict>;
 
     summary: Step.SummaryData = {};
     comment = "";
 
     @Emit("sendData")
-    onNext(): Necessitous.Request {
-        return Necessitous.createRequest({ ...this.steps });
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onNext() {}
 
     @Emit("prevStep")
     onPrev(): Step.Summary {

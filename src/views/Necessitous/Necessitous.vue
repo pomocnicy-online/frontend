@@ -8,6 +8,8 @@
 </template>
 
 <script lang="ts">
+import * as TE from "fp-ts/es6/TaskEither";
+import { pipe } from "fp-ts/es6/pipeable";
 import { Component, Vue } from "vue-property-decorator";
 import { Step } from "./Step";
 import { Necessitous } from "../Necessitious";
@@ -25,9 +27,14 @@ export default class NecessitousView extends Vue {
         this.$router.push({ path: Step.prevPath(step) });
     }
 
-    onSendData(data: Necessitous.Request) {
-        Necessitous.send(data).then(() => {
-            //  redirect to home, show thank you modal
+    onSendData() {
+        pipe(
+            { ...this.steps },
+            Necessitous.createRequest,
+            TE.fromEither,
+            TE.chain(Necessitous.send)
+        )().then(() => {
+            /** side effect: navigate to thank you page */
         });
     }
 }
