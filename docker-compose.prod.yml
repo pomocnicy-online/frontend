@@ -9,3 +9,4 @@ services:
   nginx:
     ports:
       - 80:80
+      - 5011:5011
