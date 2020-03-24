@@ -31,7 +31,7 @@ export default {
 }
 
 .app {
-    margin: 1rem auto;
+    margin: 0 auto;
     max-width: 80rem;
 }
 
