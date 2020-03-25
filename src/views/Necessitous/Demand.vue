@@ -4,28 +4,17 @@
             <voice-icon />
             <h2>Wybierz zapotrzebowanie</h2>
             <p>
-                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby
-                podać w opisie jak najwięcej szczegółowych informacji zeby
-                wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
+                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby podać w opisie jak najwięcej szczegółowych
+                informacji zeby wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
             </p>
             <div>Picture placeholder</div>
         </article>
         <section>
             <v-container>
-                <step-header
-                    name="Szczegóły zapotrzebowania"
-                    current="2"
-                    outOf="3"
-                />
+                <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
                 <!-- render list of supplies here @seba -->
                 <v-row class="step-nav">
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="onPrev"
-                        class="go-next-btn"
-                        >Wstecz</v-btn
-                    >
+                    <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                     <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
                 </v-row>
             </v-container>

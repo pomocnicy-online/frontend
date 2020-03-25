@@ -4,20 +4,15 @@
             <voice-icon />
             <h2>Potrzebuję pomocy</h2>
             <p>
-                Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz
-                pomocy indywidualnie, zostaw swoje dane kontaktowe, żeby
-                wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane
-                osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej
+                Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz pomocy indywidualnie, zostaw swoje dane
+                kontaktowe, żeby wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane osobowe są podawane
+                dobrowolnie na potrzeby akcji charytatywnej
             </p>
             <div>Picture placeholder</div>
         </article>
 
         <section class="contact-form">
-            <step-header
-                name="Wprowadź dane kontaktowe"
-                current="1"
-                outOf="3"
-            />
+            <step-header name="Wprowadź dane kontaktowe" current="1" outOf="3" />
             <contact-form
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"

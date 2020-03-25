@@ -5,6 +5,7 @@
 <script lang="ts">
 import * as TE from "fp-ts/es6/TaskEither";
 import { pipe } from "fp-ts/es6/pipeable";
+import * as O from "fp-ts/es6/Option";
 import { Component, Vue } from "vue-property-decorator";
 import { Step } from "./Step";
 import { Necessitous } from "../Necessitious";
@@ -16,14 +17,19 @@ export default class NecessitousView extends Vue {
 
     onNextStep(step: Step) {
         this.steps[step.type] = step;
-        this.$router.push({ path: Step.nextPath(step) });
+
+        const path = pipe(Step.nextPath(step), O.toUndefined);
+        path && this.$router.push({ path });
     }
 
     onPrevStep(step: Step) {
-        this.$router.push({ path: Step.prevPath(step) });
+        const path = pipe(Step.prevPath(step), O.toUndefined);
+        path && this.$router.push({ path });
     }
 
-    onSendData() {
+    onSendData(step: Step) {
+        console.log("steps", this.steps);
+
         pipe(
             // { ...this.steps }, TODO: conenct to forms,
             {

@@ -20,6 +20,7 @@ export default {
 <style>
 :root {
     --text-primary: #4a577b;
+    --text-primary-light: rgba(74, 87, 123, 0.54);
     --screen-medium: 578px;
 }
 
