@@ -1,11 +1,13 @@
 export type Supply =
     | Supply.Mask
     | Supply.Glove
+    | Supply.Suit
     | Supply.Disinfectant
     | Supply.Cleaning
-    | Supply.Comestible
+    | Supply.Grocery
     | Supply.SewingMaterial
-    | Supply.PsychologicalSupport;
+    | Supply.PsychologicalSupport
+    | Supply.Print;
 
 export namespace Supply {
     export enum UsageType {
@@ -14,23 +16,27 @@ export namespace Supply {
     }
 
     export enum Style {
-        Male = "Męskie",
-        Female = "Damskie",
-        Child = "Dziecięce"
+        Male = "Male",
+        Female = "Female",
+        Child = "Child"
     }
 
     export enum Size {
-        XS = "xs",
-        S = "s",
-        M = "m",
-        L = "l",
-        XL = "xl"
+        XS = "XS",
+        S = "S",
+        M = "M",
+        L = "L",
+        XL = "XL"
+    }
+
+    export enum PrintType {
+        VenturiNozzle = "VenturiNozzle"
     }
 
     export enum Material {
-        Latex = "latex",
-        Nitrile = "nitrile",
-        Vinyl = "vinyl",
+        Latex = "Latex",
+        Nitrile = "Nitrile",
+        Vinyl = "Vinyl",
         Foil = "Foil"
     }
 
@@ -38,14 +44,14 @@ export namespace Supply {
         __brand: "mask";
         style: Style;
         type: UsageType;
-        count: number;
+        quantity: number;
     }
 
     export interface Glove {
         __brand: "glove";
         type: UsageType;
         size: Size;
-        count: number;
+        quantity: number;
         material: Material;
     }
 
@@ -59,30 +65,41 @@ export namespace Supply {
     export interface Disinfectant {
         __brand: "disinfectant";
         type: string;
-        count: number;
+        quantity: number;
     }
 
     export interface Cleaning {
         __brand: "cleaning";
         type: string;
-        count: number;
+        quantity: number;
     }
 
-    export interface Comestible {
-        __brand: "comestible";
+    export interface Other {
+        __brand: "other";
         type: string;
-        count: number;
+        quantity: number;
+    }
+
+    export interface Grocery {
+        __brand: "grocery";
+        type: string;
+        quantity: number;
     }
 
     export interface SewingMaterial {
         __brand: "sewingMaterial";
         type: string;
-        count: number;
+        quantity: number;
     }
 
     export interface PsychologicalSupport {
         __brand: "psychologicalSupport";
         type: string;
-        count: number;
+        quantity: number;
+    }
+
+    export interface Print {
+        __brand: "print";
+        type: PrintType;
     }
 }

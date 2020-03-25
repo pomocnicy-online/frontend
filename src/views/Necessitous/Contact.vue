@@ -22,7 +22,7 @@
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"
                 :addressStreet.sync="contact.street"
-                :addressNumber.sync="contact.number"
+                :addressNumber.sync="contact.building"
                 :email.sync="contact.email"
                 :phone.sync="contact.phone"
                 @submit="onSubmit"
@@ -51,7 +51,8 @@ export default class NecessitousContact extends Vue {
         name: "",
         city: "",
         street: "",
-        number: "",
+        apartment: "",
+        building: "",
         email: "",
         phone: ""
     };

@@ -4,9 +4,8 @@
             <voice-icon />
             <h2>Twoje podsumowanie</h2>
             <p>
-                Już prawie kończymy! Sprawdź tylko czy Twoje zgłoszenie się
-                zgadza. Pamietaj, że stawka jest wysoka, wspólnie ratujemy
-                zdrowie i życie ludzkie. To dobrze, że prosisz o pomoc!
+                Już prawie kończymy! Sprawdź tylko czy Twoje zgłoszenie się zgadza. Pamietaj, że stawka jest wysoka,
+                wspólnie ratujemy zdrowie i życie ludzkie. To dobrze, że prosisz o pomoc!
             </p>
             <div>Picture placeholder</div>
         </article>
@@ -25,23 +24,11 @@
                     </ul>
                 </article>
                 <v-row>
-                    <v-text-field
-                        v-model="comment"
-                        label="Komentarz"
-                        filled
-                    ></v-text-field>
+                    <v-text-field v-model="comment" label="Komentarz" filled></v-text-field>
                 </v-row>
                 <v-row class="step-nav">
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="onPrev"
-                        class="go-next-btn"
-                        >Wstecz</v-btn
-                    >
-                    <v-btn color="primary" @click="onNext" class="go-next-btn"
-                        >Potwierdź Zgłoszenie</v-btn
-                    >
+                    <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
+                    <v-btn color="primary" @click="$emit('sendData')" class="go-next-btn">Potwierdź Zgłoszenie</v-btn>
                 </v-row>
             </v-container>
         </div>
@@ -62,15 +49,10 @@ import { Necessitous } from "../Necessitious";
 })
 export default class NecessitousSummary extends Vue {
     @Prop()
-    steps!: Step.Dict;
+    steps!: Partial<Step.Dict>;
 
     summary: Step.SummaryData = {};
     comment = "";
-
-    @Emit("sendData")
-    onNext(): Necessitous.Request {
-        return Necessitous.createRequest({ ...this.steps });
-    }
 
     @Emit("prevStep")
     onPrev(): Step.Summary {

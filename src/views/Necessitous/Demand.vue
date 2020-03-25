@@ -30,6 +30,7 @@ import SupplyContainer from "@/views/SupplyContainer.vue";
 
 import { Component, Vue, Emit } from "vue-property-decorator";
 import { Step } from "./Step";
+import { Supply } from "../Supply";
 
 @Component({
     components: {
@@ -40,7 +41,7 @@ import { Step } from "./Step";
 })
 export default class NecessitousDemand extends Vue {
     demand: Step.DemandData = {
-        supplies: []
+        supplies: {} as Partial<Step.Supplies>
     };
 
     @Emit("nextStep")
