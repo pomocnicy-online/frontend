@@ -8,11 +8,11 @@
                     </v-row>
                 </v-col>
                 <v-col md="8">
-                    <Types v-for="type in item.types" :key="type" :title="type" />
+                    <Types v-for="type in types" :key="type" :title="type" />
                 </v-col>
             </v-row>
 
-            <v-row align="center" class="pa-2">
+            <!-- <v-row align="center" class="pa-2">
                 <v-menu offset-y>
                     <template v-slot:activator="{ on }">
                         <v-btn depressed v-on="on" class="mx-2" fab dark x-small color="primary">
@@ -27,7 +27,7 @@
                 </v-menu>
 
                 <h3 class="body-1 medical-card__title">DODAJ INNY RODZAJ</h3>
-            </v-row>
+            </v-row>-->
             <v-row>
                 <v-col cols="12">
                     <v-textarea
@@ -59,6 +59,7 @@ import Counter from "@/components/Counter";
 export default class MedicalCardTypes extends Vue {
     @Prop() readonly items!: any[];
     @Prop() readonly isChecked!: string;
+    @Prop() readonly types!: any[];
 
     private readonly description: string = "";
     private readonly menuItems = [

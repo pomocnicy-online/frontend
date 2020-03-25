@@ -1,16 +1,20 @@
 <template>
-    <div>
+    <v-row>
         <v-col md="6">
             <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="masks.title">
+                <MedicalItemCardHeader title="Maseczki">
                     <template v-slot:icon>
                         <maskIcon />
                     </template>
                 </MedicalItemCardHeader>
-                <MedicalCardTypes :items="masks.items" :isChecked="masks.isChecked" />
+                <MedicalCardTypes
+                    :items="masks.items"
+                    :isChecked="masks.isChecked"
+                    :types="styles"
+                />
             </v-card>
 
-            <v-card class="mx-auto ma-5" outlined>
+            <!-- <v-card class="mx-auto ma-5" outlined>
                 <MedicalItemCardHeader :title="gloves.title">
                     <template v-slot:icon>
                         <glovesIcon />
@@ -62,7 +66,7 @@
                 </MedicalItemCardHeader>
                 <v-expand-transition>
                     <MedicaItemCardDesc
-                        :description="psychologicalSupport.desc"
+                        :description.sync="psychologicalSupport.desc"
                         :isChecked="psychologicalSupport.isChecked"
                     />
                 </v-expand-transition>
@@ -90,31 +94,34 @@
                 </MedicalItemCardHeader>
                 <v-expand-transition>
                     <MedicaItemCardDesc
-                        :description="sewingSupplies.desc"
+                        :description.sync="sewingSupplies.desc"
                         :isChecked="sewingSupplies.isChecked"
                     />
                 </v-expand-transition>
-            </v-card>
+            </v-card>-->
         </v-col>
-    </div>
+    </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 
-import MedicalItemCardHeader from "@/components/MedicalItemCardHeader";
-import MedicalCardTypes from "@/components/MedicalCardTypes";
-import MedicalItemCardWithInput from "@/components/MedicalItemCardWithInput";
-import MedicaItemCardDesc from "@/components/MedicaItemCardDesc";
+import MedicalItemCardHeader from "@/components/MedicalItemCardHeader.vue";
+import MedicalCardTypes from "@/components/MedicalCardTypes.vue";
+import MedicalItemCardWithInput from "@/components/MedicalItemCardWithInput.vue";
+import MedicaItemCardDesc from "@/components/MedicaItemCardDesc.vue";
 
-import maskIcon from "@/components/icons/mask";
-import glovesIcon from "@/components/icons/gloves";
-import disinfectantsIcon from "@/components/icons/disinfectants";
-import overallsIcon from "@/components/icons/overalls";
-import psychologicalSupportIcon from "@/components/icons/psychological-support";
-import cleaningProductsIcon from "@/components/icons/cleaning-products";
-import groceriesIcon from "@/components/icons/groceries";
-import sewingSuppliesIcon from "@/components/icons/sewing-supplies";
+import maskIcon from "@/components/icons/mask.vue";
+import glovesIcon from "@/components/icons/gloves.vue";
+import disinfectantsIcon from "@/components/icons/disinfectants.vue";
+import overallsIcon from "@/components/icons/overalls.vue";
+import psychologicalSupportIcon from "@/components/icons/psychological-support.vue";
+import cleaningProductsIcon from "@/components/icons/cleaning-products.vue";
+import groceriesIcon from "@/components/icons/groceries.vue";
+import sewingSuppliesIcon from "@/components/icons/sewing-supplies.vue";
+
+import { Step } from "@/views/Necessitous/Step";
+import { Supply } from "@/views/Supply";
 
 @Component({
     components: {
@@ -132,17 +139,23 @@ import sewingSuppliesIcon from "@/components/icons/sewing-supplies";
         sewingSuppliesIcon
     }
 })
-export default class Supply extends Vue {
+export default class SupplyContainer extends Vue {
+    @Prop() supplies!: Step.DemandData;
+
+    private readonly styles: Supply.Style[] = Object.values(Supply.Style);
+    private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
+
     private readonly masks = {
-        title: "Maseczki",
         items: [
             {
                 typeName: "Jednorazowe",
-                types: ["damskie", "męskie", "dziecięce"]
+                types: "",
+                count: 0
             },
             {
                 typeName: "Wielorazowe",
-                types: ["damskie", "męskie", "dziecięce"]
+                types: "",
+                count: 0
             }
         ],
         isChecked: true

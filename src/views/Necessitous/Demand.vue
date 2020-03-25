@@ -12,20 +12,10 @@
         </article>
         <section>
             <v-container>
-                <step-header
-                    name="Szczegóły zapotrzebowania"
-                    current="2"
-                    outOf="3"
-                />
-                <!-- render list of supplies here @seba -->
+                <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
+                <supply-container :supplies="demand.supplies" />
                 <v-row class="step-nav">
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="onPrev"
-                        class="go-next-btn"
-                        >Wstecz</v-btn
-                    >
+                    <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                     <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
                 </v-row>
             </v-container>
@@ -36,6 +26,7 @@
 <script lang="ts">
 import voiceIcon from "@/components/icons/voice.vue";
 import StepHeader from "@/components/StepHeader.vue";
+import SupplyContainer from "@/views/SupplyContainer.vue";
 
 import { Component, Vue, Emit } from "vue-property-decorator";
 import { Step } from "./Step";
@@ -43,7 +34,8 @@ import { Step } from "./Step";
 @Component({
     components: {
         voiceIcon,
-        StepHeader
+        StepHeader,
+        SupplyContainer
     }
 })
 export default class NecessitousDemand extends Vue {

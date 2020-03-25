@@ -4,6 +4,8 @@
             <v-row class="pa-4">
                 <v-col cols="12">
                     <v-textarea
+                        :value="description"
+                        @input="$emit('update:description', $event)"
                         filled
                         height="136"
                         name="description"

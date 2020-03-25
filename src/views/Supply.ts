@@ -14,9 +14,9 @@ export namespace Supply {
     }
 
     export enum Style {
-        Male = "M",
-        Female = "F",
-        Child = "C"
+        Male = "Męskie",
+        Female = "Damskie",
+        Child = "Dziecięce"
     }
 
     export enum Size {

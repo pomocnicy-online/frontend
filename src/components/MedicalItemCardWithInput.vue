@@ -4,7 +4,13 @@
             <v-row class="ma-4">
                 <v-col md="8" class="pa-0">
                     <v-row align="center" justify="center">
-                        <v-text-field label="Rodzaj" filled hide-details></v-text-field>
+                        <v-text-field
+                            :value="description"
+                            @input="$emit('update:description', $event)"
+                            label="Rodzaj"
+                            filled
+                            hide-details
+                        ></v-text-field>
                     </v-row>
                 </v-col>
                 <v-col md="3" offset-md="1" class="pa-2">
@@ -35,18 +41,17 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 
-import Counter from "@/components/Counter";
+import Counter from "@/components/Counter.vue";
 
 @Component({
     components: {
         Counter
     }
 })
-export default class MedicalItemWithInput extends Vue {
+export default class MedicalItemCardWithInput extends Vue {
     @Prop() readonly items!: any[];
     @Prop() readonly isChecked!: boolean;
-
-    private readonly description: string = "";
+    @Prop() readonly description!: string;
 }
 </script>
 

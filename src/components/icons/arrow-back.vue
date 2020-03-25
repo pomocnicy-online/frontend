@@ -3,3 +3,8 @@
         <path d="M10 1L2 9.5L10 18" stroke="#4A577B" stroke-width="1.5" />
     </svg>
 </template>
+
+<script lang="ts">
+export default {};
+</script>
+
