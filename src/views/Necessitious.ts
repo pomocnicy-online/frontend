@@ -36,7 +36,7 @@ export namespace Necessitous {
             city: string;
             street: string;
             buildingNumber: string;
-            apartmentNumber: string;
+            apartmentNumber?: string;
             postalCode?: string;
             email: string;
             phoneNumber: string;
@@ -129,7 +129,7 @@ export namespace Necessitous {
     export interface Response {}
 
     const error = () => new Error();
-    const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
+    export const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
         !!(steps.contact && steps.demand && steps.summary);
 
     export const send = (req: Request): TE.TaskEither<Error, Response> =>
@@ -141,12 +141,7 @@ export namespace Necessitous {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify(req)
-                })
-                    .then(res => res.json())
-                    .catch(x => {
-                        console.log("promise x");
-                        return x;
-                    }),
+                }).then(res => res.json()),
             error
         )();
 

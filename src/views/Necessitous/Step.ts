@@ -1,4 +1,5 @@
 import { Supply } from "../Supply";
+import * as O from "fp-ts/es6/Option";
 
 export type Step = Step.Contact | Step.Demand | Step.Summary;
 export namespace Step {
@@ -16,26 +17,25 @@ export namespace Step {
         Summary = "summary"
     }
 
-    export const nextPath = (step: Step) => {
+    export const nextPath = (step: Step): O.Option<string> => {
         switch (step.type) {
             case Steps.Contact:
-                return Paths.Demand;
+                return O.some(Paths.Demand);
             case Steps.Demand:
-                return Paths.Summary;
-
+                return O.some(Paths.Summary);
             default:
-                throw new Error("Impossible state");
+                return O.none;
         }
     };
 
-    export const prevPath = (step: Step) => {
+    export const prevPath = (step: Step): O.Option<string> => {
         switch (step.type) {
             case Steps.Demand:
-                return Paths.Contact;
+                return O.some(Paths.Contact);
             case Steps.Summary:
-                return Paths.Demand;
+                return O.some(Paths.Demand);
             default:
-                throw new Error("Impossible state");
+                return O.none;
         }
     };
 
@@ -57,11 +57,7 @@ export namespace Step {
     });
     export type Demand = ReturnType<typeof Demand>;
 
-    type DiscriminateUnion<
-        U,
-        K extends keyof U,
-        V extends U[K]
-    > = U extends Record<K, V> ? U : never;
+    type DiscriminateUnion<U, K extends keyof U, V extends U[K]> = U extends Record<K, V> ? U : never;
 
     export type Supplies = {
         [T in Supply["__brand"]]: {
@@ -86,7 +82,8 @@ export namespace Step {
         city: string;
         street: string;
         building: string;
-        apartment: string;
+        apartment?: string;
+        postalCode?: string;
         email: string;
         phone: string;
     }
