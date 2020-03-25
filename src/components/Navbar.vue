@@ -2,7 +2,7 @@
     <div class="nav">
         <v-app-bar color="transparent" elevation="0" light class="nav__bar">
             <v-toolbar-title>
-                <router-link to="/" class="nav__title">HelpMed</router-link>
+                <router-link to="/" class="nav__title">Helpmed</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
