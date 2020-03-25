@@ -144,7 +144,6 @@ export namespace Necessitous {
                 })
                     .then(res => res.json())
                     .catch(x => {
-                        console.log("promise x");
                         return x;
                     }),
             error
