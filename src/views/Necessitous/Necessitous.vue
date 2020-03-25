@@ -56,7 +56,6 @@ export default class NecessitousView extends Vue {
             TE.fromEither,
             TE.chain(Necessitous.send)
         )().then(ek => {
-            console.log("success", ek);
             /** side effect: navigate to thank you page */
         });
     }
