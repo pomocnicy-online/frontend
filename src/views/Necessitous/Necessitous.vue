@@ -1,18 +1,26 @@
 <template>
-    <router-view @nextStep="onNextStep" @prevStep="onPrevStep" @sendData="onSendData" :steps="steps"></router-view>
+    <router-view
+        @nextStep="onNextStep"
+        @prevStep="onPrevStep"
+        @sendData="onSendData"
+        :steps="steps"
+    ></router-view>
 </template>
 
 <script lang="ts">
 import * as TE from "fp-ts/es6/TaskEither";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
-import { Component, Vue } from "vue-property-decorator";
+import { AppStore, Actions } from "@/state";
+import { Component, Vue, Inject } from "vue-property-decorator";
 import { Step } from "./Step";
 import { Necessitous } from "../Necessitious";
 import { Supply } from "../Supply";
 
 @Component
 export default class NecessitousView extends Vue {
+    @Inject("rxstore") public readonly rxStore!: AppStore;
+
     steps = {} as Partial<Step.Dict>;
 
     onNextStep(step: Step) {
@@ -27,9 +35,8 @@ export default class NecessitousView extends Vue {
         path && this.$router.push({ path });
     }
 
-    onSendData(step: Step) {
-        console.log("steps", this.steps);
-
+    onSendData() {
+        // TODO: move this whole flow to effect
         pipe(
             // { ...this.steps }, TODO: conenct to forms,
             {
@@ -61,8 +68,9 @@ export default class NecessitousView extends Vue {
             Necessitous.createRequest,
             TE.fromEither,
             TE.chain(Necessitous.send)
-        )().then(ek => {
-            /** side effect: navigate to thank you page */
+        )().then(() => {
+            this.rxStore.action$.next(Actions.NECESSITOUS__REQUEST__SUCCEEDED());
+            this.$router.push({ path: "/" });
         });
     }
 }

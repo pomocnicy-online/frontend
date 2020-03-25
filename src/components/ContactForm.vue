@@ -64,9 +64,9 @@
                 </v-row>
 
                 <v-row>
-                    <v-btn color="primary" @click="onNext" class="go-next-btn"
-                        >Przejdź dalej</v-btn
-                    >
+                    <v-btn color="primary" @click="onNext" class="go-next-btn">
+                        Przejdź dalej
+                    </v-btn>
                 </v-row>
             </v-container>
         </v-form>

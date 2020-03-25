@@ -2,19 +2,35 @@
     <v-app class="app">
         <Navbar />
         <router-view />
+        <div v-if="showThankYouModal$">Thx</div>
     </v-app>
 </template>
 
-<script>
-// @ is an alias to /src
+<script lang="ts">
 import Navbar from "@/components/Navbar.vue";
 
-export default {
-    name: "App",
-    components: {
-        Navbar
+import { Component, Vue, Provide } from "vue-property-decorator";
+import { Observables } from "vue-rx";
+import { select } from "@rxsv/core";
+
+import { rootStore, AppStore } from "@/state";
+
+@Component<App>({
+    components: { Navbar },
+    subscriptions(): Observables {
+        const { state$ } = this.rxStore;
+
+        return {
+            showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
+        };
     }
-};
+})
+export default class App extends Vue {
+    @Provide("rxstore")
+    private get rxStore(): AppStore {
+        return rootStore();
+    }
+}
 </script>
 
 <style>

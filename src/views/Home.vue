@@ -5,8 +5,8 @@
                 Wsparcie dla szpitali, placówek medycznych oraz innych placówek
             </h2>
             <p>
-                Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej
-                placowki lub wolontariusza w oparciu o realne zapotrzebowanie.
+                Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej placowki lub wolontariusza w oparciu o
+                realne zapotrzebowanie.
             </p>
         </article>
 
@@ -15,8 +15,7 @@
                 <div>
                     <h2>Potrzebujący</h2>
                     <p>
-                        Zgłoś swoje zapotrzebowanie na niezbędne produkty typu
-                        maski, rękawiczki, kombinezony
+                        Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony
                     </p>
                     <v-btn color="primary" to="/potrzebujacy/1">
                         Zgłoś potrzebę
@@ -28,12 +27,10 @@
                 <div>
                     <h2>Pomagajacy</h2>
                     <p>
-                        Możesz pomóc innym? Wybierz potrzebujacego, sprawdź
-                        czego teraz potrzebuje najbardziej i działaj!
+                        Możesz pomóc innym? Wybierz potrzebujacego, sprawdź czego teraz potrzebuje najbardziej i
+                        działaj!
                     </p>
-                    <v-btn color="primary" to="/pomagajacy/1"
-                        >Zgłoś pomoc</v-btn
-                    >
+                    <v-btn color="primary" to="/pomagajacy/1">Zgłoś pomoc</v-btn>
                 </div>
                 <heart-icon />
             </article>
