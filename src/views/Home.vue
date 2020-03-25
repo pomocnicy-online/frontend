@@ -1,9 +1,7 @@
 <template>
     <div class="main">
         <article class="desc">
-            <h2>
-                Wsparcie dla szpitali, placówek medycznych oraz innych placówek
-            </h2>
+            <h2>Wsparcie dla szpitali, placówek medycznych oraz innych placówek</h2>
             <p>
                 Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej placowki lub wolontariusza w oparciu o
                 realne zapotrzebowanie.
@@ -14,12 +12,8 @@
             <article class="action-item">
                 <div>
                     <h2>Potrzebujący</h2>
-                    <p>
-                        Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony
-                    </p>
-                    <v-btn color="primary" to="/potrzebujacy/1">
-                        Zgłoś potrzebę
-                    </v-btn>
+                    <p>Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony</p>
+                    <v-btn color="primary" to="/potrzebujacy/1">Zgłoś potrzebę</v-btn>
                 </div>
                 <voice-icon />
             </article>

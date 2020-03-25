@@ -1,13 +1,18 @@
 <template>
-    <v-app class="app">
+    <v-app :class="['app', { modalOpened: showThankYouModal$ }]">
         <Navbar />
-        <router-view />
-        <div v-if="showThankYouModal$">Thx</div>
+        <v-content>
+            <v-container fluid>
+                <router-view />
+            </v-container>
+        </v-content>
+        <thank-you v-if="showThankYouModal$" class="thank-you-modal" />
     </v-app>
 </template>
 
 <script lang="ts">
 import Navbar from "@/components/Navbar.vue";
+import ThankYou from "@/components/ThankYou.vue";
 
 import { Component, Vue, Provide } from "vue-property-decorator";
 import { Observables } from "vue-rx";
@@ -16,16 +21,17 @@ import { select } from "@rxsv/core";
 import { rootStore, AppStore } from "@/state";
 
 @Component<App>({
-    components: { Navbar },
+    components: { Navbar, ThankYou },
     subscriptions(): Observables {
         const { state$ } = this.rxStore;
 
         return {
-            showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
+            // showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
         };
     }
 })
 export default class App extends Vue {
+    showThankYouModal$ = true;
     @Provide("rxstore")
     private get rxStore(): AppStore {
         return rootStore();
@@ -33,7 +39,13 @@ export default class App extends Vue {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.thank-you-modal {
+    position: absolute;
+}
+</style>
+
+<style lang="scss">
 :root {
     --text-primary: #4a577b;
     --text-primary-light: rgba(74, 87, 123, 0.54);
@@ -49,6 +61,18 @@ export default class App extends Vue {
 .app {
     margin: 0 auto;
     max-width: 80rem;
+
+    &.modalOpened {
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+        }
+    }
 }
 
 a,

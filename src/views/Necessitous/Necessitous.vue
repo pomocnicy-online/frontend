@@ -36,9 +36,9 @@ export default class NecessitousView extends Vue {
     }
 
     onSendData() {
-        // TODO: move this whole flow to effect
+        // TODO: move this whole flow to effect(s)
         pipe(
-            // { ...this.steps }, TODO: conenct to forms,
+            // { ...this.steps }, TODO: connect to forms, delete the object below
             {
                 contact: Step.Contact({
                     street: "Mikołaja Kopernika",
@@ -69,7 +69,7 @@ export default class NecessitousView extends Vue {
             TE.fromEither,
             TE.chain(Necessitous.send)
         )().then(() => {
-            this.rxStore.action$.next(Actions.NECESSITOUS__REQUEST__SUCCEEDED());
+            this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
             this.$router.push({ path: "/" });
         });
     }

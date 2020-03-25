@@ -19,11 +19,11 @@ $breakpoints: (
     .step-main {
         display: grid;
         grid-template-columns: 1fr;
-        grid-gap: 10rem;
+        grid-gap: 8rem;
         padding: 2rem;
 
         @include at(medium) {
-            margin-top: 10rem;
+            margin-top: 8rem;
             grid-template-columns: 1fr 442px;
         }
     }
