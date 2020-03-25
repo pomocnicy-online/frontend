@@ -2,16 +2,12 @@
     <div class="nav">
         <v-app-bar color="transparent" elevation="0" light class="nav__bar">
             <v-toolbar-title>
-                <router-link to="/" class="nav__title">HelMed</router-link>
+                <router-link to="/" class="nav__title">HelpMed</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
 
-            <v-toolbar-title
-                v-for="item in navigationList"
-                :key="item.name"
-                class="body-1"
-            >
+            <v-toolbar-title v-for="item in navigationList" :key="item.name" class="body-1">
                 <router-link :to="item.route" class="nav__link">
                     {{ item.name }}
                 </router-link>
@@ -24,7 +20,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class HelloWorld extends Vue {
+export default class Navbar extends Vue {
     private readonly navigationList = [
         {
             name: "Potrzebujący",
