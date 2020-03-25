@@ -32,7 +32,7 @@ export namespace Necessitous {
     }>;
     export namespace Request {
         export interface MedicalCentre {
-            legalName?: string;
+            legalName: string;
             city: string;
             street: string;
             buildingNumber: string;
@@ -43,6 +43,7 @@ export namespace Necessitous {
         }
         export const MedicalCentre = (data: Step.ContactData): MedicalCentre => ({
             ...data,
+            legalName: data.name,
             buildingNumber: data.building,
             apartmentNumber: data.apartment,
             phoneNumber: data.phone
