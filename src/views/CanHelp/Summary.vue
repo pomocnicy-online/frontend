@@ -71,7 +71,7 @@ const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 &
         Address
     }
 })
-export default class NecessitousSummary extends Vue {
+export default class CanHelpSummary extends Vue {
     @Prop()
     steps!: Partial<Step.Dict>;
 
@@ -89,23 +89,6 @@ export default class NecessitousSummary extends Vue {
     onSubmit() {
         this.$emit("nextStep", this.step);
         this.$emit("sendData");
-    }
-
-    private get supplies() {
-        return pipe(
-            (this.steps.demand?.data as Step.DemandData)?.supplies,
-            O.fromNullable,
-            O.filter(obj => !isObjEmpty(obj)),
-            O.toNullable
-        );
-    }
-
-    private get address() {
-        return this.steps.contact?.data;
-    }
-
-    private get step() {
-        return Step.Summary(this.comment === "" ? {} : { comment: this.comment });
     }
 }
 </script>

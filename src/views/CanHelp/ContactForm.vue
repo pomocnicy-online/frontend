@@ -6,8 +6,18 @@
                     <v-text-field
                         :value="name"
                         @input="$emit('update:name', $event)"
-                        label="Nazwa firmy, placówka"
-                        :rules="[v => !!v || 'Nazwa jest wymagana']"
+                        label="Imie"
+                        :rules="[v => !!v || 'Imie jest wymagana']"
+                        filled
+                        required
+                    ></v-text-field>
+                </v-row>
+                <v-row>
+                    <v-text-field
+                        :value="surname"
+                        @input="$emit('update:surname', $event)"
+                        label="Nazwisko"
+                        :rules="[v => !!v || 'Nazwisko jest wymagana']"
                         filled
                         required
                     ></v-text-field>
@@ -86,6 +96,8 @@ type VForm = Vue & { validate: () => boolean };
 export default class ContactForm extends Vue {
     @Prop()
     name!: string;
+    @Prop()
+    surname!: string;
     @Prop()
     addressCity!: string;
     @Prop()
