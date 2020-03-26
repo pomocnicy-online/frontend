@@ -1,12 +1,12 @@
 <template>
     <div>
         <v-row v-for="item in usageTypes" :key="item" align="start" justify="center">
-            <v-col md="4" justify="start" class="pa-7">
+            <v-col cols="4" justify="start" class="pa-7">
                 <v-row align="center" justify="center">
                     <h3 class="body-1 usage-type__title">{{ item }}</h3>
                 </v-row>
             </v-col>
-            <v-col md="8">
+            <v-col cols="8">
                 <Types
                     v-for="type in types"
                     :key="type"

@@ -1,12 +1,14 @@
 <template>
     <v-card class="mx-auto ma-5" outlined>
         <v-card-actions class="medical-card-header__title-container pa-3">
-            <v-col class="pa-2">
-                <v-row justify="start" align="center">
+            <v-row justify="start" align="center">
+                <v-col cols="1">
                     <slot name="icon"></slot>
-                    <v-card-title class="medical-card-header__title pa-2">{{ title }}</v-card-title>
-                </v-row>
-            </v-col>
+                </v-col>
+                <v-col cols="10" class="ml-3">
+                    <v-card-title class="medical-card-header__title body-1 pa-0 ">{{ title }}</v-card-title>
+                </v-col>
+            </v-row>
             <v-checkbox v-model="isChecked"></v-checkbox>
         </v-card-actions>
         <v-expand-transition>

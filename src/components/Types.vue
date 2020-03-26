@@ -1,11 +1,11 @@
 <template>
     <v-row align="start" justify="center">
-        <v-col md="6" class="pa-4">
+        <v-col cols="6" class="pa-4">
             <v-row align="center" justify="center">
-                <h3 class="body-1 medical-type__title">{{type}}</h3>
+                <h3 class="body-1 medical-type__title">{{ type }}</h3>
             </v-row>
         </v-col>
-        <v-col md="6" class="pa-2">
+        <v-col cols="6" class="pa-2">
             <Counter :quantity="quantity" :plus="plus" :minus="minus" />
         </v-col>
     </v-row>
@@ -31,13 +31,13 @@ export default class Types extends Vue {
 
     private plus() {
         this.quantity = Number(this.quantity) + 1;
-        this.updateSupplies("mask", this.preparePosition());
+        this.updateSupplies(this.brand, this.preparePosition());
     }
 
     private minus() {
         if (this.quantity >= 1) {
             this.quantity = Number(this.quantity) - 1;
-            this.updateSupplies("mask", this.preparePosition());
+            this.updateSupplies(this.brand, this.preparePosition());
         }
     }
 

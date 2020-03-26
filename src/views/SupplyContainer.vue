@@ -1,132 +1,113 @@
 <template>
-    <div>
-        <v-col md="12">
-            <medical-card title="Maseczki">
-                <template v-slot:icon>
-                    <maskIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <UsageTypes
-                        brand="mask"
-                        :usageTypes="usageTypes"
-                        :types="styles"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="supplies.mask.description" />
-                </template>
-            </medical-card>
+    <v-col md="12" class="pa-0">
+        <medical-card title="Maseczki">
+            <template v-slot:icon>
+                <maskIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <UsageTypes brand="mask" :usageTypes="usageTypes" :types="styles" :updateSupplies="updateSupplies" />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.mask.description" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Rękawiczki">
-                <template v-slot:icon>
-                    <glovesIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <UsageTypes
-                        brand="gloves"
-                        :usageTypes="usageTypes"
-                        :types="sizes"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:addType>
-                    <AddType :types="material" />
-                </template>
-                <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="supplies.glove.description" />
-                </template>
-            </medical-card>
+        <medical-card title="Rękawiczki">
+            <template v-slot:icon>
+                <glovesIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <UsageTypes brand="glove" :usageTypes="usageTypes" :types="sizes" :updateSupplies="updateSupplies" />
+            </template>
+            <template v-slot:addType>
+                <AddType :types="material" />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.glove.description" />
+            </template>
+        </medical-card>
 
-            <medical-card title="środki do dezynfekcji">
-                <template v-slot:icon>
-                    <disinfectantsIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <AddTypeWithInput
-                        brand="disinfectant"
-                        :usageTypes="usageTypes"
-                        :types="sizes"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:addType>
-                    <AddType :types="material" />
-                </template>
-            </medical-card>
+        <medical-card title="środki do dezynfekcji">
+            <template v-slot:icon>
+                <disinfectantsIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <AddTypeWithInput
+                    brand="disinfectant"
+                    :usageTypes="usageTypes"
+                    :types="sizes"
+                    :updateSupplies="updateSupplies"
+                />
+            </template>
+            <template v-slot:addType>
+                <AddType :types="material" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Kombinezony">
-                <template v-slot:icon>
-                    <overallsIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <UsageTypes
-                        brand="suit"
-                        :usageTypes="overallTypes"
-                        :types="sizes"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="supplies.suit.description" />
-                </template>
-            </medical-card>
+        <medical-card title="Kombinezony">
+            <template v-slot:icon>
+                <overallsIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <UsageTypes brand="suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.suit.description" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Inne środki czystości">
-                <template v-slot:icon>
-                    <cleaningProductsIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <AddTypeWithInput
-                        brand="other"
-                        :usageTypes="usageTypes"
-                        :types="sizes"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:addType>
-                    <AddType :types="material" />
-                </template>
-            </medical-card>
+        <medical-card title="Inne środki czystości">
+            <template v-slot:icon>
+                <cleaningProductsIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <AddTypeWithInput
+                    brand="other"
+                    :usageTypes="usageTypes"
+                    :types="sizes"
+                    :updateSupplies="updateSupplies"
+                />
+            </template>
+            <template v-slot:addType>
+                <AddType :types="material" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Wsparcie psychologiczne">
-                <template v-slot:icon>
-                    <psychologicalSupportIcon />
-                </template>
-                <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="supplies.psychologicalSupport.description" />
-                </template>
-            </medical-card>
+        <medical-card title="Wsparcie psychologiczne">
+            <template v-slot:icon>
+                <psychologicalSupportIcon />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.psychologicalSupport.description" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Artykuły spozywcze">
-                <template v-slot:icon>
-                    <cleaningProductsIcon />
-                </template>
-                <template v-slot:usageTypes>
-                    <AddTypeWithInput
-                        brand="grocery"
-                        :usageTypes="usageTypes"
-                        :types="sizes"
-                        :updateSupplies="updateSupplies"
-                    />
-                </template>
-                <template v-slot:addType>
-                    <AddType :types="material" />
-                </template>
-            </medical-card>
+        <medical-card title="Artykuły spozywcze">
+            <template v-slot:icon>
+                <cleaningProductsIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <AddTypeWithInput
+                    brand="grocery"
+                    :usageTypes="usageTypes"
+                    :types="sizes"
+                    :updateSupplies="updateSupplies"
+                />
+            </template>
+            <template v-slot:addType>
+                <AddType :types="material" />
+            </template>
+        </medical-card>
 
-            <medical-card title="Materiały do szycia">
-                <template v-slot:icon>
-                    <sewingSuppliesIcon />
-                </template>
-                <template v-slot:additionalDesc>
-                    <AdditionalDesc
-                        :description.sync="supplies.psychologicalSupport.sewingMaterial"
-                    />
-                </template>
-            </medical-card>
-        </v-col>
-    </div>
+        <medical-card title="Materiały do szycia">
+            <template v-slot:icon>
+                <sewingSuppliesIcon />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.psychologicalSupport.sewingMaterial" />
+            </template>
+        </medical-card>
+    </v-col>
 </template>
 
 <script lang="ts">

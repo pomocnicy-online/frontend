@@ -1,11 +1,11 @@
 <template>
-    <v-row class="ma-4">
-        <v-col md="7" class="pa-0">
-            <v-row align="center" justify="center">
-                <v-text-field v-model="kind" label="Rodzaj" filled hide-details></v-text-field>
-            </v-row>
+    <v-row align="center" justify="center">
+        <v-col cols="7" class="pa-0 pb-2">
+            <!-- <v-row align="center" justify="center"> -->
+            <v-text-field v-model="kind" label="Rodzaj" filled hide-details></v-text-field>
+            <!-- </v-row> -->
         </v-col>
-        <v-col md="4" offset-md="1" class="pa-2">
+        <v-col cols="4" class="pa-2">
             <Counter :quantity="quantity" :plus="plus" :minus="minus" />
         </v-col>
     </v-row>
@@ -33,13 +33,13 @@ export default class AddTypeWithInput extends Vue {
 
     private plus() {
         this.quantity = Number(this.quantity) + 1;
-        this.updateSupplies("mask", this.preparePosition());
+        this.updateSupplies(this.brand, this.preparePosition());
     }
 
     private minus() {
         if (this.quantity >= 1) {
             this.quantity = Number(this.quantity) - 1;
-            this.updateSupplies("mask", this.preparePosition());
+            this.updateSupplies(this.brand, this.preparePosition());
         }
     }
 

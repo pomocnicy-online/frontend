@@ -9,7 +9,7 @@
             <img class="step-img" src="@/assets/need-help.svg" alt />
         </article>
         <section>
-            <v-container>
+            <v-container class="pa-2">
                 <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
                 <supply-container :supplies="demand.supplies" :updateSupplies="updateSupplies" />
                 <v-row class="step-nav">
@@ -22,11 +22,14 @@
 </template>
 
 <script lang="ts">
+import * as O from "fp-ts/es6/Option";
+import { pipe } from "fp-ts/es6/pipeable";
+import { Component, Vue, Emit } from "vue-property-decorator";
+
 import voiceIcon from "@/components/icons/voice.vue";
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/views/SupplyContainer.vue";
 
-import { Component, Vue, Emit } from "vue-property-decorator";
 import { Step } from "./Step";
 import { Supply } from "../Supply";
 
@@ -94,13 +97,19 @@ export default class NecessitousDemand extends Vue {
     }
 
     private updateSupplies(type: keyof Step.Supplies, position: any) {
-        this.demand.supplies[type].positions = this.demand.supplies.mask.positions
-            .filter(item => (item.style === position.style && item.type === position.type ? false : true))
-            .filter(item => item.quantity !== 0);
+        pipe(
+            O.fromNullable(this.demand.supplies),
+            O.map(supplies => supplies[type]),
+            O.map((supply: any) => {
+                supply.positions = supply.positions
+                    .filter((item: any) =>
+                        item.style === position.style && item.type === position.type ? false : true
+                    )
+                    .filter((item: any) => item.quantity !== 0);
 
-        this.demand.supplies.mask.positions.push(position);
-
-        console.log(this.demand);
+                supply.positions.push(position);
+            })
+        );
     }
 
     private step = () => Step.Demand({ ...this.demand });
