@@ -7,7 +7,7 @@
                 Wypełnij formularz pełnymi danymi kontaktowymi w celu ulatwienia kontaktu z wybranym przez Ciebie
                 potrzebującym. * dane osobowe podawane są dobrowolnie na potrzeby akcji charytatywnej.
             </p>
-            <!-- <img class="step-img" src="@/assets/offer-help.svg" alt /> -->
+            <img class="step-img" src="@/assets/offer-help.svg" alt />
         </article>
 
         <section class="contact-form">

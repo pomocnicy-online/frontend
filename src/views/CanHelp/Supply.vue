@@ -7,7 +7,7 @@
                 Określ co możesz przekazać i w jakiej ilości. Pamietaj, że pomagać możesz wiele razy, dlatego liczbę
                 materiałów wybieraj realnie do swoich możliwości na daną chwilę.
             </p>
-            <!-- <img class="step-img" src="@/assets/offer-help.svg" alt /> -->
+            <img class="step-img" src="@/assets/offer-help.svg" alt />
         </article>
         <section>
             <v-container>

@@ -1,7 +1,7 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
+            <heart-icon />
             <h2>Twoje podsumowanie</h2>
             <p>
                 Już prawie konczymy! Sprawdź tylko czy Twoje zgłoszenie się zgadza. Pamietaj, że stawka jest wysoka-
@@ -11,27 +11,21 @@
         <div class="summary">
             <v-container>
                 <div class="summary__contact">
-                    <article v-if="address">
+                    <article>
                         <h2>Kontakt do Ciebie:</h2>
                         dane kontaktowe podane na pierwszym stepie
-                        <!-- <Address :contact="address" /> -->
-                    </article>
-                    <article v-else>
-                        <h2>Brak wybranej placówki</h2>
-                        <p>by ją wybrać wróć do <router-link to="/potrzebujacy/1"> kroku pierwszego</router-link></p>
                     </article>
                 </div>
 
-                <div class="summary__demand">
-                    <article v-if="supplies">
-                        <h2>Produkty, które zdecydowałeś się przekazać:</h2>
-                        <ul>
-                            <!-- todo: compute supply items count and render here -->
-                        </ul>
+                <div class="summary__outlet">
+                    <article>
+                        <h2>Placówka czekająca na Twoją pomoc:</h2>
                     </article>
-                    <article v-else>
-                        <h2>Nie masz wybranych żadnych produktów</h2>
-                        <p>by je dodać wróć <router-link to="/potrzebujacy/2"> poprzedniego kroku</router-link></p>
+                </div>
+
+                <div class="summary__supply">
+                    <article>
+                        <h2>Produkty, które zdecydowałeś się przekazać:</h2>
                     </article>
                 </div>
 
@@ -56,7 +50,7 @@
 
 <script lang="ts">
 import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
-import voiceIcon from "@/components/icons/voice.vue";
+import heartIcon from "@/components/icons/heart.vue";
 import Address from "@/components/Address.vue";
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
@@ -67,7 +61,7 @@ const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 &
 
 @Component({
     components: {
-        voiceIcon,
+        heartIcon,
         Address
     }
 })
@@ -89,6 +83,10 @@ export default class CanHelpSummary extends Vue {
     onSubmit() {
         this.$emit("nextStep", this.step);
         this.$emit("sendData");
+    }
+
+    private get step() {
+        return Step.Summary(this.comment === "" ? {} : { comment: this.comment });
     }
 }
 </script>
@@ -127,7 +125,7 @@ export default class CanHelpSummary extends Vue {
     }
 
     &__contact,
-    &__demand {
+    &__supply {
         h2 {
             color: var(--text-primary-light);
             margin-bottom: 1.2rem;

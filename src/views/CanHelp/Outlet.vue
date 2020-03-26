@@ -1,7 +1,6 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
             <h2>Wybierz placówkę</h2>
             <p>
                 Wybierz komu możesz i chcesz pomóc! Pamietaj żeby określić ilość produktów, które przekażesz
@@ -9,7 +8,7 @@
                 materiały osobiście lub przez kierowcę, wybierz potrzebującego w swoim rejonie. Pozostałym możesz też
                 wysłać paczkę na wskazany adres!
             </p>
-            <!-- <img class="step-img" src="@/assets/offer-help.svg" alt /> -->
+            <img class="step-img" src="@/assets/offer-help.svg" alt />
         </article>
         <section>
             <v-container>
