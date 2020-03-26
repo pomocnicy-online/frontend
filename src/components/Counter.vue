@@ -10,7 +10,8 @@
                 dense
                 class="pa-0 centered-input"
                 color="primary"
-                v-model="counter"
+                :value="quantity"
+                @input="$emit('update:quantity', $event)"
             ></v-text-field>
         </v-col>
 
@@ -25,17 +26,9 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class Counter extends Vue {
-    private counter = 0;
-
-    private plus() {
-        this.counter = Number(this.counter) + 1;
-    }
-
-    private minus() {
-        if (this.counter >= 1) {
-            this.counter = Number(this.counter) - 1;
-        }
-    }
+    @Prop() quantity!: number;
+    @Prop() plus!: any;
+    @Prop() minus!: any;
 }
 </script>
 

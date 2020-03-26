@@ -1,18 +1,24 @@
 <template>
-    <v-row align="start" justify="center">
-        <v-col md="6" class="pa-4">
+    <v-row class="ma-4">
+        <v-col md="8" class="pa-0">
             <v-row align="center" justify="center">
-                <h3 class="body-1 medical-type__title">{{type}}</h3>
+                <v-text-field
+                    :value="description"
+                    @input="$emit('update:description', $event)"
+                    label="Rodzaj"
+                    filled
+                    hide-details
+                ></v-text-field>
             </v-row>
         </v-col>
-        <v-col md="6" class="pa-2">
+        <v-col md="3" offset-md="1" class="pa-2">
             <Counter :quantity="quantity" :plus="plus" :minus="minus" />
         </v-col>
     </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
 
@@ -21,10 +27,11 @@ import Counter from "@/components/Counter.vue";
         Counter
     }
 })
-export default class Types extends Vue {
+export default class AddTypeWithInput extends Vue {
+    @Prop() readonly updateSupplies!: any;
     @Prop() readonly type!: string;
     @Prop() readonly usageType!: string;
-    @Prop() readonly updateSupplies!: any;
+    @Prop() description!: string[];
 
     quantity = 0;
 
@@ -50,11 +57,3 @@ export default class Types extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.medical-type {
-    &__title {
-        color: var(--text-primary);
-    }
-}
-</style>

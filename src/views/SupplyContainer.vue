@@ -1,115 +1,134 @@
 <template>
-    <v-row>
+    <div>
         <v-col md="6">
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader title="Maseczki">
-                    <template v-slot:icon>
-                        <maskIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <MedicalCardTypes
-                    :items="masks.items"
-                    :isChecked="masks.isChecked"
-                    :types="styles"
-                />
-            </v-card>
-
-            <!-- <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="gloves.title">
-                    <template v-slot:icon>
-                        <glovesIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <MedicalCardTypes :items="gloves.items" :isChecked="gloves.isChecked" />
-            </v-card>
-
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="disinfectants.title">
-                    <template v-slot:icon>
-                        <disinfectantsIcon />
-                    </template>
-                </MedicalItemCardHeader>
-
-                <MedicalItemCardWithInput
-                    :items="disinfectants.items"
-                    :isChecked="disinfectants.isChecked"
-                />
-            </v-card>
-
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="overalls.title">
-                    <template v-slot:icon>
-                        <overallsIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <MedicalCardTypes :items="overalls.items" :isChecked="overalls.isChecked" />
-            </v-card>
-
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="cleaningProducts.title">
-                    <template v-slot:icon>
-                        <cleaningProductsIcon />
-                    </template>
-                </MedicalItemCardHeader>
-
-                <MedicalItemCardWithInput
-                    :items="cleaningProducts.items"
-                    :isChecked="cleaningProducts.isChecked"
-                />
-            </v-card>
-
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="psychologicalSupport.title">
-                    <template v-slot:icon>
-                        <psychologicalSupportIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <v-expand-transition>
-                    <MedicaItemCardDesc
-                        :description.sync="psychologicalSupport.desc"
-                        :isChecked="psychologicalSupport.isChecked"
+            <medical-card title="Maseczki">
+                <template v-slot:icon>
+                    <maskIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <UsageTypes
+                        :usageTypes="usageTypes"
+                        :types="styles"
+                        :updateSupplies="updateSupplies"
                     />
-                </v-expand-transition>
-            </v-card>
+                </template>
+                <template v-slot:additionalDesc>
+                    <AdditionalDesc :description.sync="supplies.mask.description" />
+                </template>
+            </medical-card>
 
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="groceries.title">
-                    <template v-slot:icon>
-                        <groceriesIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <v-expand-transition>
-                    <MedicalItemCardWithInput
-                        :items="groceries.items"
-                        :isChecked="groceries.isChecked"
+            <medical-card title="Rękawiczki">
+                <template v-slot:icon>
+                    <glovesIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <UsageTypes
+                        :usageTypes="usageTypes"
+                        :types="sizes"
+                        :updateSupplies="updateSupplies"
                     />
-                </v-expand-transition>
-            </v-card>
+                </template>
+                <template v-slot:addType>
+                    <AddType :types="material" />
+                </template>
+                <template v-slot:additionalDesc>
+                    <AdditionalDesc :description.sync="supplies.glove.description" />
+                </template>
+            </medical-card>
 
-            <v-card class="mx-auto ma-5" outlined>
-                <MedicalItemCardHeader :title="sewingSupplies.title">
-                    <template v-slot:icon>
-                        <sewingSuppliesIcon />
-                    </template>
-                </MedicalItemCardHeader>
-                <v-expand-transition>
-                    <MedicaItemCardDesc
-                        :description.sync="sewingSupplies.desc"
-                        :isChecked="sewingSupplies.isChecked"
+            <medical-card title="środki do dezynfekcji">
+                <template v-slot:icon>
+                    <disinfectantsIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <AddTypeWithInput
+                        :usageTypes="usageTypes"
+                        :types="sizes"
+                        :updateSupplies="updateSupplies"
                     />
-                </v-expand-transition>
-            </v-card>-->
+                </template>
+                <template v-slot:addType>
+                    <AddType :types="material" />
+                </template>
+            </medical-card>
+
+            <medical-card title="Kombinezony">
+                <template v-slot:icon>
+                    <overallsIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <UsageTypes
+                        :usageTypes="overallTypes"
+                        :types="sizes"
+                        :updateSupplies="updateSupplies"
+                    />
+                </template>
+                <template v-slot:additionalDesc>
+                    <AdditionalDesc :description.sync="description" />
+                </template>
+            </medical-card>
+
+            <medical-card title="Inne środki czystości">
+                <template v-slot:icon>
+                    <cleaningProductsIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <AddTypeWithInput
+                        :usageTypes="usageTypes"
+                        :types="sizes"
+                        :updateSupplies="updateSupplies"
+                    />
+                </template>
+                <template v-slot:addType>
+                    <AddType :types="material" />
+                </template>
+            </medical-card>
+
+            <medical-card title="Wsparcie psychologiczne">
+                <template v-slot:icon>
+                    <psychologicalSupportIcon />
+                </template>
+                <template v-slot:additionalDesc>
+                    <AdditionalDesc :description.sync="description" />
+                </template>
+            </medical-card>
+
+            <medical-card title="Artykuły spoywcze">
+                <template v-slot:icon>
+                    <cleaningProductsIcon />
+                </template>
+                <template v-slot:usageTypes>
+                    <AddTypeWithInput
+                        :usageTypes="usageTypes"
+                        :types="sizes"
+                        :updateSupplies="updateSupplies"
+                    />
+                </template>
+                <template v-slot:addType>
+                    <AddType :types="material" />
+                </template>
+            </medical-card>
+
+            <medical-card title="Materiały do szycia">
+                <template v-slot:icon>
+                    <sewingSuppliesIcon />
+                </template>
+                <template v-slot:additionalDesc>
+                    <AdditionalDesc :description.sync="description" />
+                </template>
+            </medical-card>
         </v-col>
-    </v-row>
+    </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 
-import MedicalItemCardHeader from "@/components/MedicalItemCardHeader.vue";
-import MedicalCardTypes from "@/components/MedicalCardTypes.vue";
-import MedicalItemCardWithInput from "@/components/MedicalItemCardWithInput.vue";
-import MedicaItemCardDesc from "@/components/MedicaItemCardDesc.vue";
+import MedicalCard from "@/components/MedicalCard.vue";
+import AdditionalDesc from "@/components/AdditionalDesc.vue";
+import AddType from "@/components/AddType.vue";
+import UsageTypes from "@/components/UsageTypes.vue";
+import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 
 import maskIcon from "@/components/icons/mask.vue";
 import glovesIcon from "@/components/icons/gloves.vue";
@@ -125,10 +144,6 @@ import { Supply } from "@/views/Supply";
 
 @Component({
     components: {
-        MedicalItemCardWithInput,
-        MedicaItemCardDesc,
-        MedicalItemCardHeader,
-        MedicalCardTypes,
         maskIcon,
         glovesIcon,
         overallsIcon,
@@ -136,84 +151,26 @@ import { Supply } from "@/views/Supply";
         cleaningProductsIcon,
         groceriesIcon,
         psychologicalSupportIcon,
-        sewingSuppliesIcon
+        sewingSuppliesIcon,
+        MedicalCard,
+        AdditionalDesc,
+        AddType,
+        UsageTypes,
+        AddTypeWithInput
     }
 })
 export default class SupplyContainer extends Vue {
     @Prop() supplies!: Step.DemandData;
+    @Prop() updateSupplies!: any;
+    @Prop() description!: string;
 
     private readonly styles: Supply.Style[] = Object.values(Supply.Style);
     private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
+    private readonly usageTypes: Supply.UsageType[] = Object.values(Supply.UsageType);
+    private readonly material: Supply.Material[] = Object.values(Supply.Material);
 
-    private readonly masks = {
-        items: [
-            {
-                typeName: "Jednorazowe",
-                types: "",
-                count: 0
-            },
-            {
-                typeName: "Wielorazowe",
-                types: "",
-                count: 0
-            }
-        ],
-        isChecked: true
-    };
-
-    private readonly gloves = {
-        title: "Rękawiczki",
-        items: [
-            {
-                typeName: "Lateksowe",
-                types: ["XS", "S", "M", "L", "XL"]
-            }
-        ],
-        isChecked: true
-    };
-
-    private readonly overalls = {
-        title: "Kombinezony",
-        items: [
-            {
-                typeName: "Jednorazowe",
-                types: ["XS", "S", "M", "L", "XL"]
-            }
-        ],
-        isChecked: true
-    };
-
-    private readonly disinfectants = {
-        title: "środki do dezynfekcji",
-        items: [],
-        isChecked: true
-    };
-
-    private readonly cleaningProducts = {
-        title: "Inne środki czystości",
-        items: [],
-        isChecked: true
-    };
-
-    private readonly psychologicalSupport = {
-        title: "Wsparcie psychologiczne",
-        desc: "",
-        isChecked: true
-    };
-
-    private readonly groceries = {
-        title: "Artykuły spozywcze",
-        items: [],
-        isChecked: true
-    };
-
-    private readonly sewingSupplies = {
-        title: "Materiały do szycia",
-        desc: "",
-        isChecked: true
-    };
+    private overallTypes: string[] = [Supply.UsageType.Disposable];
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

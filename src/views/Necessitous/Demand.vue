@@ -4,16 +4,15 @@
             <voice-icon />
             <h2>Wybierz zapotrzebowanie</h2>
             <p>
-                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby
-                podać w opisie jak najwięcej szczegółowych informacji zeby
-                wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
+                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby podać w opisie jak najwięcej szczegółowych
+                informacji zeby wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
             </p>
             <div>Picture placeholder</div>
         </article>
         <section>
             <v-container>
                 <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
-                <supply-container :supplies="demand.supplies" />
+                <supply-container :supplies="demand.supplies" :updateSupplies="updateSupplies" />
                 <v-row class="step-nav">
                     <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                     <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
@@ -41,7 +40,20 @@ import { Supply } from "../Supply";
 })
 export default class NecessitousDemand extends Vue {
     demand: Step.DemandData = {
-        supplies: {} as Partial<Step.Supplies>
+        supplies: {
+            mask: {
+                positions: [],
+                description: ""
+            },
+            glove: {
+                positions: [],
+                description: ""
+            },
+            suit: {
+                positions: [],
+                description: ""
+            }
+        } as Partial<Step.Supplies>
     };
 
     @Emit("nextStep")
@@ -52,6 +64,16 @@ export default class NecessitousDemand extends Vue {
     @Emit("prevStep")
     onPrev(): Step.Demand {
         return this.step();
+    }
+
+    private updateSupplies(type: any, position: any) {
+        this.demand.supplies.mask.positions = this.demand.supplies.mask.positions
+            .filter(item => (item.style === position.style && item.type === position.type ? false : true))
+            .filter(item => item.quantity !== 0);
+
+        this.demand.supplies.mask.positions.push(position);
+
+        console.log(this.demand);
     }
 
     private step = () => Step.Demand({ ...this.demand });

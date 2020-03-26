@@ -7,14 +7,8 @@
 
             <v-spacer></v-spacer>
 
-            <v-toolbar-title
-                v-for="item in navigationList"
-                :key="item.name"
-                class="body-1"
-            >
-                <router-link :to="item.route" class="nav__link">
-                    {{ item.name }}
-                </router-link>
+            <v-toolbar-title v-for="item in navigationList" :key="item.name" class="body-1">
+                <router-link :to="item.route" class="nav__link">{{ item.name }}</router-link>
             </v-toolbar-title>
         </v-app-bar>
     </div>
@@ -24,7 +18,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class HelloWorld extends Vue {
+export default class Navbar extends Vue {
     private readonly navigationList = [
         {
             name: "Potrzebujący",
