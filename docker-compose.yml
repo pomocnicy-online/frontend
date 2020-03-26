@@ -1,6 +1,30 @@
 version: "3.5"
 
 services:
+  db:
+    container_name: postgres
+    image: postgres:12.2
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "weakpassword"
+      POSTGRES_DB: "uszyjmaseczke-dev"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - uszyj-maseczke-network
+  
+  web:
+    build: ./backend
+    ports:
+      - "5011:5011"
+    depends_on:
+      - db
+    networks:
+      - uszyj-maseczke-network
+    
   frontend: 
     container_name: mask-app-frontend
     networks:
@@ -11,13 +35,20 @@ services:
     build:
       context: ./nginx
     ports:
-      - 8080:80
+      - '8080:80'
       - '8081:8081'
     restart: always
     depends_on:
       - frontend
+      - web
     networks:
       - frontend
+      - uszyj-maseczke-network
 
 networks:
   frontend:
+  uszyj-maseczke-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

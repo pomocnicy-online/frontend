@@ -1,28 +1,22 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
             <h2>Potrzebuję pomocy</h2>
             <p>
-                Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz
-                pomocy indywidualnie, zostaw swoje dane kontaktowe, żeby
-                wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane
-                osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej
+                Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz pomocy indywidualnie, zostaw swoje dane
+                kontaktowe, żeby wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane osobowe są podawane
+                dobrowolnie na potrzeby akcji charytatywnej
             </p>
-            <div>Picture placeholder</div>
+            <img class="step-img" src="@/assets/need-help.svg" alt />
         </article>
 
         <section class="contact-form">
-            <step-header
-                name="Wprowadź dane kontaktowe"
-                current="1"
-                outOf="3"
-            />
+            <step-header name="Wprowadź dane kontaktowe" current="1" outOf="3" />
             <contact-form
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"
                 :addressStreet.sync="contact.street"
-                :addressNumber.sync="contact.number"
+                :addressNumber.sync="contact.building"
                 :email.sync="contact.email"
                 :phone.sync="contact.phone"
                 @submit="onSubmit"
@@ -51,7 +45,8 @@ export default class NecessitousContact extends Vue {
         name: "",
         city: "",
         street: "",
-        number: "",
+        apartment: "",
+        building: "",
         email: "",
         phone: ""
     };

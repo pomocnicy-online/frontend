@@ -1,26 +1,54 @@
 <template>
     <v-app class="app">
         <Navbar />
-        <router-view />
+        <v-content>
+            <v-container fluid>
+                <router-view />
+            </v-container>
+        </v-content>
+        <thank-you :isOpen="showThankYouModal$" class="thank-you-modal" />
     </v-app>
 </template>
 
-<script>
-// @ is an alias to /src
+<script lang="ts">
 import Navbar from "@/components/Navbar.vue";
+import ThankYou from "@/components/ThankYou.vue";
 
-export default {
-    name: "App",
-    components: {
-        Navbar
+import { Component, Vue, Provide } from "vue-property-decorator";
+import { Observables } from "vue-rx";
+import { select } from "@rxsv/core";
+
+import { rootStore, AppStore } from "@/state";
+
+@Component<App>({
+    components: { Navbar, ThankYou },
+    subscriptions(): Observables {
+        const { state$ } = this.rxStore;
+
+        return {
+            showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
+        };
     }
-};
+})
+export default class App extends Vue {
+    @Provide("rxstore")
+    private get rxStore(): AppStore {
+        return rootStore();
+    }
+}
 </script>
 
-<style>
+<style lang="scss" scoped>
+.thank-you-modal {
+    position: absolute;
+}
+</style>
+
+<style lang="scss">
 :root {
     --text-primary: #4a577b;
     --header-card-background: rgba(74, 87, 123, 0.06);
+    --text-primary-light: rgba(74, 87, 123, 0.54);
     --screen-medium: 578px;
 }
 
