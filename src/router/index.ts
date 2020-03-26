@@ -10,6 +10,9 @@ import NecessitousSummary from "@/views/Necessitous/Summary.vue";
 import { Step as CanHelpStep } from "@/views/CanHelp/Step.ts";
 import CanHelp from "@/views/CanHelp/CanHelp.vue";
 import CanHelpContact from "@/views/CanHelp/Contact.vue";
+import CanHelpOutlet from "@/views/CanHelp/Outlet.vue";
+import CanHelpSupply from "@/views/CanHelp/Supply.vue";
+import CanHelpSummary from "@/views/CanHelp/Summary.vue";
 
 Vue.use(VueRouter);
 
@@ -46,6 +49,18 @@ const routes = [
             {
                 path: CanHelpStep.Paths.Contact,
                 component: CanHelpContact
+            },
+            {
+                path: CanHelpStep.Paths.Outlet,
+                component: CanHelpOutlet
+            },
+            {
+                path: CanHelpStep.Paths.Supply,
+                component: CanHelpSupply
+            },
+            {
+                path: CanHelpStep.Paths.Summary,
+                component: CanHelpSummary
             }
         ]
     }
