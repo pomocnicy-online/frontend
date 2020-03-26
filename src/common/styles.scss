@@ -19,11 +19,11 @@ $breakpoints: (
     .step-main {
         display: grid;
         grid-template-columns: 1fr;
-        grid-gap: 10rem;
+        grid-gap: 8rem;
         padding: 2rem;
 
         @include at(medium) {
-            margin-top: 10rem;
+            margin-top: 6rem;
             grid-template-columns: 1fr 442px;
         }
     }
@@ -47,13 +47,19 @@ $breakpoints: (
             font-size: 24px;
             line-height: 31px;
             margin-bottom: 14px;
-            margin-top: 31px;
         }
 
         p {
             font-weight: 300;
             font-size: 16px;
             line-height: 30px;
+        }
+
+        .step-img {
+            display: block;
+            width: 100%;
+            max-width: 38rem;
+            margin: 0 auto;
         }
     }
 }
