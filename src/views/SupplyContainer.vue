@@ -1,12 +1,13 @@
 <template>
     <div>
-        <v-col md="6">
+        <v-col md="12">
             <medical-card title="Maseczki">
                 <template v-slot:icon>
                     <maskIcon />
                 </template>
                 <template v-slot:usageTypes>
                     <UsageTypes
+                        brand="mask"
                         :usageTypes="usageTypes"
                         :types="styles"
                         :updateSupplies="updateSupplies"
@@ -23,6 +24,7 @@
                 </template>
                 <template v-slot:usageTypes>
                     <UsageTypes
+                        brand="gloves"
                         :usageTypes="usageTypes"
                         :types="sizes"
                         :updateSupplies="updateSupplies"
@@ -42,6 +44,7 @@
                 </template>
                 <template v-slot:usageTypes>
                     <AddTypeWithInput
+                        brand="disinfectant"
                         :usageTypes="usageTypes"
                         :types="sizes"
                         :updateSupplies="updateSupplies"
@@ -58,13 +61,14 @@
                 </template>
                 <template v-slot:usageTypes>
                     <UsageTypes
+                        brand="suit"
                         :usageTypes="overallTypes"
                         :types="sizes"
                         :updateSupplies="updateSupplies"
                     />
                 </template>
                 <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="description" />
+                    <AdditionalDesc :description.sync="supplies.suit.description" />
                 </template>
             </medical-card>
 
@@ -74,6 +78,7 @@
                 </template>
                 <template v-slot:usageTypes>
                     <AddTypeWithInput
+                        brand="other"
                         :usageTypes="usageTypes"
                         :types="sizes"
                         :updateSupplies="updateSupplies"
@@ -89,16 +94,17 @@
                     <psychologicalSupportIcon />
                 </template>
                 <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="description" />
+                    <AdditionalDesc :description.sync="supplies.psychologicalSupport.description" />
                 </template>
             </medical-card>
 
-            <medical-card title="Artykuły spoywcze">
+            <medical-card title="Artykuły spozywcze">
                 <template v-slot:icon>
                     <cleaningProductsIcon />
                 </template>
                 <template v-slot:usageTypes>
                     <AddTypeWithInput
+                        brand="grocery"
                         :usageTypes="usageTypes"
                         :types="sizes"
                         :updateSupplies="updateSupplies"
@@ -114,7 +120,9 @@
                     <sewingSuppliesIcon />
                 </template>
                 <template v-slot:additionalDesc>
-                    <AdditionalDesc :description.sync="description" />
+                    <AdditionalDesc
+                        :description.sync="supplies.psychologicalSupport.sewingMaterial"
+                    />
                 </template>
             </medical-card>
         </v-col>

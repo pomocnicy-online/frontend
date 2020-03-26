@@ -13,6 +13,7 @@
                     :type="type"
                     :updateSupplies="updateSupplies"
                     :usageType="item"
+                    :brand="brand"
                 />
             </v-col>
         </v-row>
@@ -33,6 +34,7 @@ export default class UsageTypes extends Vue {
     @Prop() readonly types!: string[];
     @Prop() readonly usageTypes!: any[];
     @Prop() readonly updateSupplies!: any;
+    @Prop() readonly brand!: string;
 }
 </script>
 

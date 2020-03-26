@@ -25,6 +25,7 @@ export default class Types extends Vue {
     @Prop() readonly type!: string;
     @Prop() readonly usageType!: string;
     @Prop() readonly updateSupplies!: any;
+    @Prop() readonly brand!: string;
 
     quantity = 0;
 
@@ -42,7 +43,7 @@ export default class Types extends Vue {
 
     private preparePosition() {
         return {
-            __brand: "mask",
+            __brand: this.brand,
             style: this.type,
             type: this.usageType,
             quantity: this.quantity

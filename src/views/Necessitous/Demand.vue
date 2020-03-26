@@ -52,8 +52,36 @@ export default class NecessitousDemand extends Vue {
             suit: {
                 positions: [],
                 description: ""
+            },
+            disinfectant: {
+                positions: [],
+                description: ""
+            },
+            cleaning: {
+                positions: [],
+                description: ""
+            },
+            other: {
+                positions: [],
+                description: ""
+            },
+            grocery: {
+                positions: [],
+                description: ""
+            },
+            sewingMaterial: {
+                positions: [],
+                description: ""
+            },
+            psychologicalSupport: {
+                positions: [],
+                description: ""
+            },
+            print: {
+                positions: [],
+                description: ""
             }
-        } as Partial<Step.Supplies>
+        } as Step.Supplies
     };
 
     @Emit("nextStep")
@@ -66,8 +94,8 @@ export default class NecessitousDemand extends Vue {
         return this.step();
     }
 
-    private updateSupplies(type: any, position: any) {
-        this.demand.supplies.mask.positions = this.demand.supplies.mask.positions
+    private updateSupplies(type: keyof Step.Supplies, position: any) {
+        this.demand.supplies[type].positions = this.demand.supplies.mask.positions
             .filter(item => (item.style === position.style && item.type === position.type ? false : true))
             .filter(item => item.quantity !== 0);
 
