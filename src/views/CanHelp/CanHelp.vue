@@ -3,13 +3,17 @@
 </template>
 
 <script lang="ts">
+import * as TE from "fp-ts/es6/TaskEither";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
-import { Component, Vue } from "vue-property-decorator";
+import { AppStore, Actions } from "@/state";
+import { Component, Vue, Inject } from "vue-property-decorator";
 import { Step } from "./Step";
 
 @Component
 export default class CanHelpView extends Vue {
+    @Inject("rxstore") public readonly rxStore!: AppStore;
+
     steps = {} as Partial<Step.Dict>;
 
     onNextStep(step: Step) {
@@ -23,9 +27,8 @@ export default class CanHelpView extends Vue {
         path && this.$router.push({ path });
     }
 
-    onSendData(step: Step) {
+    onSendData() {
         pipe(
-            // { ...this.steps }, TODO: conenct to forms,
             {
                 contact: Step.Contact({
                     name: "Janusz",
@@ -45,11 +48,11 @@ export default class CanHelpView extends Vue {
                 summary: Step.Summary({
                     comment: "ASAP !"
                 })
-            }
-        )().then(ek => {
-            // uncomment after merge - modal thank you
-            // this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
-            // this.$router.push({ path: "/" });
+            },
+            TE.fromEither
+        )().then(() => {
+            this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
+            this.$router.push({ path: "/" });
         });
     }
 }
