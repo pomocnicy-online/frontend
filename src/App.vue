@@ -26,7 +26,7 @@ import { rootStore, AppStore } from "@/state";
         const { state$ } = this.rxStore;
 
         return {
-            // showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
+            showThankYouModal$: state$.pipe(select(a => a.showThankYouModal))
         };
     }
 })

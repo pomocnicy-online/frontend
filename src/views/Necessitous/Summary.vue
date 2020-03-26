@@ -1,13 +1,13 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
+            <voice-icon class="step-icon" />
             <h2>Twoje podsumowanie</h2>
             <p>
                 Już prawie kończymy! Sprawdź tylko czy Twoje zgłoszenie się zgadza. Pamietaj, że stawka jest wysoka,
                 wspólnie ratujemy zdrowie i życie ludzkie. To dobrze, że prosisz o pomoc!
             </p>
-            <div>Picture placeholder</div>
+            <img class="step-img" src="@/assets/need-help.svg" alt />
         </article>
         <div class="summary">
             <v-container>
@@ -18,7 +18,10 @@
                     </article>
                     <article v-else>
                         <h2>Brak wybranej placówki</h2>
-                        <p>by ją wybrać wróć do <router-link to="/potrzebujacy/1"> kroku pierwszego</router-link></p>
+                        <p>
+                            by ją wybrać wróć do
+                            <router-link to="/potrzebujacy/1">kroku pierwszego</router-link>
+                        </p>
                     </article>
                 </div>
 
@@ -31,7 +34,10 @@
                     </article>
                     <article v-else>
                         <h2>Nie masz wybranych żadnych produktów</h2>
-                        <p>by je dodać wróć <router-link to="/potrzebujacy/2"> poprzedniego kroku</router-link></p>
+                        <p>
+                            by je dodać wróć
+                            <router-link to="/potrzebujacy/2">poprzedniego kroku</router-link>
+                        </p>
                     </article>
                 </div>
 
@@ -43,9 +49,11 @@
                         </v-row>
                         <v-row class="step-nav">
                             <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
-                            <v-btn color="primary" @click="onSubmit" class="go-next-btn">
-                                Potwierdź Zgłoszenie
-                            </v-btn>
+                            <v-btn
+                                color="primary"
+                                @click="onSubmit"
+                                class="go-next-btn"
+                            >Potwierdź Zgłoszenie</v-btn>
                         </v-row>
                     </label>
                 </div>
