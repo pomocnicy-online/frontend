@@ -1,12 +1,12 @@
 <template>
-    <v-app :class="['app', { modalOpened: showThankYouModal$ }]">
+    <v-app class="app">
         <Navbar />
         <v-content>
             <v-container fluid>
                 <router-view />
             </v-container>
         </v-content>
-        <thank-you v-if="showThankYouModal$" class="thank-you-modal" />
+        <thank-you :isOpen="showThankYouModal$" class="thank-you-modal" />
     </v-app>
 </template>
 
@@ -31,7 +31,6 @@ import { rootStore, AppStore } from "@/state";
     }
 })
 export default class App extends Vue {
-    showThankYouModal$ = true;
     @Provide("rxstore")
     private get rxStore(): AppStore {
         return rootStore();
@@ -61,18 +60,6 @@ export default class App extends Vue {
 .app {
     margin: 0 auto;
     max-width: 80rem;
-
-    &.modalOpened {
-        &::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.9);
-        }
-    }
 }
 
 a,

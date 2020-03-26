@@ -23,7 +23,7 @@ $breakpoints: (
         padding: 2rem;
 
         @include at(medium) {
-            margin-top: 8rem;
+            margin-top: 6rem;
             grid-template-columns: 1fr 442px;
         }
     }
@@ -53,10 +53,6 @@ $breakpoints: (
             font-weight: 300;
             font-size: 16px;
             line-height: 30px;
-        }
-
-        .step-icon {
-            margin-bottom: 2rem;
         }
 
         .step-img {

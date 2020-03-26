@@ -1,7 +1,6 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon class="step-icon" />
             <h2>Twoje podsumowanie</h2>
             <p>
                 Już prawie kończymy! Sprawdź tylko czy Twoje zgłoszenie się zgadza. Pamietaj, że stawka jest wysoka,
@@ -17,7 +16,7 @@
                         <Address :contact="address" />
                     </article>
                     <article v-else>
-                        <h2>Brak wybranej placówki</h2>
+                        <h2 class="warn">Brak wybranej placówki!</h2>
                         <p>
                             by ją wybrać wróć do
                             <router-link to="/potrzebujacy/1">kroku pierwszego</router-link>
@@ -33,7 +32,7 @@
                         </ul>
                     </article>
                     <article v-else>
-                        <h2>Nie masz wybranych żadnych produktów</h2>
+                        <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
                         <p>
                             by je dodać wróć
                             <router-link to="/potrzebujacy/2">poprzedniego kroku</router-link>
@@ -160,6 +159,11 @@ export default class NecessitousSummary extends Vue {
 
         article {
             margin-bottom: 2.8rem;
+        }
+
+        .warn {
+            color: #edbf56;
+            font-weight: bold;
         }
     }
 }

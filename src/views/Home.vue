@@ -66,7 +66,7 @@ export default class HelloWorld extends Vue {}
     }
 
     @include at(medium) {
-        margin-top: 10rem;
+        margin-top: 6rem;
         grid-template-columns: minmax(auto, 1fr) 1fr;
     }
 
