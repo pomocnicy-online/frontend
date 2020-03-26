@@ -7,6 +7,10 @@ import NecessitousContact from "@/views/Necessitous/Contact.vue";
 import NecessitousDemand from "@/views/Necessitous/Demand.vue";
 import NecessitousSummary from "@/views/Necessitous/Summary.vue";
 
+import { Step as CanHelpStep } from "@/views/CanHelp/Step.ts";
+import CanHelp from "@/views/CanHelp/CanHelp.vue";
+import CanHelpContact from "@/views/CanHelp/Contact.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -31,6 +35,17 @@ const routes = [
             {
                 path: NecessitousStep.Paths.Summary,
                 component: NecessitousSummary
+            }
+        ]
+    },
+    {
+        path: "/pomagajacy",
+        name: "Canhelp",
+        component: CanHelp,
+        children: [
+            {
+                path: CanHelpStep.Paths.Contact,
+                component: CanHelpContact
             }
         ]
     }
