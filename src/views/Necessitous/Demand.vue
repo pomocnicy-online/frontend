@@ -1,13 +1,12 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
             <h2>Wybierz zapotrzebowanie</h2>
             <p>
                 Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby podać w opisie jak najwięcej szczegółowych
                 informacji zeby wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
             </p>
-            <div>Picture placeholder</div>
+            <img class="step-img" src="@/assets/need-help.svg" alt />
         </article>
         <section>
             <v-container>

@@ -1,14 +1,13 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <voice-icon />
             <h2>Potrzebuję pomocy</h2>
             <p>
                 Wypełnij formularz pełnymi danymi placówki lub jeśli szukasz pomocy indywidualnie, zostaw swoje dane
                 kontaktowe, żeby wolontariusze mogli szybko znaleźć Twoje ogłoszenie! *dane osobowe są podawane
                 dobrowolnie na potrzeby akcji charytatywnej
             </p>
-            <div>Picture placeholder</div>
+            <img class="step-img" src="@/assets/need-help.svg" alt />
         </article>
 
         <section class="contact-form">

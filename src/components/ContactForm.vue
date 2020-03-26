@@ -4,6 +4,7 @@
             <v-container>
                 <v-row>
                     <v-text-field
+                        class="form__input"
                         :value="name"
                         @input="$emit('update:name', $event)"
                         label="Nazwa firmy, placówka"
@@ -14,6 +15,7 @@
                 </v-row>
                 <v-row>
                     <v-text-field
+                        class="form__input"
                         :value="addressCity"
                         @input="$emit('update:addressCity', $event)"
                         label="Miasto"
@@ -24,6 +26,7 @@
                 </v-row>
                 <v-row>
                     <v-text-field
+                        class="form__input"
                         :value="addressStreet"
                         @input="$emit('update:addressStreet', $event)"
                         :rules="[v => !!v || 'Ulica jest wymagana']"
@@ -33,9 +36,9 @@
                     ></v-text-field>
 
                     <v-text-field
+                        class="form__input form__input--address-num"
                         :value="addressNumber"
                         @input="$emit('update:addressNumber', $event)"
-                        class="address-num"
                         :rules="[v => !!v || 'Numer lokalu jest wymagany']"
                         label="Numer"
                         filled
@@ -44,6 +47,7 @@
                 </v-row>
                 <v-row>
                     <v-text-field
+                        class="form__input"
                         :value="email"
                         @input="$emit('update:email', $event)"
                         :rules="[v => !!v || 'Email jest wymagany']"
@@ -54,6 +58,7 @@
                 </v-row>
                 <v-row>
                     <v-text-field
+                        class="form__input"
                         :value="phone"
                         @input="$emit('update:phone', $event)"
                         :rules="[v => !!v || 'Telefon jest wymagany']"
@@ -62,7 +67,9 @@
                         required
                     ></v-text-field>
                 </v-row>
-
+                <v-row
+                    class="form__disclaimer"
+                >*dane osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej</v-row>
                 <v-row>
                     <v-btn color="primary" @click="onNext" class="go-next-btn">Przejdź dalej</v-btn>
                 </v-row>
@@ -114,9 +121,21 @@ export default class ContactForm extends Vue {
 <style lang="scss" scoped>
 @import "@/common/styles.scss";
 
-.address-num {
-    width: 3rem;
-    margin-left: 2rem;
+.form {
+    &__input {
+        &--address-num {
+            width: 3rem;
+            margin-left: 2rem;
+        }
+    }
+
+    &__disclaimer {
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 30px;
+
+        margin-bottom: 1rem;
+    }
 }
 
 .main {
