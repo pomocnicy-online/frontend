@@ -28,32 +28,35 @@ export default class CanHelpView extends Vue {
     }
 
     onSendData() {
-        pipe(
-            {
-                contact: Step.Contact({
-                    name: "Janusz",
-                    surname: "Waliglowa",
-                    city: "Kraków",
-                    street: "Mikołaja Kopernika",
-                    building: "1",
-                    email: "halko@gg.pl",
-                    phone: "123"
-                }),
-                outlet: Step.Outlet({
-                    mock: "Dajesz, dajesz nie przestajesz!"
-                }),
-                supply: Step.Supply({
-                    mock: "Dajesz, dajesz nie przestajesz!"
-                }),
-                summary: Step.Summary({
-                    comment: "ASAP !"
-                })
-            },
-            TE.fromEither
-        )().then(() => {
-            this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
-            this.$router.push({ path: "/" });
-        });
+        // TODO: serialization and sending request
+        // pipe(
+        //     {
+        //         contact: Step.Contact({
+        //             name: "Janusz",
+        //             surname: "Waliglowa",
+        //             city: "Kraków",
+        //             street: "Mikołaja Kopernika",
+        //             building: "1",
+        //             email: "halko@gg.pl",
+        //             phone: "123"
+        //         }),
+        //         outlet: Step.Outlet({
+        //             mock: "Dajesz, dajesz nie przestajesz!"
+        //         }),
+        //         supply: Step.Supply({
+        //             mock: "Dajesz, dajesz nie przestajesz!"
+        //         }),
+        //         summary: Step.Summary({
+        //             comment: "ASAP !"
+        //         })
+        //     },
+        //      CanHelp.createRequest,
+        //     TE.fromEither,
+        //     TE.chain(CanHelp.send)
+        // )().then(() => {
+        //     this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
+        //     this.$router.push({ path: "/" });
+        // });
     }
 }
 </script>
