@@ -9,20 +9,24 @@
 
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="nav__icon" />
 
-            <v-toolbar-title v-for="item in navigationList" :key="item.name" class="nav__toolbar body-1">
-                <router-link :to="item.route" class="nav__link" linkActiveClass="nav__link--active">
-                    {{ item.name }}
-                </router-link>
+            <v-toolbar-title
+                v-for="item in navigationList"
+                :key="item.name"
+                class="nav__toolbar body-1"
+            >
+                <router-link
+                    :to="item.route"
+                    class="nav__link"
+                    linkActiveClass="nav__link--active"
+                >{{ item.name }}</router-link>
             </v-toolbar-title>
         </v-app-bar>
 
         <v-navigation-drawer class="nav__drawer" v-model="drawer" app top right temporary>
             <v-list nav dense>
-                <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+                <v-list-item-group active-class="deep-purple--text text--accent-4">
                     <v-list-item v-for="item in navigationList" :key="item.name">
-                        <router-link :to="item.route">
-                            {{ item.name }}
-                        </router-link>
+                        <router-link :to="item.route">{{ item.name }}</router-link>
                     </v-list-item>
                 </v-list-item-group>
             </v-list>

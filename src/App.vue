@@ -47,6 +47,7 @@ export default class App extends Vue {
 <style lang="scss">
 :root {
     --text-primary: #4a577b;
+    --header-card-background: rgba(74, 87, 123, 0.06);
     --text-primary-light: rgba(74, 87, 123, 0.54);
     --screen-medium: 578px;
 }
