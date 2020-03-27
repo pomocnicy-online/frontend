@@ -7,6 +7,13 @@ import NecessitousContact from "@/views/Necessitous/Contact.vue";
 import NecessitousDemand from "@/views/Necessitous/Demand.vue";
 import NecessitousSummary from "@/views/Necessitous/Summary.vue";
 
+import { Step as CanHelpStep } from "@/views/CanHelp/Step.ts";
+import CanHelp from "@/views/CanHelp/CanHelp.vue";
+import CanHelpContact from "@/views/CanHelp/Contact.vue";
+import CanHelpOutlet from "@/views/CanHelp/Outlet.vue";
+import CanHelpSupply from "@/views/CanHelp/Supply.vue";
+import CanHelpSummary from "@/views/CanHelp/Summary.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -31,6 +38,29 @@ const routes = [
             {
                 path: NecessitousStep.Paths.Summary,
                 component: NecessitousSummary
+            }
+        ]
+    },
+    {
+        path: "/pomagajacy",
+        name: "Canhelp",
+        component: CanHelp,
+        children: [
+            {
+                path: CanHelpStep.Paths.Contact,
+                component: CanHelpContact
+            },
+            {
+                path: CanHelpStep.Paths.Outlet,
+                component: CanHelpOutlet
+            },
+            {
+                path: CanHelpStep.Paths.Supply,
+                component: CanHelpSupply
+            },
+            {
+                path: CanHelpStep.Paths.Summary,
+                component: CanHelpSummary
             }
         ]
     }

@@ -1,7 +1,7 @@
 <template>
-    <v-app class="app">
+    <v-app>
         <Navbar />
-        <v-content>
+        <v-content class="content">
             <v-container fluid>
                 <router-view />
             </v-container>
@@ -58,7 +58,7 @@ export default class App extends Vue {
     color: var(--text-primary);
 }
 
-.app {
+.content {
     margin: 0 auto;
     max-width: 80rem;
 }
