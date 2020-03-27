@@ -24,7 +24,7 @@
 
         <v-navigation-drawer class="nav__drawer" v-model="drawer" app top right temporary>
             <v-list nav dense>
-                <v-list-item-group v-model="group" active-class="deep-purple--text text--accent-4">
+                <v-list-item-group active-class="deep-purple--text text--accent-4">
                     <v-list-item v-for="item in navigationList" :key="item.name">
                         <router-link :to="item.route">{{ item.name }}</router-link>
                     </v-list-item>
