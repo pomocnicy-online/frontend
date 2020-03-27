@@ -31,7 +31,6 @@ import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/views/SupplyContainer.vue";
 
 import { Step } from "./Step";
-import { Supply } from "../Supply";
 
 @Component({
     components: {
