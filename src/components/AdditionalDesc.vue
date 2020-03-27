@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 
-@Component({})
+@Component
 export default class AdditionalDesc extends Vue {
     @Prop() description!: string;
 }

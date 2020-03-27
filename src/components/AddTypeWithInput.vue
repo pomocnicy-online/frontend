@@ -1,9 +1,7 @@
 <template>
     <v-row align="center" justify="center">
         <v-col cols="7" class="pa-0 pb-2">
-            <!-- <v-row align="center" justify="center"> -->
             <v-text-field v-model="kind" label="Rodzaj" filled hide-details></v-text-field>
-            <!-- </v-row> -->
         </v-col>
         <v-col cols="4" class="pa-2">
             <Counter :quantity="quantity" :plus="plus" :minus="minus" />
@@ -45,7 +43,6 @@ export default class AddTypeWithInput extends Vue {
 
     private preparePosition() {
         return {
-            __brand: this.brand,
             style: this.type,
             type: this.kind,
             quantity: this.quantity

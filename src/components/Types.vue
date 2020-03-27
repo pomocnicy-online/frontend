@@ -43,7 +43,6 @@ export default class Types extends Vue {
 
     private preparePosition() {
         return {
-            __brand: this.brand,
             style: this.type,
             type: this.usageType,
             quantity: this.quantity
