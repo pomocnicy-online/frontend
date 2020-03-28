@@ -71,7 +71,7 @@ export namespace Step {
 
     export namespace Supplies {
         type Brand = keyof Supplies;
-        type Order = Supplies[Brand];
+        export type Order = Supplies[Brand];
 
         const supplyName = (brand: Brand): string => {
             switch (brand) {
@@ -102,11 +102,12 @@ export namespace Step {
                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
                 O.getOrElse<[Brand, Order][]>(() => []),
                 A.map(([brand, supply]) => ({
+                    brand,
                     icon: `${brand}-icon`,
                     title: supplyName(brand),
                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
                 })),
-                A.filter(x => x.quantity > 0)
+                A.filter(x => x.quantity > 0 || x.brand === "psychologicalSupport")
             );
     }
 

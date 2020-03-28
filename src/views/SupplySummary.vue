@@ -11,7 +11,7 @@
             </template>
             <template v-slot:desc>
                 <v-row class="summary__quantity">
-                    <span>{{ supply.quantity }} szt</span>
+                    <span v-if="supply.quantity">{{ supply.quantity }} szt</span>
                 </v-row>
             </template>
         </medical-card-header>
