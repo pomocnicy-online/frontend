@@ -40,6 +40,7 @@ import { Step } from "./Step";
     }
 })
 export default class NecessitousDemand extends Vue {
+    // TODO: use smart constructors for this
     demand: Step.DemandData = {
         supplies: {
             mask: {
@@ -62,6 +63,7 @@ export default class NecessitousDemand extends Vue {
                 positions: [],
                 description: ""
             },
+            // Not yet used
             // other: {
             //     positions: [],
             //     description: ""
@@ -95,6 +97,7 @@ export default class NecessitousDemand extends Vue {
         return this.step();
     }
 
+    // TODO: this function is a mess, refactor it and type properly
     private updateSupplies(type: keyof Step.Supplies, position: any) {
         pipe(
             O.fromNullable(this.demand.supplies),

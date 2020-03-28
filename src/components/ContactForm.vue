@@ -45,12 +45,13 @@
                         required
                     ></v-text-field>
                 </v-row>
+                <v-row class="form__requester-contact">Kontakt do Ciebie:</v-row>
                 <v-row>
                     <v-text-field
                         class="form__input"
                         :value="email"
                         @input="$emit('update:email', $event)"
-                        :rules="[v => !!v || 'Email jest wymagany']"
+                        :rules="[v => !!v || 'Email jest wymagany', v => /\S+@\S+\.\S+/.test(v) || 'Email jest nieprawidłowy']"
                         label="Email"
                         filled
                         required
@@ -135,6 +136,13 @@ export default class ContactForm extends Vue {
         line-height: 30px;
 
         margin-bottom: 1rem;
+    }
+
+    &__requester-contact {
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 30px;
+        margin-bottom: 0.7rem;
     }
 }
 
