@@ -62,10 +62,10 @@ export default class NecessitousDemand extends Vue {
                 positions: [],
                 description: ""
             },
-            other: {
-                positions: [],
-                description: ""
-            },
+            // other: {
+            //     positions: [],
+            //     description: ""
+            // },
             grocery: {
                 positions: [],
                 description: ""
@@ -82,7 +82,7 @@ export default class NecessitousDemand extends Vue {
                 positions: [],
                 description: ""
             }
-        } as Step.Supplies
+        }
     };
 
     @Emit("nextStep")
