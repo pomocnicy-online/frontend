@@ -8,6 +8,7 @@
                         <template v-slot:default>
                             <thead>
                                 <tr>
+                                    <th class="text-left"></th>
                                     <th class="text-left">Szpital</th>
                                     <th class="text-left">Zapotrzebowanie</th>
                                     <th class="text-left">Kontakt do zglaszającego</th>
@@ -15,9 +16,26 @@
                             </thead>
                             <tbody>
                                 <tr v-for="item in outlets" :key="item.name">
-                                    <td>{{ item.legalName }}, {{ item.city }}, ul. {{ item.street }}</td>
+                                    <td>
+                                        <v-checkbox v-model="checkbox"></v-checkbox>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <strong>{{ item.legalName }}</strong>
+                                        </div>
+                                        <div>{{ item.city }}, ul. {{ item.street }}</div>
+                                    </td>
                                     <td>supply needed</td>
-                                    <td>{{ item.phoneNumber }}, {{ item.email }}</td>
+                                    <td>
+                                        <div>
+                                            <a :href="`mailto: ${item.email}`">{{item.email}}</a>
+                                        </div>
+                                        <div>
+                                            <a
+                                                :href="`tel: ${item.phoneNumber}`"
+                                            >{{item.phoneNumber}}</a>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </template>
