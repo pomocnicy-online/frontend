@@ -1,5 +1,8 @@
 import { Supply } from "../Supply";
 import * as O from "fp-ts/es6/Option";
+import * as R from "fp-ts/es6/Record";
+import * as A from "fp-ts/es6/Array";
+import { pipe } from "fp-ts/es6/pipeable";
 
 export type Step = Step.Contact | Step.Demand | Step.Summary;
 export namespace Step {
@@ -65,6 +68,48 @@ export namespace Step {
             description?: string;
         };
     };
+
+    export namespace Supplies {
+        type Brand = keyof Supplies;
+        export type Order = Supplies[Brand];
+
+        const supplyName = (brand: Brand): string => {
+            switch (brand) {
+                case "mask":
+                    return "Maseczki";
+                case "glove":
+                    return "Rekawiczki";
+                case "disinfectant":
+                    return "Środki do dezynfekcji";
+                case "suit":
+                    return "Kombinezony";
+                case "cleaning":
+                    return "Inne środki czystości";
+                case "psychologicalSupport":
+                    return "Wsparcie psychologiczne";
+                case "grocery":
+                    return "Artykuły spozywcze";
+                case "sewingMaterial":
+                    return "Materiały do szycia";
+                case "print":
+                    return "Druk 3D";
+            }
+        };
+
+        export const toSummary = (supplies?: Partial<Supplies>) =>
+            pipe(
+                O.fromNullable(supplies),
+                O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+                O.getOrElse<[Brand, Order][]>(() => []),
+                A.map(([brand, supply]) => ({
+                    brand,
+                    icon: `${brand}-icon`,
+                    title: supplyName(brand),
+                    quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
+                })),
+                A.filter(x => x.quantity > 0 || x.brand === "psychologicalSupport")
+            );
+    }
 
     export interface DemandData {
         supplies: Partial<Supplies>;

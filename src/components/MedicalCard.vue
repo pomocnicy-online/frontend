@@ -1,16 +1,10 @@
 <template>
     <v-card class="mx-auto ma-5" outlined>
-        <v-card-actions class="medical-card-header__title-container pa-3">
-            <v-row justify="start" align="center">
-                <v-col cols="1">
-                    <slot name="icon"></slot>
-                </v-col>
-                <v-col cols="10" class="ml-3">
-                    <v-card-title class="medical-card-header__title body-1 pa-0 ">{{ title }}</v-card-title>
-                </v-col>
-            </v-row>
-            <v-checkbox v-model="isChecked"></v-checkbox>
-        </v-card-actions>
+        <medical-card-header showCheckBox="true" :title="title" :isChecked.sync="isChecked">
+            <template v-slot:icon>
+                <slot name="icon"></slot>
+            </template>
+        </medical-card-header>
         <v-expand-transition>
             <v-container v-show="isChecked">
                 <slot name="usageTypes"></slot>
@@ -23,23 +17,16 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
+import MedicalCardHeader from "@/components/MedicalCardHeader.vue";
 
-@Component({})
+@Component({
+    components: {
+        MedicalCardHeader
+    }
+})
 export default class MedicalCard extends Vue {
     @Prop() readonly title!: string;
 
-    private readonly isChecked: boolean = false;
+    private isChecked = false;
 }
 </script>
-
-<style lang="scss" scoped>
-.medical-card-header {
-    &__title-container {
-        background-color: var(--header-card-background);
-        height: 5rem;
-    }
-    &__title {
-        color: var(--text-primary);
-    }
-}
-</style>

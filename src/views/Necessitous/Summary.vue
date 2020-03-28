@@ -27,9 +27,7 @@
                 <div class="summary__demand">
                     <article v-if="supplies">
                         <h2>Produkty, które zdecydowałeś się przekazać:</h2>
-                        <ul>
-                            <!-- todo: compute supply items count and render here -->
-                        </ul>
+                        <supply-summary :supplies="supplies" />
                     </article>
                     <article v-else>
                         <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
@@ -65,6 +63,7 @@
 import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
 import voiceIcon from "@/components/icons/voice.vue";
 import Address from "@/components/Address.vue";
+import SupplySummary from "../SupplySummary.vue";
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
 
@@ -75,7 +74,8 @@ const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 &
 @Component({
     components: {
         voiceIcon,
-        Address
+        Address,
+        SupplySummary
     }
 })
 export default class NecessitousSummary extends Vue {
@@ -103,7 +103,7 @@ export default class NecessitousSummary extends Vue {
             (this.steps.demand?.data as Step.DemandData)?.supplies,
             O.fromNullable,
             O.filter(obj => !isObjEmpty(obj)),
-            O.toNullable
+            O.toUndefined
         );
     }
 

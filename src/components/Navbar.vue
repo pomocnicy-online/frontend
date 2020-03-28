@@ -69,7 +69,9 @@ export default class Navbar extends Vue {
 @import "@/common/styles.scss";
 
 .nav {
-    padding: 2rem 0;
+    @include at(medium) {
+        padding-left: 2rem;
+    }
 
     &__icon {
         @include at(medium) {
@@ -83,11 +85,6 @@ export default class Navbar extends Vue {
         @include at(medium) {
             display: initial;
         }
-    }
-
-    &__bar {
-        padding-left: 2rem;
-        padding-right: 2rem;
     }
 
     &__link {
