@@ -1,18 +1,28 @@
 <template>
-    <div class="step-main">
-        <article class="step-desc">
-            <h2>Wybierz placówkę</h2>
-            <p>
-                Wybierz komu możesz i chcesz pomóc! Pamietaj żeby określić ilość produktów, które przekażesz
-                potrzebującemu, żeby inni wolontariusze widzieli ile jeszcze pozostało. Jeśli będziesz dostarczał
-                materiały osobiście lub przez kierowcę, wybierz potrzebującego w swoim rejonie. Pozostałym możesz też
-                wysłać paczkę na wskazany adres!
-            </p>
-            <img class="step-img" src="@/assets/offer-help.svg" alt />
-        </article>
+    <div class="step-single">
         <section>
             <v-container>
-                <step-header name="Lokalizacja" current="2" outOf="4" />
+                <step-header name="Wybierz placówkę" current="2" outOf="4" />
+                <article class="step-desc">
+                    <v-simple-table>
+                        <template v-slot:default>
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Szpital</th>
+                                    <th class="text-left">Zapotrzebowanie</th>
+                                    <th class="text-left">Kontakt do zglaszającego</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in outlets" :key="item.name">
+                                    <td>{{ item.legalName }}, {{ item.city }}, ul. {{ item.street }}</td>
+                                    <td>supply needed</td>
+                                    <td>{{ item.phoneNumber }}, {{ item.email }}</td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </article>
                 <!-- render list of supplies here @seba -->
                 <v-row class="step-nav">
                     <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
@@ -36,6 +46,21 @@ import { Step } from "./Step";
 })
 export default class CanHelpOutlet extends Vue {
     outlet = { mock: "" };
+    outlets = [];
+    path = "/api/requests/";
+
+    async mounted() {
+        this.outlets = await this.getAllOutlets();
+    }
+
+    getAllOutlets() {
+        return fetch(this.path, {
+            method: "get",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json());
+    }
 
     @Emit("nextStep")
     onNext(): Step.Outlet {
@@ -54,7 +79,7 @@ export default class CanHelpOutlet extends Vue {
 <style lang="scss" scoped>
 @import "@/common/styles.scss";
 
-@include step-main;
+@include step-single;
 @include step-nav;
 @include step-desc;
 </style>
