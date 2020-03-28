@@ -1,3 +1,5 @@
+$accent: #00acc1;
+
 $breakpoints: (
     small: 767px,
     medium: 992px,
@@ -37,7 +39,7 @@ $breakpoints: (
 
         @include at(medium) {
             margin-top: 6rem;
-            grid-template-columns: 100%;
+            grid-template-columns: 1200px;
             padding: 2rem;
         }
     }

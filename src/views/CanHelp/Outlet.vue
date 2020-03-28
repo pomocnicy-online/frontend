@@ -3,7 +3,7 @@
         <section>
             <v-container>
                 <step-header name="Wybierz placówkę" current="2" outOf="4" />
-                <article class="step-desc">
+                <article class="step-desc step-table">
                     <v-simple-table>
                         <template v-slot:default>
                             <thead>
@@ -23,9 +23,41 @@
                                         <div>
                                             <strong>{{ item.legalName }}</strong>
                                         </div>
-                                        <div>{{ item.city }}, ul. {{ item.street }}</div>
+                                        <div>
+                                            {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
+                                            {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
+                                        </div>
                                     </td>
-                                    <td>supply needed</td>
+                                    <td class="step-table__supplies">
+                                        <div>
+                                            maseczki:
+                                            <strong>{{ item.maskRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            rekawiczki:
+                                            <strong>{{ item.gloveRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            kombinezony:
+                                            <strong>{{ item.suitRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            zakupy ?:
+                                            <strong>{{ item.groceryRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            plyny dezynfekujące:
+                                            <strong>{{ item.disinfectionMeasureRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            inne dezynfekujące materialy:
+                                            <strong>{{ item.otherCleaningMaterialRequestsTotalCount }}</strong>
+                                        </div>
+                                        <div>
+                                            print request ?
+                                            <strong>{{ item.printRequestsTotalCount }}</strong>
+                                        </div>
+                                    </td>
                                     <td>
                                         <div>
                                             <a :href="`mailto: ${item.email}`">{{item.email}}</a>
@@ -100,4 +132,14 @@ export default class CanHelpOutlet extends Vue {
 @include step-single;
 @include step-nav;
 @include step-desc;
+
+.step-table {
+    td {
+        padding: 14px;
+    }
+
+    &__supplies {
+        color: $accent;
+    }
+}
 </style>
