@@ -5,7 +5,12 @@
                 <maskIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes brand="mask" :usageTypes="usageTypes" :types="styles" :updateSupplies="updateSupplies" />
+                <UsageTypes
+                    brand="mask"
+                    :usageTypes="usageTypes"
+                    :types="styles"
+                    :updateSupplies="updateSupplies"
+                />
             </template>
             <template v-slot:additionalDesc>
                 <AdditionalDesc :description.sync="supplies.mask.description" />
@@ -17,7 +22,12 @@
                 <glovesIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes brand="glove" :usageTypes="usageTypes" :types="sizes" :updateSupplies="updateSupplies" />
+                <UsageTypes
+                    brand="glove"
+                    :usageTypes="usageTypes"
+                    :types="sizes"
+                    :updateSupplies="updateSupplies"
+                />
             </template>
             <template v-slot:addType>
                 <AddType :types="material" />
@@ -49,7 +59,12 @@
                 <overallsIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes brand="suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
+                <UsageTypes
+                    brand="suit"
+                    :usageTypes="overallTypes"
+                    :types="sizes"
+                    :updateSupplies="updateSupplies"
+                />
             </template>
             <template v-slot:additionalDesc>
                 <AdditionalDesc :description.sync="supplies.suit.description" />
@@ -62,7 +77,7 @@
             </template>
             <template v-slot:usageTypes>
                 <AddTypeWithInput
-                    brand="other"
+                    brand="cleaning"
                     :usageTypes="usageTypes"
                     :types="sizes"
                     :updateSupplies="updateSupplies"

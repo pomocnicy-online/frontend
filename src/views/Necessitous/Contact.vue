@@ -11,7 +11,7 @@
         </article>
 
         <section class="contact-form">
-            <step-header name="Wprowadź dane kontaktowe" current="1" outOf="3" />
+            <step-header name="Kto potrzebuje pomocy:" current="1" outOf="3" />
             <contact-form
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"

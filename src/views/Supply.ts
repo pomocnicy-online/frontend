@@ -59,7 +59,7 @@ export namespace Supply {
         __brand: "suit";
         type: UsageType;
         size: Size;
-        count: number;
+        quantity: number;
     }
 
     export interface Disinfectant {
@@ -101,5 +101,6 @@ export namespace Supply {
     export interface Print {
         __brand: "print";
         type: PrintType;
+        quantity: number;
     }
 }

@@ -15,7 +15,6 @@ import { AppStore, Actions } from "@/state";
 import { Component, Vue, Inject } from "vue-property-decorator";
 import { Step } from "./Step";
 import { Necessitous } from "../Necessitious";
-import { Supply } from "../Supply";
 
 @Component
 export default class NecessitousView extends Vue {
@@ -37,38 +36,7 @@ export default class NecessitousView extends Vue {
 
     onSendData() {
         // TODO: move this whole flow to effect(s)
-        pipe(
-            // { ...this.steps }, TODO: connect to forms, delete the object below
-            {
-                contact: Step.Contact({
-                    street: "Mikołaja Kopernika",
-                    building: "1",
-                    name: "Szpital Jakiś",
-                    city: "Kraków",
-                    apartment: "",
-                    email: "halko@gg.pl",
-                    phone: "123"
-                }),
-                demand: Step.Demand({
-                    supplies: {
-                        mask: {
-                            positions: [
-                                {
-                                    type: Supply.UsageType.Reusable,
-                                    style: Supply.Style.Male
-                                } as Supply.Mask
-                            ]
-                        }
-                    }
-                }),
-                summary: Step.Summary({
-                    comment: "ASAP plz"
-                })
-            },
-            Necessitous.createRequest,
-            TE.fromEither,
-            TE.chain(Necessitous.send)
-        )().then(() => {
+        pipe({ ...this.steps }, Necessitous.createRequest, TE.fromEither, TE.chain(Necessitous.send))().then(() => {
             this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
             this.$router.push({ path: "/" });
         });

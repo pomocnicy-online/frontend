@@ -49,76 +49,88 @@ export namespace Necessitous {
             phoneNumber: data.phone
         });
 
+        // TODO: refactor serialization, io-ts ?
+
+        const nonEmpty = <A extends keyof Step.Supplies, B>(fn: (data: Step.Supplies[A]) => B) => (
+            data: Step.Supplies[A]
+        ) => (data.positions.length > 0 ? O.some(fn(data)) : O.none);
+
+        const nonEmptyDesc = (desc?: string) =>
+            pipe(
+                desc,
+                O.fromNullable,
+                O.filter(d => d !== ""),
+                O.map(d => ({ description: d }))
+            );
+
         export type Mask = SupplyRequest<{
             usageType: Supply.UsageType;
             quantity: number;
             style: Supply.Style;
         }>;
-        export const Mask = (data: Step.Supplies["mask"]): Mask => ({
+        export const Mask = nonEmpty<"mask", Mask>(data => ({
             ...data,
             positions: data.positions.map(a => ({
                 ...a,
                 usageType: a.type
             }))
-        });
+        }));
 
         export type Glove = SupplyRequest<{
             material: Supply.Material;
             quantity: number;
             size: Supply.Size;
         }>;
-        export const Glove = (data: Step.Supplies["glove"]): Glove => data;
+        export const Glove = nonEmpty<"glove", Glove>(a => a);
 
         export type Grocery = SupplyRequest<{
             quantity: number;
             description?: string;
         }>;
-        export const Grocery = (data: Step.Supplies["grocery"]): Grocery => data;
+        export const Grocery = nonEmpty<"grocery", Grocery>(a => a);
 
         export type Disinfectant = SupplyRequest<{
             quantity: number;
             description?: string;
         }>;
-        export const Disinfectant = (data: Step.Supplies["disinfectant"]): Disinfectant => data;
+        export const Disinfectant = nonEmpty<"disinfectant", Disinfectant>(a => a);
 
         export type Suite = SupplyRequest<{
-            material: Supply.Material;
+            material?: Supply.Material;
             quantity: number;
             size: Supply.Size;
         }>;
-        export const Suite = (data: Step.Supplies["suit"]) => data;
+        export const Suite = nonEmpty<"suit", Suite>(a => a);
 
         export type Cleaning = SupplyRequest<{
             quantity: number;
-            description: string;
+            description?: string;
         }>;
-        export const Cleaning = (data: Step.Supplies["cleaning"]) => data;
+        export const Cleaning = nonEmpty<"cleaning", Cleaning>(a => a);
 
         export type PsychologicalSupport = {
             description: string;
         };
-        export const PsychologicalSupport = (data: Step.Supplies["psychologicalSupport"]) => data;
+        export const PsychologicalSupport = (data: Step.Supplies["psychologicalSupport"]) =>
+            nonEmptyDesc(data.description);
 
         export type Print = SupplyRequest<{
             printType: Supply.PrintType;
             quantity: number;
         }>;
-        export const Print = (data: Step.Supplies["print"]) => ({
+        export const Print = nonEmpty<"print", Print>(data => ({
             ...data,
             positions: data.positions.map(a => ({ ...a, printType: a.type }))
-        });
+        }));
 
         export type SewingSupplies = {
             description: string;
         };
-        export const SewingSupplies = (data: Step.Supplies["sewingMaterial"]) => data;
-
+        export const SewingSupplies = (data: Step.Supplies["sewingMaterial"]) => nonEmptyDesc(data.description);
         export type Other = {
             description?: string;
         };
-        export const Other = (comment: Step.SummaryData["comment"]) => ({
-            description: comment
-        });
+        export const Other = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
 
         type SupplyRequest<T> = {
             description?: string;
@@ -153,22 +165,23 @@ export namespace Necessitous {
             const { supplies } = steps.demand.data as Step.DemandData;
             const summary = steps.summary.data as Step.SummaryData;
 
+            // TODO: made Supply a custom Monad instance
             const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
                 medicalCentre: O.some(Request.MedicalCentre(contact)),
-                maskRequest: pipe(supplies.mask, O.fromNullable, O.map(Request.Mask)),
-                gloveRequest: pipe(supplies.glove, O.fromNullable, O.map(Request.Glove)),
-                groceryRequest: pipe(supplies.grocery, O.fromNullable, O.map(Request.Grocery)),
-                disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.map(Request.Disinfectant)),
-                suitRequest: pipe(supplies.suit, O.fromNullable, O.map(Request.Suite)),
-                otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.map(Request.Cleaning)),
+                maskRequest: pipe(supplies.mask, O.fromNullable, O.chain(Request.Mask)),
+                gloveRequest: pipe(supplies.glove, O.fromNullable, O.chain(Request.Glove)),
+                groceryRequest: pipe(supplies.grocery, O.fromNullable, O.chain(Request.Grocery)),
+                disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.chain(Request.Disinfectant)),
+                suitRequest: pipe(supplies.suit, O.fromNullable, O.chain(Request.Suite)),
+                otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.chain(Request.Cleaning)),
                 psychologicalSupportRequest: pipe(
                     supplies.psychologicalSupport,
                     O.fromNullable,
-                    O.map(Request.PsychologicalSupport)
+                    O.chain(Request.PsychologicalSupport)
                 ),
-                sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.map(Request.SewingSupplies)),
-                printRequest: pipe(supplies.print, O.fromNullable, O.map(Request.Print)),
-                otherRequest: pipe(summary.comment, O.fromNullable, O.map(Request.Other))
+                sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
+                printRequest: pipe(supplies.print, O.fromNullable, O.chain(Request.Print)),
+                otherRequest: pipe(summary.comment, O.fromNullable, O.chain(Request.Other))
             };
 
             return request;
