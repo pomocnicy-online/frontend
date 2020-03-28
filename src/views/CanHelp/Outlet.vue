@@ -11,7 +11,6 @@
                                     <th class="text-left"></th>
                                     <th class="text-left">Szpital</th>
                                     <th class="text-left">Zapotrzebowanie</th>
-                                    <th class="text-left">Kontakt do zglaszającego</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,16 +55,6 @@
                                         <div>
                                             print request ?
                                             <strong>{{ item.printRequestsTotalCount }}</strong>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <a :href="`mailto: ${item.email}`">{{item.email}}</a>
-                                        </div>
-                                        <div>
-                                            <a
-                                                :href="`tel: ${item.phoneNumber}`"
-                                            >{{item.phoneNumber}}</a>
                                         </div>
                                     </td>
                                 </tr>
