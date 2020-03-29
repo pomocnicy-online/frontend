@@ -7,7 +7,7 @@
                 </v-btn>
             </template>
             <v-list>
-                <v-list-item v-for="(item, index) in types" :key="index">
+                <v-list-item v-for="(item, index) in types" :key="index" @click="updateTypes(item)">
                     <v-list-item-title>{{ item }}</v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -23,5 +23,14 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 @Component({})
 export default class AddType extends Vue {
     @Prop() types!: string[];
+    @Prop() usageTypes!: any;
+
+    private updateTypes(item: string) {
+        if (this.usageTypes.includes(item)) {
+            return;
+        }
+
+        this.$emit("update:usageTypes", [...this.usageTypes, item]);
+    }
 }
 </script>

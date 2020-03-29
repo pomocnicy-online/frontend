@@ -6,13 +6,13 @@
             </v-row>
         </v-col>
         <v-col cols="6" class="pa-2">
-            <Counter :quantity="quantity" :plus="plus" :minus="minus" />
+            <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :kind="type" />
         </v-col>
     </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
 
@@ -31,22 +31,31 @@ export default class Types extends Vue {
 
     private plus() {
         this.quantity = Number(this.quantity) + 1;
-        this.updateSupplies(this.brand, this.preparePosition());
     }
 
     private minus() {
         if (this.quantity >= 1) {
             this.quantity = Number(this.quantity) - 1;
-            this.updateSupplies(this.brand, this.preparePosition());
         }
     }
 
-    private preparePosition() {
-        return {
+    private updatePosition() {
+        if (this.quantity === 0) {
+            return;
+        }
+
+        const position = {
             style: this.type,
             type: this.usageType,
             quantity: this.quantity
         };
+
+        this.updateSupplies(this.brand, position);
+    }
+
+    @Watch("quantity")
+    quantityChanged(quantity: number) {
+        this.updatePosition();
     }
 }
 </script>
