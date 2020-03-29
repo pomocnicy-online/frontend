@@ -35,7 +35,14 @@ import { Step } from "./Step";
     }
 })
 export default class CanHelpOutlet extends Vue {
-    outlet = { mock: "" };
+    outlet: Step.OutletData = {
+        request: [
+            {
+                requestId: 35,
+                name: "XD"
+            }
+        ]
+    };
 
     @Emit("nextStep")
     onNext(): Step.Outlet {

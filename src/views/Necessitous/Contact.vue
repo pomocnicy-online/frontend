@@ -13,6 +13,7 @@
         <section class="contact-form">
             <step-header name="Kto potrzebuje pomocy:" current="1" outOf="3" />
             <contact-form
+                namePlaceholder="Nazwa firmy, placówka"
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"
                 :addressStreet.sync="contact.street"
@@ -60,8 +61,6 @@ export default class NecessitousContact extends Vue {
             this.contact = steps.contact.data as Step.ContactData;
         }
     }
-
-    isValid = true;
 
     onSubmit() {
         this.$emit("nextStep", Step.Contact({ ...this.contact }));

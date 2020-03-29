@@ -1,5 +1,10 @@
 <template>
-    <router-view @nextStep="onNextStep" @prevStep="onPrevStep" @sendData="onSendData" :steps="steps"></router-view>
+    <router-view
+        @nextStep="onNextStep"
+        @prevStep="onPrevStep"
+        @sendData="onSendData"
+        :steps="steps"
+    ></router-view>
 </template>
 
 <script lang="ts">
@@ -9,6 +14,8 @@ import * as O from "fp-ts/es6/Option";
 import { AppStore, Actions } from "@/state";
 import { Component, Vue, Inject } from "vue-property-decorator";
 import { Step } from "./Step";
+
+import { CanHelp } from "../CanHelp";
 
 @Component
 export default class CanHelpView extends Vue {
@@ -28,35 +35,10 @@ export default class CanHelpView extends Vue {
     }
 
     onSendData() {
-        // TODO: serialization and sending request
-        // pipe(
-        //     {
-        //         contact: Step.Contact({
-        //             name: "Janusz",
-        //             surname: "Waliglowa",
-        //             city: "Kraków",
-        //             street: "Mikołaja Kopernika",
-        //             building: "1",
-        //             email: "halko@gg.pl",
-        //             phone: "123"
-        //         }),
-        //         outlet: Step.Outlet({
-        //             mock: "Dajesz, dajesz nie przestajesz!"
-        //         }),
-        //         supply: Step.Supply({
-        //             mock: "Dajesz, dajesz nie przestajesz!"
-        //         }),
-        //         summary: Step.Summary({
-        //             comment: "ASAP !"
-        //         })
-        //     },
-        //      CanHelp.createRequest,
-        //     TE.fromEither,
-        //     TE.chain(CanHelp.send)
-        // )().then(() => {
-        //     this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
-        //     this.$router.push({ path: "/" });
-        // });
+        pipe({ ...this.steps }, CanHelp.createRequest, TE.fromEither, TE.chain(CanHelp.send))().then(() => {
+            this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
+            this.$router.push({ path: "/" });
+        });
     }
 }
 </script>
