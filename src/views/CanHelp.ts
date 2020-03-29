@@ -13,6 +13,8 @@ export type CanHelp = {
     [K in keyof CanHelp.Request]: CanHelp.Request[K];
 }[keyof CanHelp.Request];
 export namespace CanHelp {
+    export const canHelpPath = "/api/offerHelp";
+
     export type Request = {
         helper: Request.Helper;
         requests: Request.SupplyRequest[];
@@ -54,7 +56,7 @@ export namespace CanHelp {
         !!(steps.contact && steps.outlet && steps.supply && steps.summary);
     const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
-    export const send = (req: Request) => Necessitous.sender(req);
+    export const send = (req: Request) => Necessitous.sender(req, canHelpPath);
     export const createRequest = flow(
         fromNonPartial,
         E.chain(steps => {

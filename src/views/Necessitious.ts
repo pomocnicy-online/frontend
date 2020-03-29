@@ -15,7 +15,7 @@ export type Necessitous = {
 
 export namespace Necessitous {
     // TODO: use URL builder
-    const path = "/api/requests";
+    const necessitousPath = "/api/requests";
 
     export type Request = Partial<{
         medicalCentre: Request.MedicalCentre;
@@ -165,7 +165,7 @@ export namespace Necessitous {
         !!(steps.contact && steps.demand && steps.summary);
     const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
-    export const sender = <Req, Res>(req: Req): TE.TaskEither<Error, Res> =>
+    export const sender = <Req, Res>(req: Req, path: string): TE.TaskEither<Error, Res> =>
         TE.tryCatchK(
             () =>
                 fetch(path, {
@@ -178,7 +178,7 @@ export namespace Necessitous {
             () => new Error("Failed to send the request")
         )();
 
-    export const send = (req: Request) => sender(req);
+    export const send = (req: Request) => sender(req, necessitousPath);
 
     export const createRequest = flow(
         fromNonPartial,
