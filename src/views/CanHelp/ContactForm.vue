@@ -14,46 +14,6 @@
                 </v-row>
                 <v-row>
                     <v-text-field
-                        :value="surname"
-                        @input="$emit('update:surname', $event)"
-                        label="Nazwisko"
-                        :rules="[v => !!v || 'Nazwisko jest wymagana']"
-                        filled
-                        required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        :value="addressCity"
-                        @input="$emit('update:addressCity', $event)"
-                        label="Miasto"
-                        :rules="[v => !!v || 'Miasto jest wymagene']"
-                        filled
-                        required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                        :value="addressStreet"
-                        @input="$emit('update:addressStreet', $event)"
-                        :rules="[v => !!v || 'Ulica jest wymagana']"
-                        label="Ulica"
-                        filled
-                        required
-                    ></v-text-field>
-
-                    <v-text-field
-                        :value="addressNumber"
-                        @input="$emit('update:addressNumber', $event)"
-                        class="address-num"
-                        :rules="[v => !!v || 'Numer lokalu jest wymagany']"
-                        label="Numer"
-                        filled
-                        required
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
                         :value="email"
                         @input="$emit('update:email', $event)"
                         :rules="[v => !!v || 'Email jest wymagany']"
@@ -96,14 +56,6 @@ type VForm = Vue & { validate: () => boolean };
 export default class ContactForm extends Vue {
     @Prop()
     name!: string;
-    @Prop()
-    surname!: string;
-    @Prop()
-    addressCity!: string;
-    @Prop()
-    addressStreet!: string;
-    @Prop()
-    addressNumber!: string;
     @Prop()
     email!: string;
     @Prop()
