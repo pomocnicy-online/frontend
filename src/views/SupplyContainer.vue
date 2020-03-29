@@ -24,13 +24,13 @@
             <template v-slot:usageTypes>
                 <UsageTypes
                     brand="glove"
-                    :usageTypes="usageTypes"
+                    :usageTypes="gloveTypes"
                     :types="sizes"
                     :updateSupplies="updateSupplies"
                 />
             </template>
             <template v-slot:addType>
-                <AddType :types="material" />
+                <AddType :types="material" :usageTypes.sync="gloveTypes" />
             </template>
             <template v-slot:additionalDesc>
                 <AdditionalDesc :description.sync="supplies.glove.description" />
@@ -43,14 +43,17 @@
             </template>
             <template v-slot:usageTypes>
                 <AddTypeWithInput
+                    v-for="index in disinfectantCount"
+                    :key="index"
                     brand="disinfectant"
                     :usageTypes="usageTypes"
                     :types="sizes"
                     :updateSupplies="updateSupplies"
+                    :deleteSupplies="deleteSupplies"
                 />
             </template>
             <template v-slot:addType>
-                <AddType :types="material" />
+                <AddInputForType :typesCount.sync="disinfectantCount" />
             </template>
         </medical-card>
 
@@ -71,7 +74,8 @@
             </template>
         </medical-card>
 
-        <medical-card title="Inne środki czystości">
+        <!-- Not yet used -->
+        <!-- <medical-card title="Inne środki czystości">
             <template v-slot:icon>
                 <cleaningProductsIcon />
             </template>
@@ -86,7 +90,7 @@
             <template v-slot:addType>
                 <AddType :types="material" />
             </template>
-        </medical-card>
+        </medical-card>-->
 
         <medical-card title="Wsparcie psychologiczne">
             <template v-slot:icon>
@@ -103,14 +107,17 @@
             </template>
             <template v-slot:usageTypes>
                 <AddTypeWithInput
+                    v-for="index in groceryCount"
+                    :key="index"
                     brand="grocery"
                     :usageTypes="usageTypes"
                     :types="sizes"
                     :updateSupplies="updateSupplies"
+                    :deleteSupplies="deleteSupplies"
                 />
             </template>
             <template v-slot:addType>
-                <AddType :types="material" />
+                <AddInputForType :typesCount.sync="groceryCount" />
             </template>
         </medical-card>
 
@@ -133,6 +140,7 @@ import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddType from "@/components/AddType.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
+import AddInputForType from "@/components/AddInputForType.vue";
 
 import maskIcon from "@/components/icons/mask.vue";
 import glovesIcon from "@/components/icons/gloves.vue";
@@ -160,13 +168,18 @@ import { Supply } from "@/views/Supply";
         AdditionalDesc,
         AddType,
         UsageTypes,
-        AddTypeWithInput
+        AddTypeWithInput,
+        AddInputForType
     }
 })
 export default class SupplyContainer extends Vue {
     @Prop() supplies!: Step.DemandData;
     @Prop() updateSupplies!: any;
+    @Prop() deleteSupplies!: any;
     @Prop() description!: string;
+
+    disinfectantCount = 1;
+    groceryCount = 1;
 
     private readonly styles: Supply.Style[] = Object.values(Supply.Style);
     private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
@@ -174,6 +187,7 @@ export default class SupplyContainer extends Vue {
     private readonly material: Supply.Material[] = Object.values(Supply.Material);
 
     private overallTypes: string[] = [Supply.UsageType.Disposable];
+    private gloveTypes: string[] = [Supply.Material.Latex];
 }
 </script>
 

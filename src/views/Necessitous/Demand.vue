@@ -11,7 +11,11 @@
         <section>
             <v-container class="pa-2">
                 <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
-                <supply-container :supplies="demand.supplies" :updateSupplies="updateSupplies" />
+                <supply-container
+                    :supplies="demand.supplies"
+                    :updateSupplies="updateSupplies"
+                    :deleteSupplies="deleteSupplies"
+                />
                 <v-row class="step-nav">
                     <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                     <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
@@ -56,8 +60,7 @@ export default class NecessitousDemand extends Vue {
                 description: ""
             },
             disinfectant: {
-                positions: [],
-                description: ""
+                positions: []
             },
             cleaning: {
                 positions: [],
@@ -110,6 +113,16 @@ export default class NecessitousDemand extends Vue {
                     .filter((item: any) => item.quantity !== 0);
 
                 supply.positions.push(position);
+            })
+        );
+    }
+
+    private deleteSupplies(type: keyof Step.Supplies, itemType: string) {
+        pipe(
+            O.fromNullable(this.demand.supplies),
+            O.map(supplies => supplies[type]),
+            O.map((supply: any) => {
+                supply.positions = supply.positions.filter((item: any) => item.type !== itemType);
             })
         );
     }

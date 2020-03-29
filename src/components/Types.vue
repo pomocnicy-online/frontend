@@ -6,7 +6,7 @@
             </v-row>
         </v-col>
         <v-col cols="6" class="pa-2">
-            <Counter :quantity="quantity" :plus="plus" :minus="minus" />
+            <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :kind="type" />
         </v-col>
     </v-row>
 </template>
