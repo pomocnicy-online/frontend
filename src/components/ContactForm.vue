@@ -1,19 +1,19 @@
 <template>
     <div>
-        <v-form ref="form" :isValid.sync="isValid" lazy-validation>
+        <v-form ref="form" lazy-validation>
             <v-container>
                 <v-row>
                     <v-text-field
                         class="form__input"
                         :value="name"
                         @input="$emit('update:name', $event)"
-                        label="Nazwa firmy, placówka"
+                        :label="namePlaceholder"
                         :rules="[v => !!v || 'Nazwa jest wymagana']"
                         filled
                         required
                     ></v-text-field>
                 </v-row>
-                <v-row>
+                <v-row v-if="addressCity">
                     <v-text-field
                         class="form__input"
                         :value="addressCity"
@@ -24,7 +24,7 @@
                         required
                     ></v-text-field>
                 </v-row>
-                <v-row>
+                <v-row v-if="showAddressFields">
                     <v-text-field
                         class="form__input"
                         :value="addressStreet"
@@ -45,7 +45,7 @@
                         required
                     ></v-text-field>
                 </v-row>
-                <v-row class="form__requester-contact">Kontakt do Ciebie:</v-row>
+                <v-row v-if="showAddressFields" class="form__requester-contact">Kontakt do Ciebie:</v-row>
                 <v-row>
                     <v-text-field
                         class="form__input"
@@ -80,32 +80,30 @@
 </template>
 
 <script lang="ts">
-import heartIcon from "@/components/icons/heart.vue";
-
 import { Component, Vue, Prop } from "vue-property-decorator";
 
 type VForm = Vue & { validate: () => boolean };
 
-@Component({
-    components: {
-        heartIcon
-    }
-})
+@Component
 export default class ContactForm extends Vue {
+    @Prop()
+    namePlaceholder!: string;
     @Prop()
     name!: string;
     @Prop()
-    addressCity!: string;
+    addressCity?: string;
     @Prop()
-    addressStreet!: string;
+    addressStreet?: string;
     @Prop()
-    addressNumber!: string;
+    addressNumber?: string;
     @Prop()
     email!: string;
     @Prop()
     phone!: string;
-    @Prop()
-    isValid!: boolean;
+
+    get showAddressFields() {
+        return this.addressStreet !== undefined && this.addressNumber !== undefined;
+    }
 
     get form(): VForm {
         return this.$refs.form as VForm;
