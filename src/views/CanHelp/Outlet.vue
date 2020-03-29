@@ -128,7 +128,9 @@ export default class CanHelpOutlet extends Vue {
         if (selectedTown === "Wszystkie") {
             this.filteredOutlets = this.outlets;
         } else {
-            this.filteredOutlets = this.outlets.filter((outlet: any) => outlet.city === selectedTown);
+            this.filteredOutlets = this.outlets.filter(
+                (outlet: any) => outlet.city.toLowerCase() === selectedTown.toLowerCase()
+            );
         }
     }
 
