@@ -120,7 +120,7 @@ export default class NecessitousDemand extends Vue {
     private deleteSupplies(type: keyof Step.Supplies, itemType: string) {
         pipe(
             O.fromNullable(this.demand.supplies),
-            O.map(supplies => supplies[type]),
+            O.mapNullable(supplies => supplies[type]),
             O.map((supply: any) => {
                 supply.positions = supply.positions.filter((item: any) => item.type !== itemType);
             })
