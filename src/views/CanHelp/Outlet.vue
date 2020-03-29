@@ -4,63 +4,65 @@
             <v-container>
                 <step-header name="Wybierz placówkę" current="2" outOf="4" />
                 <article class="step-desc step-table">
-                    <v-simple-table>
-                        <template v-slot:default>
-                            <thead>
-                                <tr>
-                                    <th class="text-left"></th>
-                                    <th class="text-left">Szpital</th>
-                                    <th class="text-left">Zapotrzebowanie</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in outlets" :key="item.name">
-                                    <td>
-                                        <v-checkbox v-model="checkbox"></v-checkbox>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <strong>{{ item.legalName }}</strong>
-                                        </div>
-                                        <div>
-                                            {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
-                                            {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
-                                        </div>
-                                    </td>
-                                    <td class="step-table__supplies">
-                                        <div>
-                                            maseczki:
-                                            <strong>{{ item.maskRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            rekawiczki:
-                                            <strong>{{ item.gloveRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            kombinezony:
-                                            <strong>{{ item.suitRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            zakupy ?:
-                                            <strong>{{ item.groceryRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            plyny dezynfekujące:
-                                            <strong>{{ item.disinfectionMeasureRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            inne dezynfekujące materialy:
-                                            <strong>{{ item.otherCleaningMaterialRequestsTotalCount }}</strong>
-                                        </div>
-                                        <div>
-                                            print request ?
-                                            <strong>{{ item.printRequestsTotalCount }}</strong>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </template>
-                    </v-simple-table>
+                    <v-radio-group v-model="outlet.requestId">
+                        <v-simple-table>
+                            <template v-slot:default>
+                                <thead>
+                                    <tr>
+                                        <th class="text-left"></th>
+                                        <th class="text-left">Szpital</th>
+                                        <th class="text-left">Zapotrzebowanie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in outlets" :key="item.name">
+                                        <td>
+                                            <v-radio :key="item.id" :value="item.id"></v-radio>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <strong>{{ item.legalName }}</strong>
+                                            </div>
+                                            <div>
+                                                {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
+                                                {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
+                                            </div>
+                                        </td>
+                                        <td class="step-table__supplies">
+                                            <div>
+                                                maseczki:
+                                                <strong>{{ item.maskRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                rekawiczki:
+                                                <strong>{{ item.gloveRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                kombinezony:
+                                                <strong>{{ item.suitRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                zakupy ?:
+                                                <strong>{{ item.groceryRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                plyny dezynfekujące:
+                                                <strong>{{ item.disinfectionMeasureRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                inne dezynfekujące materialy:
+                                                <strong>{{ item.otherCleaningMaterialRequestsTotalCount }}</strong>
+                                            </div>
+                                            <div>
+                                                print request ?
+                                                <strong>{{ item.printRequestsTotalCount }}</strong>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
+                    </v-radio-group>
                 </article>
                 <!-- render list of supplies here @seba -->
                 <v-row class="step-nav">
@@ -84,9 +86,10 @@ import { Step } from "./Step";
     }
 })
 export default class CanHelpOutlet extends Vue {
-    outlet = { mock: "" };
+    outlet = { requestId: "" };
     outlets = [];
     path = "/api/requests/";
+    outletRequest = null;
 
     async mounted() {
         this.outlets = await this.getAllOutlets();
