@@ -38,7 +38,7 @@ export default class CanHelpOutlet extends Vue {
     outlet: Step.OutletData = {
         request: [
             {
-                requestId: "35",
+                requestId: 35,
                 name: "XD"
             }
         ]

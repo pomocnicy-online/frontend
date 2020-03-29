@@ -67,7 +67,7 @@ export namespace Step {
     export type Outlet = ReturnType<typeof Outlet>;
 
     export interface OutletSupplyRequest {
-        requestId: string;
+        requestId: number;
         name: string;
     }
 

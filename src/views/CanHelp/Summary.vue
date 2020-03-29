@@ -42,11 +42,13 @@
                     <article v-if="supplies.length > 0">
                         <h2>Produkty, które zdecydowałeś się przekazać:</h2>
                         <supply-summary :supplies="supplies" />
-                        <label>
+
+                        <!-- not supported by backend -->
+                        <!-- <label>
                             <v-row class="summary__deliver-checkbox">
                                 <v-checkbox v-model="willDeliverTheSupplies" />Dostarczę produkty
                             </v-row>
-                        </label>
+                        </label>-->
                     </article>
                     <article v-else>
                         <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>

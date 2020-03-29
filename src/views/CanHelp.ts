@@ -31,7 +31,7 @@ export namespace CanHelp {
                 email: data.email
             });
 
-        export type SupplyRequest = Supplies & { requestId: string };
+        export type SupplyRequest = Supplies & { requestId: number };
         export const SupplyRequest = (
             { requestId }: Step.OutletSupplyRequest,
             { supplies }: Step.SupplyData,
