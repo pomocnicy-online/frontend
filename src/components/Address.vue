@@ -1,10 +1,19 @@
 <template>
     <address>
-        <span>{{ contact.name }}</span
-        ><br />
-        {{ contact.postalCode }} {{ contact.city }}<br />
-        {{ contact.street }} {{ addressNumber }}<br />
-        telefon: {{ contact.phone }} <br />
+        <span>
+            {{ contact.name }}
+            <br />
+        </span>
+        <span v-if="contact.postalCode && contact.city">
+            {{ contact.postalCode }} {{ contact.city }}
+            <br />
+        </span>
+        <span v-if="contact.street && addressNumber">
+            {{ contact.street }} {{ addressNumber }}
+            <br />
+        </span>
+        telefon: {{ contact.phone }}
+        <br />
         email: {{ contact.email }}
     </address>
 </template>

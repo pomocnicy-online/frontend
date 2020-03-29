@@ -1,5 +1,10 @@
 <template>
-    <router-view @nextStep="onNextStep" @prevStep="onPrevStep" @sendData="onSendData" :steps="steps"></router-view>
+    <router-view
+        @nextStep="onNextStep"
+        @prevStep="onPrevStep"
+        @sendData="onSendData"
+        :steps="steps"
+    ></router-view>
 </template>
 
 <script lang="ts">
@@ -28,6 +33,7 @@ export default class CanHelpView extends Vue {
     }
 
     onSendData() {
+        // console.log({ ...this.steps });
         // TODO: serialization and sending request
         // pipe(
         //     {

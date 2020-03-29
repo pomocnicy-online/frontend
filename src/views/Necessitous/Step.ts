@@ -103,9 +103,9 @@ export namespace Step {
             quantity: number;
         }
 
-        export const toSummary = (demand?: Step.Demand): SummaryViewData[] =>
+        export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
             pipe(
-                O.fromNullable(demand?.data.supplies),
+                O.fromNullable(supplies),
                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
                 O.getOrElse<[Brand, Order][]>(() => []),
                 A.filter(([brand, supply]) => (brand === "psychologicalSupport" ? supply.description !== "" : true)),

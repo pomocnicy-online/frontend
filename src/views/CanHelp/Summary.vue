@@ -11,29 +11,60 @@
         <div class="summary">
             <v-container>
                 <div class="summary__contact">
-                    <article>
-                        <h2>Kontakt do Ciebie:</h2>dane kontaktowe podane na pierwszym stepie
+                    <article v-if="contact">
+                        <h2>Kontakt do Ciebie:</h2>
+                        <Address :contact="contact" />
+                    </article>
+                    <article v-else>
+                        <h2 class="warn">Brak danych kontakowych</h2>
+                        <p>
+                            by je dodać wróć do
+                            <router-link to="/pomagajacy/1">kroku pierwszego</router-link>
+                        </p>
                     </article>
                 </div>
 
                 <div class="summary__outlet">
-                    <article>
+                    <article v-if="outlet">
                         <h2>Placówka czekająca na Twoją pomoc:</h2>
+                        <Address :contact="outlet" />
+                    </article>
+                    <article v-else>
+                        <h2 class="warn">Brak wybranej placówki</h2>
+                        <p>
+                            by ją wybrać wróc do
+                            <router-link to="/pomagajacy/2">kroku drugiego</router-link>
+                        </p>
                     </article>
                 </div>
 
                 <div class="summary__supply">
-                    <article>
+                    <article v-if="supplies.length > 0">
                         <h2>Produkty, które zdecydowałeś się przekazać:</h2>
+                        <supply-summary :supplies="supplies" />
+                        <label>
+                            <v-row class="summary__deliver-checkbox">
+                                <v-checkbox v-model="willDeliverTheSupplies" />Dostarczę produkty
+                            </v-row>
+                        </label>
+                    </article>
+                    <article v-else>
+                        <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
+                        <p>
+                            by je dodać wróć
+                            <router-link to="/pomagajacy/3">poprzedniego kroku</router-link>
+                        </p>
                     </article>
                 </div>
 
                 <div class="summary__other">
-                    <label>
-                        <h2>Dodaj komentarz</h2>
-                        <v-row>
-                            <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
-                        </v-row>
+                    <div>
+                        <label>
+                            <h2>Dodaj komentarz</h2>
+                            <v-row>
+                                <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
+                            </v-row>
+                        </label>
                         <v-row class="step-nav">
                             <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                             <v-btn
@@ -42,7 +73,7 @@
                                 class="go-next-btn"
                             >Potwierdź Zgłoszenie</v-btn>
                         </v-row>
-                    </label>
+                    </div>
                 </div>
             </v-container>
         </div>
@@ -51,18 +82,19 @@
 
 <script lang="ts">
 import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
-import heartIcon from "@/components/icons/heart.vue";
+import SupplySummary from "../SupplySummary.vue";
 import Address from "@/components/Address.vue";
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
+import * as A from "fp-ts/es6/Array";
 
 import { Step } from "./Step";
-
-const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 && obj.constructor === Object;
+import { Step as NecessitousStep } from "../Necessitous/Step";
 
 @Component({
     components: {
-        Address
+        Address,
+        SupplySummary
     }
 })
 export default class CanHelpSummary extends Vue {
@@ -78,12 +110,30 @@ export default class CanHelpSummary extends Vue {
     }
     @Watch("steps", { immediate: true })
     onStepsChange(steps: Partial<Step.Dict>) {
-        this.comment = (steps.summary?.data as Step.SummaryData).comment ?? this.comment;
+        const summaryData = steps.summary?.data as Step.SummaryData | undefined;
+        this.comment = summaryData?.comment ?? this.comment;
+        this.willDeliverTheSupplies = summaryData?.willDeliverTheSupplies ?? false;
     }
 
     onSubmit() {
         this.$emit("nextStep", this.step);
         this.$emit("sendData");
+    }
+
+    private get supplies() {
+        return NecessitousStep.Supplies.toSummary((this.steps?.supply as Step.Supply | undefined)?.data.supplies);
+    }
+
+    private get outlet() {
+        return pipe(
+            O.fromNullable((this.steps.outlet?.data as Step.OutletData | undefined)?.request),
+            O.chain(A.head),
+            O.toUndefined
+        );
+    }
+
+    private get contact() {
+        return this.steps.contact?.data;
     }
 
     private get step() {
@@ -107,6 +157,12 @@ export default class CanHelpSummary extends Vue {
         margin-bottom: 1.2rem;
     }
 
+    &__deliver-checkbox {
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+    }
+
     &__other {
         padding: 10px;
 
@@ -125,6 +181,7 @@ export default class CanHelpSummary extends Vue {
         }
     }
 
+    &__outlet,
     &__contact,
     &__supply {
         h2 {
@@ -134,6 +191,11 @@ export default class CanHelpSummary extends Vue {
 
         article {
             margin-bottom: 2.8rem;
+        }
+
+        .warn {
+            color: #edbf56;
+            font-weight: bold;
         }
     }
 }

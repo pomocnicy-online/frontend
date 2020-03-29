@@ -36,7 +36,7 @@ import { Step } from "./Step";
 })
 export default class CanHelpOutlet extends Vue {
     outlet: Step.OutletData = {
-        requestIds: []
+        request: []
     };
 
     @Emit("nextStep")

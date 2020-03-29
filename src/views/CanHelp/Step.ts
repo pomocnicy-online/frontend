@@ -66,8 +66,13 @@ export namespace Step {
     });
     export type Outlet = ReturnType<typeof Outlet>;
 
+    export interface OutletSupplyRequest {
+        requestId: string;
+        name: string;
+    }
+
     export interface OutletData {
-        requestIds: string[];
+        request: OutletSupplyRequest[];
     }
 
     export const Supply = (data: SupplyData) => ({
