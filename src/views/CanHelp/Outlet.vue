@@ -4,7 +4,7 @@
             <v-container>
                 <step-header name="Wybierz placówkę" current="2" outOf="4" />
                 <article class="step-desc step-table">
-                    <v-radio-group v-model="outlet.requestId">
+                    <v-radio-group v-model="outlet.request.requestId">
                         <v-simple-table>
                             <template v-slot:default>
                                 <thead>
@@ -86,7 +86,14 @@ import { Step } from "./Step";
     }
 })
 export default class CanHelpOutlet extends Vue {
-    outlet: Step.OutletData = { requestId: "" };
+    outlet: Step.OutletData = {
+        request: [
+            {
+                requestId: 35,
+                name: "XD"
+            }
+        ]
+    };
     outlets = [];
     path = "/api/requests/";
     outletRequest = null;

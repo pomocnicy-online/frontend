@@ -1,4 +1,5 @@
 import * as O from "fp-ts/es6/Option";
+import { Step as NecessitousStep } from "../Necessitous/Step";
 
 export type Step = Step.Contact | Step.Outlet | Step.Supply | Step.Summary;
 
@@ -45,7 +46,6 @@ export namespace Step {
         }
     };
 
-    // CONTACT
     export const Contact = (data: ContactData) => ({
         type: Steps.Contact,
         data,
@@ -59,7 +59,6 @@ export namespace Step {
         phone: string;
     }
 
-    // OUTLET
     export const Outlet = (data: OutletData) => ({
         type: Steps.Outlet,
         data,
@@ -67,11 +66,15 @@ export namespace Step {
     });
     export type Outlet = ReturnType<typeof Outlet>;
 
-    export interface OutletData {
-        requestId: string;
+    export interface OutletSupplyRequest {
+        requestId: number;
+        name: string;
     }
 
-    // SUPPLY
+    export interface OutletData {
+        request: OutletSupplyRequest[];
+    }
+
     export const Supply = (data: SupplyData) => ({
         type: Steps.Supply,
         data,
@@ -79,12 +82,8 @@ export namespace Step {
     });
     export type Supply = ReturnType<typeof Supply>;
 
-    export interface SupplyData {
-        // should be same as demand in Step.ts from need-help flow ?
-        mock: string;
-    }
+    export type SupplyData = NecessitousStep.DemandData;
 
-    // SUMMARY
     export const Summary = (data: SummaryData) => ({
         type: Steps.Summary,
         data,
@@ -94,5 +93,6 @@ export namespace Step {
 
     export interface SummaryData {
         comment?: string;
+        willDeliverTheSupplies: boolean;
     }
 }

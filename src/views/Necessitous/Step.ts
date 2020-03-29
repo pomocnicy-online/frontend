@@ -70,7 +70,7 @@ export namespace Step {
     };
 
     export namespace Supplies {
-        type Brand = keyof Supplies;
+        export type Brand = keyof Supplies;
         export type Order = Supplies[Brand];
 
         const supplyName = (brand: Brand): string => {
@@ -96,18 +96,26 @@ export namespace Step {
             }
         };
 
-        export const toSummary = (supplies?: Partial<Supplies>) =>
+        export interface SummaryViewData {
+            brand: Brand;
+            icon: string;
+            title: string;
+            quantity: number;
+        }
+
+        export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
             pipe(
                 O.fromNullable(supplies),
                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
                 O.getOrElse<[Brand, Order][]>(() => []),
+                A.filter(([brand, supply]) => (brand === "psychologicalSupport" ? supply.description !== "" : true)),
                 A.map(([brand, supply]) => ({
                     brand,
                     icon: `${brand}-icon`,
                     title: supplyName(brand),
                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
                 })),
-                A.filter(x => x.quantity > 0 || x.brand === "psychologicalSupport")
+                A.filter(x => x.quantity > 0)
             );
     }
 

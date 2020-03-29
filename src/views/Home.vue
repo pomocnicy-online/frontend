@@ -18,7 +18,7 @@
                     <p>Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony</p>
                     <v-btn class="action-link" color="primary" to="/potrzebujacy/1">Zgłoś potrzebę</v-btn>
                 </div>
-                <voice-icon />
+                <voice-icon class="action-item__icon" />
             </article>
             <article class="action-item">
                 <div class="action-item__content">
@@ -29,7 +29,7 @@
                     </p>
                     <v-btn class="action-link" color="primary" to="/pomagajacy/1">Zgłoś pomoc</v-btn>
                 </div>
-                <heart-icon />
+                <heart-icon class="action-item__icon" />
             </article>
         </aside>
     </div>
@@ -58,7 +58,6 @@ export default class HelloWorld extends Vue {}
     grid-template-columns: 1fr;
     justify-items: center;
     grid-gap: 3rem;
-    padding: 2rem;
 
     img {
         display: block;
@@ -68,6 +67,7 @@ export default class HelloWorld extends Vue {}
     @include at(medium) {
         margin-top: 6rem;
         grid-template-columns: minmax(auto, 1fr) 1fr;
+        padding: 2rem;
     }
 
     h2 {
@@ -121,6 +121,14 @@ export default class HelloWorld extends Vue {}
     &__content {
         display: grid;
         align-content: space-between;
+    }
+
+    &__icon {
+        display: none;
+
+        @include at(small) {
+            display: initial;
+        }
     }
 }
 </style>
