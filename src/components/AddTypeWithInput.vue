@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
 
@@ -51,6 +51,11 @@ export default class AddTypeWithInput extends Vue {
 
     private deleteType() {
         this.deleteSupplies(this.brand, this.kind);
+    }
+
+    @Watch("quantity")
+    quantityChanged(quantity: number) {
+        this.updatePosition();
     }
 
     private updatePosition() {
