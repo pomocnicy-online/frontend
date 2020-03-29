@@ -15,6 +15,8 @@ import { AppStore, Actions } from "@/state";
 import { Component, Vue, Inject } from "vue-property-decorator";
 import { Step } from "./Step";
 
+import { CanHelp } from "../CanHelp";
+
 @Component
 export default class CanHelpView extends Vue {
     @Inject("rxstore") public readonly rxStore!: AppStore;
@@ -33,36 +35,10 @@ export default class CanHelpView extends Vue {
     }
 
     onSendData() {
-        // console.log({ ...this.steps });
-        // TODO: serialization and sending request
-        // pipe(
-        //     {
-        //         contact: Step.Contact({
-        //             name: "Janusz",
-        //             surname: "Waliglowa",
-        //             city: "Kraków",
-        //             street: "Mikołaja Kopernika",
-        //             building: "1",
-        //             email: "halko@gg.pl",
-        //             phone: "123"
-        //         }),
-        //         outlet: Step.Outlet({
-        //             mock: "Dajesz, dajesz nie przestajesz!"
-        //         }),
-        //         supply: Step.Supply({
-        //             mock: "Dajesz, dajesz nie przestajesz!"
-        //         }),
-        //         summary: Step.Summary({
-        //             comment: "ASAP !"
-        //         })
-        //     },
-        //      CanHelp.createRequest,
-        //     TE.fromEither,
-        //     TE.chain(CanHelp.send)
-        // )().then(() => {
-        //     this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
-        //     this.$router.push({ path: "/" });
-        // });
+        pipe({ ...this.steps }, CanHelp.createRequest, TE.fromEither, TE.chain(CanHelp.send))().then(() => {
+            this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
+            this.$router.push({ path: "/" });
+        });
     }
 }
 </script>

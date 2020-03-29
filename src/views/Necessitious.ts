@@ -161,10 +161,9 @@ export namespace Necessitous {
 
     export interface Response {}
 
-    const error = () => new Error();
     const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
         !!(steps.contact && steps.demand && steps.summary);
-    const fromNonPartial = E.fromPredicate(isNotPartial, error);
+    const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
     export const sender = <Req, Res>(req: Req): TE.TaskEither<Error, Res> =>
         TE.tryCatchK(
@@ -176,7 +175,7 @@ export namespace Necessitous {
                     },
                     body: JSON.stringify(req)
                 }).then(res => res.json()),
-            error
+            () => new Error("Failed to send the request")
         )();
 
     export const send = (req: Request) => sender(req);

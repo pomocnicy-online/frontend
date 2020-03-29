@@ -2,6 +2,7 @@ import * as E from "fp-ts/es6/Either";
 import * as O from "fp-ts/es6/Option";
 import * as A from "fp-ts/es6/Array";
 import * as R from "fp-ts/es6/Record";
+import { sequenceT } from "fp-ts/es6/Apply";
 import { flow } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 
@@ -49,33 +50,33 @@ export namespace CanHelp {
         };
     }
 
-    const error = () => new Error();
     const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
         !!(steps.contact && steps.outlet && steps.supply && steps.summary);
-    const fromNonPartial = E.fromPredicate(isNotPartial, error);
+    const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
     export const send = (req: Request) => Necessitous.sender(req);
     export const createRequest = flow(
         fromNonPartial,
-        E.map(steps => {
+        E.chain(steps => {
             const contact = steps.contact.data as Step.ContactData;
             const outlet = steps.outlet.data as Step.OutletData;
             const supplies = steps.supply.data as Step.SupplyData;
             const summary = steps.summary.data as Step.SummaryData;
 
-            const request: Record<keyof CanHelp.Request, O.Option<CanHelp>> = {
-                helper: Request.Helper(contact),
-                requests: pipe(
-                    // for now we are only making one request at time
-                    outlet.request,
-                    A.head,
-                    O.chain(req => Request.SupplyRequest(req, supplies, summary)),
-                    O.map(x => [x])
-                )
-            };
-
-            return request;
-        }),
-        E.map(R.compact)
+            return pipe(
+                sequenceT(O.option)(
+                    Request.Helper(contact),
+                    pipe(
+                        // for now we are only making one request at time
+                        outlet.request,
+                        A.head,
+                        O.chain(req => Request.SupplyRequest(req, supplies, summary)),
+                        O.map(x => [x])
+                    )
+                ),
+                O.map(([helper, requests]) => ({ helper, requests })),
+                E.fromOption(() => new Error("Incorrect request format"))
+            );
+        })
     );
 }
