@@ -36,7 +36,9 @@ import { Step } from "./Step";
     }
 })
 export default class CanHelpSupply extends Vue {
-    supply = { mock: "" };
+    supply: Step.SupplyData = {
+        supplies: {}
+    };
 
     @Emit("nextStep")
     onNext(): Step.Supply {

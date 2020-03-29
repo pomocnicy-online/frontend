@@ -1,7 +1,7 @@
 <template>
     <v-col md="12" class="pa-0">
         <medical-card-header
-            v-for="supply in choosenSupplies"
+            v-for="supply in supplies"
             :title="supply.title"
             :key="supply.title"
             class="summary"
@@ -52,11 +52,7 @@ import { Step } from "@/views/Necessitous/Step";
     }
 })
 export default class SupplyContainer extends Vue {
-    @Prop() supplies?: Partial<Step.Supplies>;
-
-    get choosenSupplies() {
-        return Step.Supplies.toSummary(this.supplies);
-    }
+    @Prop() supplies?: Step.Supplies.SummaryViewData;
 }
 </script>
 

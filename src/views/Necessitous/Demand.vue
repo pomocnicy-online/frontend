@@ -24,7 +24,7 @@
 <script lang="ts">
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
-import { Component, Vue, Emit } from "vue-property-decorator";
+import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
 
 import voiceIcon from "@/components/icons/voice.vue";
 import StepHeader from "@/components/StepHeader.vue";
@@ -40,7 +40,7 @@ import { Step } from "./Step";
     }
 })
 export default class NecessitousDemand extends Vue {
-    // TODO: use smart constructors for this
+    // TODO: use smart constructors for this, vue.$set might be helpful
     demand: Step.DemandData = {
         supplies: {
             mask: {
@@ -96,6 +96,20 @@ export default class NecessitousDemand extends Vue {
     onPrev(): Step.Demand {
         return this.step();
     }
+
+    // TODO: getting to previous step doesn't work properly
+    // need to refactor `updateSupplies` and the components first
+
+    // @Prop()
+    // steps!: Step.Dict;
+
+    // @Watch("steps", { immediate: true })
+    // onStepsChange(steps: Partial<Step.Dict>) {
+    //     if (steps.demand) {
+    //         // this.$set(this.demand, "supplies", (steps.demand.data as Step.DemandData).supplies);
+    //         this.demand = steps.demand.data as Step.DemandData;
+    //     }
+    // }
 
     // TODO: this function is a mess, refactor it and type properly
     private updateSupplies(type: keyof Step.Supplies, position: any) {

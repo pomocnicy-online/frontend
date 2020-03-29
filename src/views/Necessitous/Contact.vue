@@ -61,8 +61,6 @@ export default class NecessitousContact extends Vue {
         }
     }
 
-    isValid = true;
-
     onSubmit() {
         this.$emit("nextStep", Step.Contact({ ...this.contact }));
     }

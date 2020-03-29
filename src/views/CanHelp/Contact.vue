@@ -44,10 +44,6 @@ import { Step } from "./Step";
 export default class CanHelpContact extends Vue {
     contact: Step.ContactData = {
         name: "",
-        surname: "",
-        city: "",
-        street: "",
-        building: "",
         email: "",
         phone: ""
     };

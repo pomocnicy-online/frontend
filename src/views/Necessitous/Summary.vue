@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="summary__demand">
-                    <article v-if="supplies">
+                    <article v-if="supplies.length > 0">
                         <h2>Produkty, które zdecydowałeś się przekazać:</h2>
                         <supply-summary :supplies="supplies" />
                     </article>
@@ -69,8 +69,6 @@ import { pipe } from "fp-ts/es6/pipeable";
 
 import { Step } from "./Step";
 
-const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 && obj.constructor === Object;
-
 @Component({
     components: {
         voiceIcon,
@@ -99,12 +97,7 @@ export default class NecessitousSummary extends Vue {
     }
 
     private get supplies() {
-        return pipe(
-            (this.steps.demand?.data as Step.DemandData)?.supplies,
-            O.fromNullable,
-            O.filter(obj => !isObjEmpty(obj)),
-            O.toUndefined
-        );
+        return Step.Supplies.toSummary(this.steps.demand as Step.Demand);
     }
 
     private get address() {

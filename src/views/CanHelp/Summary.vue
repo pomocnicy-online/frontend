@@ -12,8 +12,7 @@
             <v-container>
                 <div class="summary__contact">
                     <article>
-                        <h2>Kontakt do Ciebie:</h2>
-                        dane kontaktowe podane na pierwszym stepie
+                        <h2>Kontakt do Ciebie:</h2>dane kontaktowe podane na pierwszym stepie
                     </article>
                 </div>
 
@@ -37,9 +36,11 @@
                         </v-row>
                         <v-row class="step-nav">
                             <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
-                            <v-btn color="primary" @click="onSubmit" class="go-next-btn">
-                                Potwierdź Zgłoszenie
-                            </v-btn>
+                            <v-btn
+                                color="primary"
+                                @click="onSubmit"
+                                class="go-next-btn"
+                            >Potwierdź Zgłoszenie</v-btn>
                         </v-row>
                     </label>
                 </div>
@@ -70,6 +71,7 @@ export default class CanHelpSummary extends Vue {
     steps!: Partial<Step.Dict>;
 
     comment = "";
+    willDeliverTheSupplies = false;
 
     @Emit("prevStep")
     onPrev(): Step.Summary {
@@ -86,7 +88,7 @@ export default class CanHelpSummary extends Vue {
     }
 
     private get step() {
-        return Step.Summary(this.comment === "" ? {} : { comment: this.comment });
+        return Step.Summary({ willDeliverTheSupplies: this.willDeliverTheSupplies, comment: this.comment });
     }
 }
 </script>
