@@ -16,7 +16,7 @@
                     <v-text-field
                         :value="email"
                         @input="$emit('update:email', $event)"
-                        :rules="[v => !!v || 'Email jest wymagany']"
+                        :rules="[v => !!v || 'Email jest wymagany', v => /\S+@\S+\.\S+/.test(v) || 'Email jest nieprawidłowy']"
                         label="Email"
                         filled
                         required

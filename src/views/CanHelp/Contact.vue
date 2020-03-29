@@ -14,10 +14,6 @@
             <step-header name="Wprowadź dane kontaktowe" current="1" outOf="4" />
             <contact-form
                 :name.sync="contact.name"
-                :surname.sync="contact.surname"
-                :addressCity.sync="contact.city"
-                :addressStreet.sync="contact.street"
-                :addressNumber.sync="contact.building"
                 :email.sync="contact.email"
                 :phone.sync="contact.phone"
                 @submit="onSubmit"
@@ -44,10 +40,6 @@ import { Step } from "./Step";
 export default class CanHelpContact extends Vue {
     contact: Step.ContactData = {
         name: "",
-        surname: "",
-        city: "",
-        street: "",
-        building: "",
         email: "",
         phone: ""
     };

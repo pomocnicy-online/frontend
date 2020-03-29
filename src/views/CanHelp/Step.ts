@@ -55,10 +55,6 @@ export namespace Step {
 
     export interface ContactData {
         name: string;
-        surname: string;
-        city?: string; // optional
-        street?: string; // optional
-        building: string;
         email: string;
         phone: string;
     }
