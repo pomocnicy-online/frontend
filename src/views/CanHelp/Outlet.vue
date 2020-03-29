@@ -77,7 +77,7 @@
 <script lang="ts">
 import StepHeader from "@/components/StepHeader.vue";
 
-import { Component, Vue, Emit } from "vue-property-decorator";
+import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
 import { Step } from "./Step";
 
 @Component({
@@ -86,10 +86,20 @@ import { Step } from "./Step";
     }
 })
 export default class CanHelpOutlet extends Vue {
-    outlet = { requestId: "" };
+    outlet: Step.OutletData = { requestId: "" };
     outlets = [];
     path = "/api/requests/";
     outletRequest = null;
+
+    @Prop()
+    steps!: Step.Dict;
+
+    @Watch("steps", { immediate: true })
+    onStepsChange(steps: Partial<Step.Dict>) {
+        if (steps.outlet) {
+            this.outlet = steps.outlet.data as Step.OutletData;
+        }
+    }
 
     async mounted() {
         this.outlets = await this.getAllOutlets();
@@ -106,15 +116,13 @@ export default class CanHelpOutlet extends Vue {
 
     @Emit("nextStep")
     onNext(): Step.Outlet {
-        return this.step();
+        return Step.Outlet({ ...this.outlet });
     }
 
     @Emit("prevStep")
     onPrev(): Step.Outlet {
-        return this.step();
+        return Step.Outlet({ ...this.outlet });
     }
-
-    private step = () => Step.Outlet({ ...this.outlet });
 }
 </script>
 

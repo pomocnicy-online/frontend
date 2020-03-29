@@ -68,7 +68,7 @@ export namespace Step {
     export type Outlet = ReturnType<typeof Outlet>;
 
     export interface OutletData {
-        mock: string;
+        requestId: string;
     }
 
     // SUPPLY
