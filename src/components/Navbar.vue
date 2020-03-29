@@ -2,7 +2,7 @@
     <div class="nav">
         <v-app-bar color="transparent" elevation="0" light class="nav__bar">
             <v-toolbar-title>
-                <router-link to="/" class="nav__title">Helpmed</router-link>
+                <router-link to="/" class="nav__title">pomocnicy.online</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -69,9 +69,10 @@ export default class Navbar extends Vue {
 @import "@/common/styles.scss";
 
 .nav {
-    @include at(medium) {
-        padding-left: 2rem;
-    }
+    padding-left: 1.8rem;
+    // @include at(medium) {
+    //     padding-left: 2rem;
+    // }
 
     &__icon {
         @include at(medium) {

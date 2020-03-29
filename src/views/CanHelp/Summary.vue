@@ -1,12 +1,12 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <heart-icon />
             <h2>Twoje podsumowanie</h2>
             <p>
                 Już prawie konczymy! Sprawdź tylko czy Twoje zgłoszenie się zgadza. Pamietaj, że stawka jest wysoka-
                 pomagasz ratować zdrowie i zycie ludzkie. Jak dobrze, że mamy Ciebie!
             </p>
+            <img class="step-img" src="@/assets/offer-help.svg" alt />
         </article>
         <div class="summary">
             <v-container>
@@ -62,7 +62,6 @@ const isObjEmpty = <T extends object>(obj: T) => Object.keys(obj).length === 0 &
 
 @Component({
     components: {
-        heartIcon,
         Address
     }
 })

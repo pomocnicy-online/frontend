@@ -1,7 +1,6 @@
 <template>
     <div class="step-main">
         <article class="step-desc">
-            <heart-icon />
             <h2>Chce pomóc</h2>
             <p>
                 Wypełnij formularz pełnymi danymi kontaktowymi w celu ulatwienia kontaktu z wybranym przez Ciebie
@@ -24,7 +23,6 @@
 </template>
 
 <script lang="ts">
-import heartIcon from "@/components/icons/heart.vue";
 import StepHeader from "@/components/StepHeader.vue";
 import ContactForm from "@/components/ContactForm.vue";
 
@@ -34,7 +32,6 @@ import { Step } from "./Step";
 @Component({
     components: {
         StepHeader,
-        heartIcon,
         ContactForm
     }
 })

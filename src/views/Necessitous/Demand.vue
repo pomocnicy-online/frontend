@@ -26,7 +26,6 @@ import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
 import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
 
-import voiceIcon from "@/components/icons/voice.vue";
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/views/SupplyContainer.vue";
 
@@ -34,7 +33,6 @@ import { Step } from "./Step";
 
 @Component({
     components: {
-        voiceIcon,
         StepHeader,
         SupplyContainer
     }
