@@ -11,7 +11,7 @@
             ></v-text-field>
         </v-col>
         <v-col cols="4" class="pa-2">
-            <Counter :kind="kind" :quantity="quantity" :plus="plus" :minus="minus" />
+            <Counter :kind="kind" :quantity.sync="quantity" :plus="plus" :minus="minus" />
         </v-col>
     </v-row>
 </template>

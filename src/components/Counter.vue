@@ -6,6 +6,7 @@
 
         <v-col cols="3" class="pa-0">
             <v-text-field
+                :disabled="!kind"
                 hide-details
                 dense
                 class="pa-0 centered-input"
