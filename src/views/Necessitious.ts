@@ -19,16 +19,16 @@ export namespace Necessitous {
 
     export type Request = Partial<{
         medicalCentre: Request.MedicalCentre;
-        maskRequest: Request.Mask;
-        gloveRequest: Request.Glove;
-        groceryRequest: Request.Grocery;
-        disinfectionMeasureRequest: Request.Disinfectant;
-        suitRequest: Request.Suite;
-        otherCleaningMaterialRequest: Request.Cleaning;
-        psychologicalSupportRequest: Request.PsychologicalSupport;
-        sewingSuppliesRequest: Request.SewingSupplies;
-        otherRequest: Request.Other;
-        printRequest: Request.Print;
+        masks: Request.Mask;
+        gloves: Request.Glove;
+        groceries: Request.Grocery;
+        disinfectionMeasures: Request.Disinfectant;
+        suits: Request.Suite;
+        otherCleaningMaterials: Request.Cleaning;
+        psychologicalSupport: Request.PsychologicalSupport;
+        sewingSupplies: Request.SewingSupplies;
+        others: Request.Other;
+        prints: Request.Print;
     }>;
     export namespace Request {
         export interface MedicalCentre {
@@ -133,7 +133,7 @@ export namespace Necessitous {
         export const Other = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
 
         export const fromOther = (comment?: string) => ({
-            otherRequest: pipe(comment, O.fromNullable, O.chain(Request.Other))
+            others: pipe(comment, O.fromNullable, O.chain(Request.Other))
         });
 
         type SupplyRequest<T> = {
@@ -143,19 +143,19 @@ export namespace Necessitous {
 
         // TODO: made Supply a custom Monad instance
         export const fromSupplies = (supplies: Partial<Step.Supplies>) => ({
-            maskRequest: pipe(supplies.mask, O.fromNullable, O.chain(Request.Mask)),
-            gloveRequest: pipe(supplies.glove, O.fromNullable, O.chain(Request.Glove)),
-            groceryRequest: pipe(supplies.grocery, O.fromNullable, O.chain(Request.Grocery)),
-            disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.chain(Request.Disinfectant)),
-            suitRequest: pipe(supplies.suit, O.fromNullable, O.chain(Request.Suite)),
-            otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.chain(Request.Cleaning)),
-            psychologicalSupportRequest: pipe(
+            masks: pipe(supplies.mask, O.fromNullable, O.chain(Request.Mask)),
+            gloves: pipe(supplies.glove, O.fromNullable, O.chain(Request.Glove)),
+            groceries: pipe(supplies.grocery, O.fromNullable, O.chain(Request.Grocery)),
+            disinfectionMeasures: pipe(supplies.disinfectant, O.fromNullable, O.chain(Request.Disinfectant)),
+            suits: pipe(supplies.suit, O.fromNullable, O.chain(Request.Suite)),
+            otherCleaningMaterials: pipe(supplies.cleaning, O.fromNullable, O.chain(Request.Cleaning)),
+            psychologicalSupport: pipe(
                 supplies.psychologicalSupport,
                 O.fromNullable,
                 O.chain(Request.PsychologicalSupport)
             ),
-            sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
-            printRequest: pipe(supplies.print, O.fromNullable, O.chain(Request.Print))
+            sewingSupplies: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
+            prints: pipe(supplies.print, O.fromNullable, O.chain(Request.Print))
         });
     }
 

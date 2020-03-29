@@ -23,14 +23,15 @@ export namespace CanHelp {
     export namespace Request {
         export type Supplies = Omit<Necessitous.Request, "medicalCentre">;
 
-        export type Helper = Step.ContactData;
-        export const Helper = (data: Step.ContactData) => O.some(data);
+        export type Helper = { firstName: string; phoneNumber: string; email: string };
+        export const Helper = (data: Step.ContactData) =>
+            O.some({
+                firstName: data.name,
+                phoneNumber: data.phone,
+                email: data.email
+            });
 
-        export interface SupplyRequest {
-            requestId: string;
-            supplies: Supplies;
-            willDeliverSupplies: boolean;
-        }
+        export type SupplyRequest = Supplies & { requestId: string };
         export const SupplyRequest = (
             { requestId }: Step.OutletSupplyRequest,
             { supplies }: Step.SupplyData,
@@ -46,8 +47,7 @@ export namespace CanHelp {
 
             return O.some({
                 requestId,
-                supplies: R.compact(reqSupplies),
-                willDeliverSupplies: summary.willDeliverTheSupplies
+                ...R.compact(reqSupplies)
             });
         };
     }

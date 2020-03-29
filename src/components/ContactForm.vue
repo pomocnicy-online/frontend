@@ -13,7 +13,7 @@
                         required
                     ></v-text-field>
                 </v-row>
-                <v-row v-if="addressCity">
+                <v-row v-if="showAddressCity">
                     <v-text-field
                         class="form__input"
                         :value="addressCity"
@@ -103,6 +103,10 @@ export default class ContactForm extends Vue {
 
     get showAddressFields() {
         return this.addressStreet !== undefined && this.addressNumber !== undefined;
+    }
+
+    get showAddressCity() {
+        return this.addressCity !== undefined;
     }
 
     get form(): VForm {
