@@ -74,23 +74,25 @@
             </template>
         </medical-card>
 
-        <!-- Not yet used -->
-        <!-- <medical-card title="Inne środki czystości">
+        <medical-card title="Inne środki czystości">
             <template v-slot:icon>
                 <cleaningProductsIcon />
             </template>
             <template v-slot:usageTypes>
                 <AddTypeWithInput
+                    v-for="index in cleaningCount"
+                    :key="index"
                     brand="cleaning"
                     :usageTypes="usageTypes"
                     :types="sizes"
                     :updateSupplies="updateSupplies"
+                    :deleteSupplies="deleteSupplies"
                 />
             </template>
             <template v-slot:addType>
-                <AddType :types="material" />
+                <AddInputForType :typesCount.sync="cleaningCount" />
             </template>
-        </medical-card>-->
+        </medical-card>
 
         <medical-card title="Wsparcie psychologiczne">
             <template v-slot:icon>
@@ -180,6 +182,7 @@ export default class SupplyContainer extends Vue {
 
     disinfectantCount = 1;
     groceryCount = 1;
+    cleaningCount = 1;
 
     private readonly styles: Supply.Style[] = Object.values(Supply.Style);
     private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
