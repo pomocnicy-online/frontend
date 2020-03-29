@@ -107,7 +107,6 @@ export default class CanHelpOutlet extends Vue {
     towns = ["Wszystkie"];
     selectedTown = "";
     path = "/api/requests/";
-    outletRequest = null;
 
     @Prop()
     steps!: Step.Dict;
