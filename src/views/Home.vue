@@ -58,14 +58,19 @@ export default class HelloWorld extends Vue {}
     grid-template-columns: 1fr;
     justify-items: center;
     grid-gap: 3rem;
+    margin-top: 2rem;
 
     img {
         display: block;
         width: 100%;
     }
 
+    @include at(small) {
+        margin-top: 5rem;
+    }
+
     @include at(medium) {
-        margin-top: 6rem;
+        margin-top: 12rem;
         grid-template-columns: minmax(auto, 1fr) 1fr;
         padding: 2rem;
     }

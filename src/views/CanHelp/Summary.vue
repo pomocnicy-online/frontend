@@ -10,73 +10,83 @@
         </article>
         <div class="summary">
             <v-container>
-                <div class="summary__contact">
-                    <article v-if="contact">
-                        <h2>Kontakt do Ciebie:</h2>
-                        <Address :contact="contact" />
-                    </article>
-                    <article v-else>
-                        <h2 class="warn">Brak danych kontakowych</h2>
-                        <p>
-                            by je dodać wróć do
-                            <router-link to="/pomagajacy/1">kroku pierwszego</router-link>
-                        </p>
-                    </article>
-                </div>
+                <v-form v-model="valid" ref="form">
+                    <div class="summary__contact">
+                        <article v-if="contact">
+                            <h2>Kontakt do Ciebie:</h2>
+                            <Address :contact="contact" />
+                        </article>
+                        <article v-else>
+                            <h2 class="warn">Brak danych kontakowych</h2>
+                            <p>
+                                by je dodać wróć do
+                                <router-link to="/pomagajacy/1">kroku pierwszego</router-link>
+                            </p>
+                        </article>
+                    </div>
 
-                <div class="summary__outlet">
-                    <article v-if="outlet">
-                        <h2>Placówka czekająca na Twoją pomoc:</h2>
-                        <Address :contact="outlet" />
-                    </article>
-                    <article v-else>
-                        <h2 class="warn">Brak wybranej placówki</h2>
-                        <p>
-                            by ją wybrać wróc do
-                            <router-link to="/pomagajacy/2">kroku drugiego</router-link>
-                        </p>
-                    </article>
-                </div>
+                    <div class="summary__outlet">
+                        <article v-if="outlet">
+                            <h2>Placówka czekająca na Twoją pomoc:</h2>
+                            <Address :contact="outlet" />
+                        </article>
+                        <article v-else>
+                            <h2 class="warn">Brak wybranej placówki</h2>
+                            <p>
+                                by ją wybrać wróc do
+                                <router-link to="/pomagajacy/2">kroku drugiego</router-link>
+                            </p>
+                        </article>
+                    </div>
 
-                <div class="summary__supply">
-                    <article v-if="supplies.length > 0">
-                        <h2>Produkty, które zdecydowałeś się przekazać:</h2>
-                        <supply-summary :supplies="supplies" />
+                    <div class="summary__supply">
+                        <article v-if="supplies.length > 0">
+                            <h2>Produkty, które zdecydowałeś się przekazać:</h2>
+                            <supply-summary :supplies="supplies" />
 
-                        <!-- not supported by backend -->
-                        <!-- <label>
+                            <!-- not supported by backend -->
+                            <!-- <label>
                             <v-row class="summary__deliver-checkbox">
                                 <v-checkbox v-model="willDeliverTheSupplies" />Dostarczę produkty
                             </v-row>
-                        </label>-->
-                    </article>
-                    <article v-else>
-                        <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
-                        <p>
-                            by je dodać wróć
-                            <router-link to="/pomagajacy/3">poprzedniego kroku</router-link>
-                        </p>
-                    </article>
-                </div>
-
-                <div class="summary__other">
-                    <div>
-                        <label>
-                            <h2>Dodaj komentarz</h2>
-                            <v-row>
-                                <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
-                            </v-row>
-                        </label>
-                        <v-row class="step-nav">
-                            <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
-                            <v-btn
-                                color="primary"
-                                @click="onSubmit"
-                                class="go-next-btn"
-                            >Potwierdź Zgłoszenie</v-btn>
-                        </v-row>
+                            </label>-->
+                        </article>
+                        <article v-else>
+                            <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
+                            <p>
+                                by je dodać wróć
+                                <router-link to="/pomagajacy/3">poprzedniego kroku</router-link>
+                            </p>
+                        </article>
                     </div>
-                </div>
+
+                    <div class="summary__other">
+                        <div>
+                            <label>
+                                <h2>Dodaj komentarz</h2>
+                                <v-row>
+                                    <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
+                                </v-row>
+                            </label>
+
+                            <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
+
+                            <v-row class="step-nav">
+                                <v-btn
+                                    text
+                                    color="primary"
+                                    @click="onPrev"
+                                    class="go-next-btn"
+                                >Wstecz</v-btn>
+                                <v-btn
+                                    color="primary"
+                                    @click="onSubmit"
+                                    class="go-next-btn"
+                                >Potwierdź Zgłoszenie</v-btn>
+                            </v-row>
+                        </div>
+                    </div>
+                </v-form>
             </v-container>
         </div>
     </div>
@@ -90,13 +100,18 @@ import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as A from "fp-ts/es6/Array";
 
+import TermsCheckbox from "@/components/TermsCheckBox.vue";
+
 import { Step } from "./Step";
 import { Step as NecessitousStep } from "../Necessitous/Step";
+
+type VForm = Vue & { validate: () => boolean };
 
 @Component({
     components: {
         Address,
-        SupplySummary
+        SupplySummary,
+        TermsCheckbox
     }
 })
 export default class CanHelpSummary extends Vue {
@@ -105,6 +120,7 @@ export default class CanHelpSummary extends Vue {
 
     comment = "";
     willDeliverTheSupplies = false;
+    isTermsOfServiceAccepted = false;
 
     @Emit("prevStep")
     onPrev(): Step.Summary {
@@ -118,8 +134,14 @@ export default class CanHelpSummary extends Vue {
     }
 
     onSubmit() {
-        this.$emit("nextStep", this.step);
-        this.$emit("sendData");
+        if (this.form.validate()) {
+            this.$emit("nextStep", this.step);
+            this.$emit("sendData");
+        }
+    }
+
+    get form(): VForm {
+        return this.$refs.form as VForm;
     }
 
     private get supplies() {

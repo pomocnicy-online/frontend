@@ -1,16 +1,16 @@
-$breakpoints: (small: 767px,
+$breakpoints: (
+    small: 767px,
     medium: 992px,
     large: 1200px,
-    extraLarge: 1450px);
+    extraLarge: 1450px
+);
 
 @mixin at($breakpoint) {
     @if map-has-key($breakpoints, $breakpoint) {
         @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
             @content;
         }
-    }
-
-    @else {
+    } @else {
         @warn "No such breakpoint";
     }
 }
@@ -21,9 +21,8 @@ $breakpoints: (small: 767px,
         grid-template-columns: 1fr;
         grid-gap: 8rem;
 
-
         @include at(medium) {
-            margin-top: 6rem;
+            margin-top: 10rem;
             grid-template-columns: 1fr 442px;
             padding: 2rem;
         }
