@@ -25,8 +25,6 @@ export default class NecessitousView extends Vue {
     onNextStep(step: Step) {
         this.steps[step.type] = step;
 
-        console.log("steps", this.steps);
-
         const path = pipe(Step.nextPath(step), O.toUndefined);
         path && this.$router.push({ path });
     }

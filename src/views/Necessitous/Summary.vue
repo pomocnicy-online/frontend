@@ -10,40 +10,43 @@
         </article>
         <div class="summary">
             <v-container>
-                <div class="summary__contact">
-                    <article v-if="address">
-                        <h2>Twoja placówka czekająca na pomoc:</h2>
-                        <Address :contact="address" />
-                    </article>
-                    <article v-else>
-                        <h2 class="warn">Brak wybranej placówki!</h2>
-                        <p>
-                            by ją wybrać wróć do
-                            <router-link to="/potrzebujacy/1">kroku pierwszego</router-link>
-                        </p>
-                    </article>
-                </div>
+                <v-form v-model="valid" ref="form">
+                    <div class="summary__contact">
+                        <article v-if="address">
+                            <h2>Twoja placówka czekająca na pomoc:</h2>
+                            <Address :contact="address" />
+                        </article>
+                        <article v-else>
+                            <h2 class="warn">Brak wybranej placówki!</h2>
+                            <p>
+                                by ją wybrać wróć do
+                                <router-link to="/potrzebujacy/1">kroku pierwszego</router-link>
+                            </p>
+                        </article>
+                    </div>
 
-                <div class="summary__demand">
-                    <article v-if="supplies.length > 0">
-                        <h2>Produkty, których potrzebujesz</h2>
-                        <supply-summary :supplies="supplies" />
-                    </article>
-                    <article v-else>
-                        <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
-                        <p>
-                            by je dodać wróć
-                            <router-link to="/potrzebujacy/2">poprzedniego kroku</router-link>
-                        </p>
-                    </article>
-                </div>
+                    <div class="summary__demand">
+                        <article v-if="supplies.length > 0">
+                            <h2>Produkty, których potrzebujesz</h2>
+                            <supply-summary :supplies="supplies" />
+                        </article>
+                        <article v-else>
+                            <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
+                            <p>
+                                by je dodać wróć
+                                <router-link to="/potrzebujacy/2">poprzedniego kroku</router-link>
+                            </p>
+                        </article>
+                    </div>
 
-                <div class="summary__other">
-                    <label>
+                    <div class="summary__other">
                         <h2>Dodaj komentarz</h2>
                         <v-row>
                             <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
                         </v-row>
+
+                        <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
+
                         <v-row class="step-nav">
                             <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                             <v-btn
@@ -52,8 +55,8 @@
                                 class="go-next-btn"
                             >Potwierdź Zgłoszenie</v-btn>
                         </v-row>
-                    </label>
-                </div>
+                    </div>
+                </v-form>
             </v-container>
         </div>
     </div>
@@ -65,13 +68,18 @@ import voiceIcon from "@/components/icons/voice.vue";
 import Address from "@/components/Address.vue";
 import SupplySummary from "../SupplySummary.vue";
 
+import TermsCheckbox from "@/components/TermsCheckBox.vue";
+
 import { Step } from "./Step";
+
+type VForm = Vue & { validate: () => boolean };
 
 @Component({
     components: {
         voiceIcon,
         Address,
-        SupplySummary
+        SupplySummary,
+        TermsCheckbox
     }
 })
 export default class NecessitousSummary extends Vue {
@@ -79,6 +87,7 @@ export default class NecessitousSummary extends Vue {
     steps!: Partial<Step.Dict>;
 
     comment = "";
+    isTermsOfServiceAccepted = false;
 
     @Emit("prevStep")
     onPrev(): Step.Summary {
@@ -89,9 +98,15 @@ export default class NecessitousSummary extends Vue {
         this.comment = (steps.summary?.data as Step.SummaryData).comment ?? this.comment;
     }
 
+    get form(): VForm {
+        return this.$refs.form as VForm;
+    }
+
     onSubmit() {
-        this.$emit("nextStep", this.step);
-        this.$emit("sendData");
+        if (this.form.validate()) {
+            this.$emit("nextStep", this.step);
+            this.$emit("sendData");
+        }
     }
 
     private get supplies() {

@@ -15,6 +15,7 @@ import CanHelpSupply from "@/views/CanHelp/Supply.vue";
 import CanHelpSummary from "@/views/CanHelp/Summary.vue";
 
 import NotFound from "@/components/NotFound.vue";
+import TermsOfService from "@/components/TermsOfService.vue";
 
 Vue.use(VueRouter);
 
@@ -65,6 +66,10 @@ const routes = [
                 component: CanHelpSummary
             }
         ]
+    },
+    {
+        path: "/regulamin",
+        component: TermsOfService
     },
     {
         path: "*",
