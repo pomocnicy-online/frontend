@@ -49,7 +49,7 @@ export namespace Necessitous {
             phoneNumber: data.phone
         });
 
-        // TODO: refactor serialization, io-ts ?
+        // TODO: refactor serialization, io-ts ?, move to supplies ?
 
         const nonEmpty = <A extends keyof Step.Supplies, B>(fn: (data: Step.Supplies[A]) => B) => (
             data: Step.Supplies[A]
@@ -132,19 +132,41 @@ export namespace Necessitous {
         };
         export const Other = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
 
+        export const fromOther = (comment?: string) => ({
+            otherRequest: pipe(comment, O.fromNullable, O.chain(Request.Other))
+        });
+
         type SupplyRequest<T> = {
             description?: string;
             positions: T[];
         };
+
+        // TODO: made Supply a custom Monad instance
+        export const fromSupplies = (supplies: Partial<Step.Supplies>) => ({
+            maskRequest: pipe(supplies.mask, O.fromNullable, O.chain(Request.Mask)),
+            gloveRequest: pipe(supplies.glove, O.fromNullable, O.chain(Request.Glove)),
+            groceryRequest: pipe(supplies.grocery, O.fromNullable, O.chain(Request.Grocery)),
+            disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.chain(Request.Disinfectant)),
+            suitRequest: pipe(supplies.suit, O.fromNullable, O.chain(Request.Suite)),
+            otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.chain(Request.Cleaning)),
+            psychologicalSupportRequest: pipe(
+                supplies.psychologicalSupport,
+                O.fromNullable,
+                O.chain(Request.PsychologicalSupport)
+            ),
+            sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
+            printRequest: pipe(supplies.print, O.fromNullable, O.chain(Request.Print))
+        });
     }
 
     export interface Response {}
 
     const error = () => new Error();
-    export const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
+    const isNotPartial = (steps: Partial<Step.Dict>): steps is Step.Dict =>
         !!(steps.contact && steps.demand && steps.summary);
+    const fromNonPartial = E.fromPredicate(isNotPartial, error);
 
-    export const send = (req: Request): TE.TaskEither<Error, Response> =>
+    export const sender = <Req, Res>(req: Req): TE.TaskEither<Error, Res> =>
         TE.tryCatchK(
             () =>
                 fetch(path, {
@@ -157,31 +179,20 @@ export namespace Necessitous {
             error
         )();
 
+    export const send = (req: Request) => sender(req);
+
     export const createRequest = flow(
-        E.fromPredicate(isNotPartial, error),
+        fromNonPartial,
         E.map(steps => {
             // TODO: narrow the types, use union builder
             const contact = steps.contact.data as Step.ContactData;
             const { supplies } = steps.demand.data as Step.DemandData;
             const summary = steps.summary.data as Step.SummaryData;
 
-            // TODO: made Supply a custom Monad instance
             const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
                 medicalCentre: O.some(Request.MedicalCentre(contact)),
-                maskRequest: pipe(supplies.mask, O.fromNullable, O.chain(Request.Mask)),
-                gloveRequest: pipe(supplies.glove, O.fromNullable, O.chain(Request.Glove)),
-                groceryRequest: pipe(supplies.grocery, O.fromNullable, O.chain(Request.Grocery)),
-                disinfectionMeasureRequest: pipe(supplies.disinfectant, O.fromNullable, O.chain(Request.Disinfectant)),
-                suitRequest: pipe(supplies.suit, O.fromNullable, O.chain(Request.Suite)),
-                otherCleaningMaterialRequest: pipe(supplies.cleaning, O.fromNullable, O.chain(Request.Cleaning)),
-                psychologicalSupportRequest: pipe(
-                    supplies.psychologicalSupport,
-                    O.fromNullable,
-                    O.chain(Request.PsychologicalSupport)
-                ),
-                sewingSuppliesRequest: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
-                printRequest: pipe(supplies.print, O.fromNullable, O.chain(Request.Print)),
-                otherRequest: pipe(summary.comment, O.fromNullable, O.chain(Request.Other))
+                ...Request.fromOther(summary.comment),
+                ...Request.fromSupplies(supplies)
             };
 
             return request;
