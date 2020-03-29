@@ -14,6 +14,8 @@ import CanHelpOutlet from "@/views/CanHelp/Outlet.vue";
 import CanHelpSupply from "@/views/CanHelp/Supply.vue";
 import CanHelpSummary from "@/views/CanHelp/Summary.vue";
 
+import NotFound from "@/components/NotFound.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -63,6 +65,10 @@ const routes = [
                 component: CanHelpSummary
             }
         ]
+    },
+    {
+        path: "*",
+        component: NotFound
     }
 ];
 

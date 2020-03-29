@@ -1,8 +1,8 @@
 <template>
     <v-app>
-        <v-content class="content">
-            <Navbar />
-            <v-container fluid>
+        <nav-bar />
+        <v-content>
+            <v-container fluid class="content">
                 <router-view />
             </v-container>
         </v-content>
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import Navbar from "@/components/Navbar.vue";
+import NavBar from "@/components/Navbar.vue";
 import ThankYou from "@/components/ThankYou.vue";
 
 import { Component, Vue, Provide } from "vue-property-decorator";
@@ -21,7 +21,7 @@ import { select } from "@rxsv/core";
 import { rootStore, AppStore } from "@/state";
 
 @Component<App>({
-    components: { Navbar, ThankYou },
+    components: { NavBar, ThankYou },
     subscriptions(): Observables {
         const { state$ } = this.rxStore;
 
