@@ -2,7 +2,9 @@
     <v-row align="start" justify="center">
         <v-col cols="6" class="pa-4">
             <v-row align="center" justify="center">
-                <h3 class="body-1 medical-type__title">{{ $typeName(type) }}</h3>
+                <h3
+                    class="body-1 medical-type__title"
+                >{{ $vuetify.lang.t(`$vuetify.types.${type}`) }}</h3>
             </v-row>
         </v-col>
         <v-col cols="6" class="pa-2">

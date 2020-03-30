@@ -103,29 +103,4 @@ export namespace Supply {
         type: PrintType;
         quantity: number;
     }
-
-    export const typeName = (type: string) => {
-        switch (type) {
-            case "disposable":
-                return "Jednorazowe";
-            case "reusable":
-                return "Wielorazowe";
-            case "Male":
-                return "Męskie";
-            case "Female":
-                return "Damskie";
-            case "Child":
-                return "Dziecięce";
-            case "Latex":
-                return "Lateksowe";
-            case "Nitrile":
-                return "Nitrylowe";
-            case "Vinyl":
-                return "Winylowe";
-            case "Foil":
-                return "Foliowe";
-            default:
-                return type;
-        }
-    };
 }
