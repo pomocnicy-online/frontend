@@ -39,34 +39,46 @@
                                     cols="10"
                                     md="6"
                                 >
-                                    <div>
-                                        maseczki:
+                                    <div v-if="item.maskRequestsTotalCount">
+                                        Maseczki:
                                         <strong>{{ item.maskRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
-                                        rekawiczki:
+                                    <div v-if="item.gloveRequestsTotalCount">
+                                        Rękawiczki:
                                         <strong>{{ item.gloveRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
-                                        kombinezony:
+                                    <div v-if="item.suitRequestsTotalCount">
+                                        Kombinezony:
                                         <strong>{{ item.suitRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
-                                        zakupy ?:
+                                    <div v-if="item.groceryRequestsTotalCount">
+                                        Artykuły spozywcze:
                                         <strong>{{ item.groceryRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
-                                        plyny dezynfekujące:
+                                    <div v-if="item.disinfectionMeasureRequestsTotalCount">
+                                       Środki do dezynfekcji:
                                         <strong>{{ item.disinfectionMeasureRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
-                                        inne dezynfekujące materialy:
+                                    <div v-if="item.otherCleaningMaterialRequestsTotalCount">
+                                        Inne środki czystości:
                                         <strong>{{ item.otherCleaningMaterialRequestsTotalCount }}</strong>
                                     </div>
-                                    <div>
+                                    <!-- <div v-if="item.printRequestsTotalCount">
                                         print request ?
                                         <strong>{{ item.printRequestsTotalCount }}</strong>
+                                    </div> -->
+                                    <div v-if="item.psychologicalSupportNeeded">
+                                        Wsparcie psychologiczne:
+                                        <strong>tak</strong>
                                     </div>
+                                    <div v-if="item.sewingSuppliesNeeded">
+                                        Materiały do szycia:
+                                        <strong>{{ item.sewingSuppliesNeeded }}</strong>
+                                    </div>
+                                    <!-- <div v-if="item.otherNeeded">
+                                        otherNeeded
+                                        <strong>{{ item.otherNeeded }}</strong>
+                                    </div> -->
                                 </v-col>
                             </v-row>
                         </div>
