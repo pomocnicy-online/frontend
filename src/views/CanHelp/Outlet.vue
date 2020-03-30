@@ -123,7 +123,7 @@ export default class CanHelpOutlet extends Vue {
     @Prop()
     steps!: Step.Dict;
 
-    onRadioChange(id) {
+    onRadioChange(id: number) {
         this.outlet = {
             request: [
                 {
@@ -147,7 +147,7 @@ export default class CanHelpOutlet extends Vue {
     }
 
     @Watch("selectedTown", { immediate: true })
-    onTownsChange(selectedTown: any) {
+    onTownsChange(selectedTown: string) {
         if (selectedTown === "Wszystkie") {
             this.filteredOutlets = this.outlets;
         } else {
