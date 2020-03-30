@@ -1,8 +1,8 @@
 <template>
     <div class="nav">
-        <v-app-bar color="white" elevation="0" light class="nav__bar" app>
+        <v-app-bar color="transparent" elevation="0" light class="nav__bar">
             <v-toolbar-title>
-                <router-link to="/" class="nav__title">pomocnicy.online</router-link>
+                <router-link to="/" class="nav__title">Pomocnicy</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
@@ -17,22 +17,18 @@
                 <router-link
                     :to="item.route"
                     class="nav__link"
-                    exact-active-class="nav__link--active"
-                    exact
+                    linkActiveClass="nav__link--active"
                 >{{ item.name }}</router-link>
             </v-toolbar-title>
         </v-app-bar>
 
         <v-navigation-drawer class="nav__drawer" v-model="drawer" app top right temporary>
             <v-list nav dense>
-                <v-list-item v-for="item in navigationList" :key="item.name">
-                    <router-link
-                        class="nav__link"
-                        exact-active-class="nav__link--active"
-                        exact
-                        :to="item.route"
-                    >{{ item.name }}</router-link>
-                </v-list-item>
+                <v-list-item-group active-class="deep-purple--text text--accent-4">
+                    <v-list-item v-for="item in navigationList" :key="item.name">
+                        <router-link :to="item.route">{{ item.name }}</router-link>
+                    </v-list-item>
+                </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
     </div>
@@ -54,6 +50,14 @@ export default class Navbar extends Vue {
             route: "/pomagajacy/1"
         },
         {
+            name: "Materiały",
+            route: "/materialy"
+        },
+        {
+            name: "Instrukcja szycia",
+            route: "/instrukcja"
+        },
+        {
             name: "Kontakt",
             route: "/kontakt"
         }
@@ -65,14 +69,8 @@ export default class Navbar extends Vue {
 @import "@/common/styles.scss";
 
 .nav {
-    &__bar {
-        margin: 0 auto;
-        max-width: 80rem;
-        background-color: white;
-
-        @include at(medium) {
-            padding-left: 1.8rem;
-        }
+    @include at(medium) {
+        padding-left: 2rem;
     }
 
     &__icon {
@@ -90,7 +88,6 @@ export default class Navbar extends Vue {
     }
 
     &__link {
-        position: relative;
         color: var(--text-primary);
         padding-right: 3.4rem;
         line-height: 21px;
@@ -100,8 +97,7 @@ export default class Navbar extends Vue {
         &:hover,
         &:focus,
         &--active {
-            text-decoration: underline;
-            text-underline-position: under;
+            text-decoration-line: underline;
         }
     }
 

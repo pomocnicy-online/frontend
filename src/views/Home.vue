@@ -6,13 +6,20 @@
                 <p>
                     Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej placowki lub wolontariusza w oparciu o
                     realne zapotrzebowanie.
-                </p>
+                </p>               
             </article>
+             <article class="desc">
+                <h2>Aplikacja jest w fazie testów<br/><small>Nie możesz jeszcze dodać zgłoszenia</small></h2>
+               
+                <p><a href="https://forms.gle/5izjGcFPVTCKSWcy8" target="_blank">Kliknij tutaj</a> jeżeli chcesz dostać powiadomienie o uruchomieniu aplikacji</p>
+            </article>
+           
             <img src="@/assets/landing.svg" alt />
         </div>
-
         <aside class="action-items">
             <article class="action-item">
+                
+
                 <div class="action-item__content">
                     <h2>Potrzebujący</h2>
                     <p>Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony</p>
@@ -58,7 +65,7 @@ export default class HelloWorld extends Vue {}
     grid-template-columns: 1fr;
     justify-items: center;
     grid-gap: 3rem;
-    margin-top: 2rem;
+    margin-top: 0rem;
 
     img {
         display: block;
@@ -66,11 +73,11 @@ export default class HelloWorld extends Vue {}
     }
 
     @include at(small) {
-        margin-top: 5rem;
+        margin-top: 3rem;
     }
 
     @include at(medium) {
-        margin-top: 12rem;
+        margin-top: 6rem;
         grid-template-columns: minmax(auto, 1fr) 1fr;
         padding: 2rem;
     }
