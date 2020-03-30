@@ -8,6 +8,7 @@
                     realne zapotrzebowanie.
                 </p>               
             </article>
+            <br/>
              <article class="desc">
                 <h2>Aplikacja jest w fazie testów<br/><small>Nie możesz jeszcze dodać zgłoszenia</small></h2>
                
