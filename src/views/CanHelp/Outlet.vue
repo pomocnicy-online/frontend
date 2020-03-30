@@ -9,7 +9,7 @@
                     </v-col>
                 </v-row>
                 <article class="step-desc step-table">
-                    <v-radio-group v-model="outlet.request.requestId">
+                    <v-radio-group @change="onRadioChange">
                         <v-row class="step-table__row-container d-none d-sm-flex">
                             <v-col cols="2" md="1"></v-col>
                             <v-col cols="10" md="5">Szpital</v-col>
@@ -23,7 +23,7 @@
                         >
                             <v-row>
                                 <v-col cols="2" md="1">
-                                    <v-radio :key="item.id" :value="item.id"></v-radio>
+                                    <v-radio :key="item.requestId" :value="item.requestId"></v-radio>
                                 </v-col>
                                 <v-col class="offset-md-0" cols="10" md="5">
                                     <div>
@@ -56,7 +56,7 @@
                                         <strong>{{ item.groceryRequestsTotalCount }}</strong>
                                     </div>
                                     <div v-if="item.disinfectionMeasureRequestsTotalCount">
-                                       Środki do dezynfekcji:
+                                        Środki do dezynfekcji:
                                         <strong>{{ item.disinfectionMeasureRequestsTotalCount }}</strong>
                                     </div>
                                     <div v-if="item.otherCleaningMaterialRequestsTotalCount">
@@ -66,7 +66,7 @@
                                     <!-- <div v-if="item.printRequestsTotalCount">
                                         print request ?
                                         <strong>{{ item.printRequestsTotalCount }}</strong>
-                                    </div> -->
+                                    </div>-->
                                     <div v-if="item.psychologicalSupportNeeded">
                                         Wsparcie psychologiczne:
                                         <strong>tak</strong>
@@ -78,7 +78,7 @@
                                     <!-- <div v-if="item.otherNeeded">
                                         otherNeeded
                                         <strong>{{ item.otherNeeded }}</strong>
-                                    </div> -->
+                                    </div>-->
                                 </v-col>
                             </v-row>
                         </div>
@@ -122,6 +122,17 @@ export default class CanHelpOutlet extends Vue {
 
     @Prop()
     steps!: Step.Dict;
+
+    onRadioChange(id) {
+        this.outlet = {
+            request: [
+                {
+                    requestId: id,
+                    name: this.outlets.find((outlet: any) => outlet.requestId === id)?.legalName || ""
+                }
+            ]
+        };
+    }
 
     @Watch("steps", { immediate: true })
     onStepsChange(steps: Partial<Step.Dict>) {
