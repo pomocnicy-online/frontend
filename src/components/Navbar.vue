@@ -54,14 +54,6 @@ export default class Navbar extends Vue {
             route: "/pomagajacy/1"
         },
         {
-            name: "Materiały",
-            route: "/materialy"
-        },
-        {
-            name: "Instrukcja szycia",
-            route: "/instrukcja"
-        },
-        {
             name: "Kontakt",
             route: "/kontakt"
         }

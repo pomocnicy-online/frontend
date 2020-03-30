@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import { Step as NecessitousStep } from "@/views/Necessitous/Step.ts";
 import Necessitous from "@/views/Necessitous/Necessitous.vue";
 import NecessitousContact from "@/views/Necessitous/Contact.vue";
+import Contact from "@/views/Contact.vue";
 import NecessitousDemand from "@/views/Necessitous/Demand.vue";
 import NecessitousSummary from "@/views/Necessitous/Summary.vue";
 
@@ -25,48 +26,53 @@ const routes = [
         name: "Home",
         component: Home
     },
+    // {
+    //     path: "/potrzebujacy",
+    //     name: "Necessitous",
+    //     component: Necessitous,
+    //     children: [
+    //         {
+    //             path: NecessitousStep.Paths.Contact,
+    //             component: NecessitousContact
+    //         },
+    //         {
+    //             path: NecessitousStep.Paths.Demand,
+    //             component: NecessitousDemand
+    //         },
+    //         {
+    //             path: NecessitousStep.Paths.Summary,
+    //             component: NecessitousSummary
+    //         }
+    //     ]
+    // },
     {
-        path: "/potrzebujacy",
-        name: "Necessitous",
-        component: Necessitous,
-        children: [
-            {
-                path: NecessitousStep.Paths.Contact,
-                component: NecessitousContact
-            },
-            {
-                path: NecessitousStep.Paths.Demand,
-                component: NecessitousDemand
-            },
-            {
-                path: NecessitousStep.Paths.Summary,
-                component: NecessitousSummary
-            }
-        ]
+        path: "/kontakt",
+        name: "Contact",
+        component: Contact,
     },
-    {
-        path: "/pomagajacy",
-        name: "Canhelp",
-        component: CanHelp,
-        children: [
-            {
-                path: CanHelpStep.Paths.Contact,
-                component: CanHelpContact
-            },
-            {
-                path: CanHelpStep.Paths.Outlet,
-                component: CanHelpOutlet
-            },
-            {
-                path: CanHelpStep.Paths.Supply,
-                component: CanHelpSupply
-            },
-            {
-                path: CanHelpStep.Paths.Summary,
-                component: CanHelpSummary
-            }
-        ]
-    },
+    // {
+    //     path: "/pomagajacy",
+    //     name: "Canhelp",
+    //     component: CanHelp,
+    //     children: [
+    //         {
+    //             path: CanHelpStep.Paths.Contact,
+    //             component: CanHelpContact
+    //         },
+    //         {
+    //             path: CanHelpStep.Paths.Outlet,
+    //             component: CanHelpOutlet
+    //         },
+    //         {
+    //             path: CanHelpStep.Paths.Supply,
+    //             component: CanHelpSupply
+    //         },
+    //         {
+    //             path: CanHelpStep.Paths.Summary,
+    //             component: CanHelpSummary
+    //         }
+    //     ]
+    // },
     {
         path: "/regulamin",
         component: TermsOfService
