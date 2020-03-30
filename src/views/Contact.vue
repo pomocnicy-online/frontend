@@ -4,7 +4,7 @@
             <article class="desc">
                 <h2>Nasza misja</h2>
                 <p>
-                    Naszą wspólną misją jest wsparcie placówek medycznych podczas walki z koronawirusem. Poprzez dobry proces, odpowiednie skoordynowanie działań oraz dobrzy przepływ informacji możemy dostarczyć ogromne ilości niezbędnych środków takich jak maski, płyny dezynfekujące, rękawiczki, kombinezony, artykuły spożywcze czy nawet niezbędne wsparcie psychologiczne.<br/><br/>Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej okolicy, niezależnie od rodzaju pomocy.<br/><br/>
+                    Naszą wspólną misją jest wsparcie placówek medycznych podczas walki z koronawirusem. Poprzez dobry proces, odpowiednie skoordynowanie działań oraz dobry przepływ informacji możemy dostarczyć ogromne ilości niezbędnych środków takich jak maski, płyny dezynfekujące, rękawiczki, kombinezony, artykuły spożywcze czy nawet niezbędne wsparcie psychologiczne.<br/><br/>Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej okolicy, niezależnie od rodzaju pomocy.<br/><br/>
                 </p>
                 
             </article>

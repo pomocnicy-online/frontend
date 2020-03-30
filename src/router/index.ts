@@ -24,7 +24,20 @@ const routes = [
     {
         path: "/",
         name: "Home",
-        component: Home
+        component: Home,
+        meta: {
+            title: 'Pomocnicy',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Aplikacja wspomagająca placówki w walce z koronawirusem.'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Pomóżmy placówką medycznym wspólnymi siłami'
+                }
+            ]
+        }
     },
     // {
     //     path: "/potrzebujacy",

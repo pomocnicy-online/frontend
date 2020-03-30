@@ -4,42 +4,28 @@
             <article class="desc">
                 <h2>Wsparcie dla szpitali, placówek medycznych oraz innych placówek</h2>
                 <p>
-                    Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej placowki lub wolontariusza w oparciu o
+                    Aplikacja została stworzona w celu łatwego i szybkiego wsparcia danej placówki lub wolontariusza w oparciu o
                     realne zapotrzebowanie.
+
+                    <a href="#/kontakt">Czytaj więcej o naszej misji</a>
                 </p>               
             </article>
             <br/>
-             <article class="desc">
-                <h2>Aplikacja jest w fazie testów<br/><small>Nie możesz jeszcze dodać zgłoszenia</small></h2>
-               
-                <p><a href="https://forms.gle/5izjGcFPVTCKSWcy8" target="_blank">Kliknij tutaj</a> jeżeli chcesz dostać powiadomienie o uruchomieniu aplikacji</p>
-            </article>
+
            
             <img src="@/assets/landing.svg" alt />
         </div>
-        <aside class="action-items">
-            <article class="action-item">
-                
+        <div>
+            <article class="desc">
+                <h2>Aplikacja jest w fazie testów<br/><small>Nie możesz jeszcze dodać zgłoszenia</small></h2>
 
-                <div class="action-item__content">
-                    <h2>Potrzebujący</h2>
-                    <p>Zgłoś swoje zapotrzebowanie na niezbędne produkty typu maski, rękawiczki, kombinezony</p>
-                    <v-btn class="action-link" color="primary" to="/potrzebujacy/1">Zgłoś potrzebę</v-btn>
-                </div>
-                <voice-icon class="action-item__icon" />
+                <p><a href="https://forms.gle/5izjGcFPVTCKSWcy8" target="_blank">Kliknij tutaj</a> jeżeli chcesz dostać powiadomienie o uruchomieniu aplikacji.</p>
             </article>
-            <article class="action-item">
-                <div class="action-item__content">
-                    <h2>Pomagajacy</h2>
-                    <p>
-                        Możesz pomóc innym? Wybierz potrzebujacego, sprawdź czego teraz potrzebuje najbardziej i
-                        działaj!
-                    </p>
-                    <v-btn class="action-link" color="primary" to="/pomagajacy/1">Zgłoś pomoc</v-btn>
-                </div>
-                <heart-icon class="action-item__icon" />
-            </article>
-        </aside>
+            <br/>
+        </div>
+
+
+
     </div>
 </template>
 
@@ -123,7 +109,7 @@ export default class HelloWorld extends Vue {}
 
     @include at(medium) {
         grid-template-columns: 20rem 2fr;
-        grid-gap: 4rem;
+        grid-gap: 5rem;
     }
 
     h2 {
