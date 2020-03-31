@@ -6,7 +6,7 @@ import { pipe } from "fp-ts/es6/pipeable";
 import { flow } from "fp-ts/es6/function";
 
 import { Step } from "./Necessitous/Step";
-import { Supply } from "./Supply";
+import { UsageType, Style, Supply, Material, Size, PrintType } from "./Supply";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export type Necessitous = {
@@ -64,9 +64,9 @@ export namespace Necessitous {
             );
 
         export type Mask = SupplyRequest<{
-            usageType: Supply.UsageType;
+            usageType: UsageType;
             quantity: number;
-            style: Supply.Style;
+            style: Style;
         }>;
         export const Mask = nonEmpty<"mask", Mask>(data => ({
             ...data,
@@ -77,9 +77,9 @@ export namespace Necessitous {
         }));
 
         export type Glove = SupplyRequest<{
-            material: Supply.Material;
+            material: Material;
             quantity: number;
-            size: Supply.Size;
+            size: Size;
         }>;
         export const Glove = nonEmpty<"glove", Glove>(a => a);
 
@@ -96,9 +96,9 @@ export namespace Necessitous {
         export const Disinfectant = nonEmpty<"disinfectant", Disinfectant>(a => a);
 
         export type Suite = SupplyRequest<{
-            material?: Supply.Material;
+            material?: Material;
             quantity: number;
-            size: Supply.Size;
+            size: Size;
         }>;
         export const Suite = nonEmpty<"suit", Suite>(a => a);
 
@@ -115,7 +115,7 @@ export namespace Necessitous {
             nonEmptyDesc(data.description);
 
         export type Print = SupplyRequest<{
-            printType: Supply.PrintType;
+            printType: PrintType;
             quantity: number;
         }>;
         export const Print = nonEmpty<"print", Print>(data => ({
