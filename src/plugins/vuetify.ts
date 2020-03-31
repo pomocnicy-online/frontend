@@ -1,6 +1,7 @@
 import "@mdi/font/css/materialdesignicons.css";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import VueI18n from "vue-i18n";
 
 import "vuetify/dist/vuetify.min.css";
 import colors from "vuetify/lib/util/colors";
@@ -9,8 +10,15 @@ import ArrowNext from "@/components/icons/arrow-next.vue";
 import ArrowBack from "@/components/icons/arrow-back.vue";
 import VoiceIcon from "@/components/icons/voice.vue";
 import HeartIcon from "@/components/icons/heart.vue";
+import { messages } from "@/translation/translation";
 
 Vue.use(Vuetify);
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+    locale: "pl",
+    messages
+});
 
 const opts = {
     theme: {
@@ -36,6 +44,9 @@ const opts = {
                 component: HeartIcon
             }
         }
+    },
+    lang: {
+        t: (key: string, ...params: Array<string | number>) => String(i18n.t(key, params))
     }
 };
 

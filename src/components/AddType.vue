@@ -8,7 +8,7 @@
             </template>
             <v-list>
                 <v-list-item v-for="(item, index) in types" :key="index" @click="updateTypes(item)">
-                    <v-list-item-title>{{ item }}</v-list-item-title>
+                    <v-list-item-title>{{ $vuetify.lang.t(`$vuetify.types.${item}`) }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-menu>
