@@ -8,6 +8,7 @@ export const Step = U.unionize({
     Demand: U.ofType<DemandData>(),
     Summary: U.ofType<SummaryData>()
 });
+export type Step = U.UnionOf<typeof Step>;
 
 export enum Paths {
     Contact = "1",
