@@ -100,6 +100,12 @@ import StepHeader from "@/components/StepHeader.vue";
 import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
 import { Step } from "./Step";
 
+type ResOutlet = {
+    legalName: string;
+    requestId: number;
+    city: string;
+};
+
 @Component({
     components: {
         StepHeader
@@ -107,15 +113,10 @@ import { Step } from "./Step";
 })
 export default class CanHelpOutlet extends Vue {
     outlet: Step.OutletData = {
-        request: [
-            {
-                requestId: 35,
-                name: "XD"
-            }
-        ]
+        request: []
     };
-    outlets = [];
-    filteredOutlets = [];
+    outlets = [] as ResOutlet[];
+    filteredOutlets = [] as ResOutlet[];
     towns = ["Wszystkie"];
     selectedTown = "";
     path = "/api/requests/";
@@ -128,7 +129,7 @@ export default class CanHelpOutlet extends Vue {
             request: [
                 {
                     requestId: id,
-                    name: this.outlets.find((outlet: any) => outlet.requestId === id)?.legalName || ""
+                    name: this.outlets.find(outlet => outlet.requestId === id)?.legalName || ""
                 }
             ]
         };
@@ -142,8 +143,8 @@ export default class CanHelpOutlet extends Vue {
     }
 
     @Watch("outlets", { immediate: true })
-    onOutletsChange(outlets: any) {
-        this.towns = [...this.towns, ...outlets.map((outlet: any) => outlet.city)];
+    onOutletsChange(outlets: ResOutlet[]) {
+        this.towns = [...this.towns, ...outlets.map(outlet => outlet.city)];
     }
 
     @Watch("selectedTown", { immediate: true })
@@ -152,7 +153,7 @@ export default class CanHelpOutlet extends Vue {
             this.filteredOutlets = this.outlets;
         } else {
             this.filteredOutlets = this.outlets.filter(
-                (outlet: any) => outlet.city.toLowerCase() === selectedTown.toLowerCase()
+                outlet => outlet.city.toLowerCase() === selectedTown.toLowerCase()
             );
         }
     }
