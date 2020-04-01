@@ -2,7 +2,7 @@
     <div class="nav">
         <v-app-bar color="white" elevation="0" light class="nav__bar" app>
             <v-toolbar-title>
-                <router-link to="/" class="nav__title">pomocnicy.online</router-link>
+                <router-link to="/" class="nav__title">Pomocnicy</router-link>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
