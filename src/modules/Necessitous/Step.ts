@@ -9,6 +9,7 @@ export const Step = U.unionize({
     Summary: U.ofType<SummaryData>()
 });
 export type Step = U.UnionOf<typeof Step>;
+export type StepDict = U.RecordOf<typeof Step>;
 
 export enum Paths {
     Contact = "1",
