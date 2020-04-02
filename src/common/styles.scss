@@ -24,7 +24,7 @@ $breakpoints: (
         grid-gap: 8rem;
 
         @include at(medium) {
-            margin-top: 10rem;
+            margin-top: 7rem;
             grid-template-columns: 1fr 442px;
             padding: 2rem;
         }

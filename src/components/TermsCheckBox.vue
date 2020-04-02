@@ -5,7 +5,7 @@
             :rules="[v => !!v || 'Musisz się zgodzić by kontynuować']"
         >
             <template v-slot:label>
-                <a href="/#/regulamin" target="_blank">Akceptuje regulamin i polityke prywatności</a>
+                <a href="/#/regulamin" target="_blank">Wyrażam zgodę na przetwarzanie moich danych w ramach procesu pomocy.</a>
             </template>
         </v-checkbox>
     </v-row>
