@@ -28,7 +28,8 @@
                     <div class="summary__outlet">
                         <article v-if="outlet">
                             <h2>Placówka czekająca na Twoją pomoc:</h2>
-                            <Address :contact="outlet" />
+                            <Address :contact="outlet" /><br/>
+                            <p>Szczegółowe dane kontaktowe placówki otrzymasz na maila po wysłaniu zgłoszenia.</p>
                         </article>
                         <article v-else>
                             <h2 class="warn">Brak wybranej placówki</h2>

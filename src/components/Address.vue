@@ -12,9 +12,13 @@
             {{ contact.street }} {{ addressNumber }}
             <br />
         </span>
-        telefon: {{ contact.phone }}
+        <span v-if="contact.phone">
+             telefon: {{ contact.phone }}
+        </span>
         <br />
-        email: {{ contact.email }}
+        <span v-if="contact.email">
+              email: {{ contact.email }}
+        </span>
     </address>
 </template>
 

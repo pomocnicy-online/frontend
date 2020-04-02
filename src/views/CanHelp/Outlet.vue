@@ -192,7 +192,7 @@ export default class CanHelpOutlet extends Vue {
 @include step-desc;
 
 .step-table {
-    height: 65vh;
+    height: 52vh;
     overflow-x: hidden;
     overflow-y: auto;
     &__row-container {
