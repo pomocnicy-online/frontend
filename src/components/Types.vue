@@ -1,14 +1,20 @@
 <template>
     <v-row align="start" justify="center">
         <v-col cols="6" class="pa-4">
-            <v-row align="center" justify="center">
+            <v-row align="center" :justify="justifyTypes">
                 <h3
                     class="body-1 medical-type__title"
                 >{{ $vuetify.lang.t(`$vuetify.types.${type}`) }}</h3>
             </v-row>
         </v-col>
         <v-col cols="6" class="pa-2">
-            <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :kind="type" />
+            <Counter
+                :quantity.sync="quantity"
+                :plus="plus"
+                :minus="minus"
+                :kind="type"
+                :justify="justifyCounter"
+            />
         </v-col>
     </v-row>
 </template>
@@ -28,6 +34,8 @@ export default class Types extends Vue {
     @Prop() readonly usageType!: string;
     @Prop() readonly updateSupplies!: any;
     @Prop() readonly brand!: string;
+    @Prop({ default: "center" }) justifyTypes!: string;
+    @Prop({ default: "center" }) justifyCounter!: string;
 
     quantity = 0;
 

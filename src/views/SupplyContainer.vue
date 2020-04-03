@@ -132,15 +132,20 @@
             </template>
         </medical-card>
 
-        <medical-card title="Druk 3D">
+        <medical-card title="Druk 3D" class="print-card">
             <template v-slot:icon>
                 <printIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes
+                <Types
+                    class="print-card__types"
+                    v-for="type in printType"
+                    :key="type"
                     brand="print"
-                    :usageTypes="printType"
-                    :types="printType"
+                    justifyTypes="start"
+                    justifyCounter="end"
+                    :usageTyps="type"
+                    :type="type"
                     :updateSupplies="updateSupplies"
                 />
             </template>
@@ -215,5 +220,16 @@ export default class SupplyContainer extends Vue {
     private gloveTypes: string[] = [Supply.Material.Latex];
 }
 </script>
+<style lang="scss">
+.print-card {
+    &__types {
+        .medical-type__title {
+            padding-left: 0.75rem;
+        }
 
-<style lang="scss" scoped></style>
+        .counter {
+            padding-right: 0.75rem;
+        }
+    }
+}
+</style>
