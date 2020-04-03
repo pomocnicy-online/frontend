@@ -32,7 +32,7 @@ export default class Counter extends Vue {
     @Prop() minus!: any;
     @Prop() kind!: string;
 
-    @Prop({ default: "center " }) justify!: string;
+    @Prop({ default: "center" }) justify!: string;
 }
 </script>
 

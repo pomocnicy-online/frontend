@@ -128,7 +128,7 @@
                 <sewingSuppliesIcon />
             </template>
             <template v-slot:additionalDesc>
-                <AdditionalDesc :description.sync="supplies.psychologicalSupport.sewingMaterial" />
+                <AdditionalDesc :description.sync="supplies.sewingMaterial.description" />
             </template>
         </medical-card>
 
@@ -153,6 +153,15 @@
                 <AdditionalDesc :description.sync="supplies.print.description" />
             </template>
         </medical-card>
+
+        <medical-card title="Inne">
+            <template v-slot:icon>
+                <otherIcon />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.other.description" />
+            </template>
+        </medical-card>
     </v-col>
 </template>
 
@@ -168,6 +177,7 @@ import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
 
 import maskIcon from "@/components/icons/mask.vue";
+import otherIcon from "@/components/icons/other.vue";
 import printIcon from "@/components/icons/print.vue";
 import glovesIcon from "@/components/icons/gloves.vue";
 import disinfectantsIcon from "@/components/icons/disinfectants.vue";
@@ -183,6 +193,7 @@ import { Supply } from "@/views/Supply";
 @Component({
     components: {
         maskIcon,
+        otherIcon,
         glovesIcon,
         overallsIcon,
         disinfectantsIcon,

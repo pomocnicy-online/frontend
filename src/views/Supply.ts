@@ -7,7 +7,8 @@ export type Supply =
     | Supply.Grocery
     | Supply.SewingMaterial
     | Supply.PsychologicalSupport
-    | Supply.Print;
+    | Supply.Print
+    | Supply.Other;
 
 export namespace Supply {
     export enum UsageType {
