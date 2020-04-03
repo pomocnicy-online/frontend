@@ -1,5 +1,5 @@
 <template>
-    <v-row align="center" justify="center">
+    <v-row align="center" :justify="justify" class="counter">
         <v-btn icon @click="minus" color="primary" :disabled="!kind">
             <v-icon>$backArrow</v-icon>
         </v-btn>
@@ -31,6 +31,8 @@ export default class Counter extends Vue {
     @Prop() plus!: any;
     @Prop() minus!: any;
     @Prop() kind!: string;
+
+    @Prop({ default: "center" }) justify!: string;
 }
 </script>
 

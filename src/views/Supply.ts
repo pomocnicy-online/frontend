@@ -7,7 +7,8 @@ export type Supply =
     | Supply.Grocery
     | Supply.SewingMaterial
     | Supply.PsychologicalSupport
-    | Supply.Print;
+    | Supply.Print
+    | Supply.Other;
 
 export namespace Supply {
     export enum UsageType {
@@ -30,7 +31,11 @@ export namespace Supply {
     }
 
     export enum PrintType {
-        VenturiNozzle = "VenturiNozzle"
+        VenturiNozzle = "VenturiNozzle",
+        VenturiValve = "VenturiValve",
+        PositiveExperienceValve = "PositiveExperienceValve",
+        PlexiFaceCover = "PlexiFaceCover",
+        CoverMask = "CoverMask"
     }
 
     export enum Material {

@@ -10,7 +10,7 @@
         </article>
         <div class="summary">
             <v-container>
-                <v-form v-model="valid" ref="form">
+                <v-form ref="form">
                     <div class="summary__contact">
                         <article v-if="address">
                             <h2>Twoja placówka czekająca na pomoc:</h2>
@@ -110,6 +110,7 @@ export default class NecessitousSummary extends Vue {
     }
 
     private get supplies() {
+        console.log(this.steps);
         return Step.Supplies.toSummary((this.steps?.demand as Step.Demand | undefined)?.data.supplies);
     }
 
