@@ -10,6 +10,8 @@ import ArrowNext from "@/components/icons/arrow-next.vue";
 import ArrowBack from "@/components/icons/arrow-back.vue";
 import VoiceIcon from "@/components/icons/voice.vue";
 import HeartIcon from "@/components/icons/heart.vue";
+import PeopleIcon from "@/components/icons/people.vue";
+import CarIcon from "@/components/icons/car.vue";
 import { messages } from "@/translation/translation";
 
 Vue.use(Vuetify);
@@ -42,6 +44,12 @@ const opts = {
             },
             heartIcon: {
                 component: HeartIcon
+            },
+            peopleIcon: {
+                component: PeopleIcon
+            },
+            carIcon: {
+                component: CarIcon
             }
         }
     },
