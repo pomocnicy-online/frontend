@@ -63,28 +63,27 @@
                                         Inne środki czystości:
                                         <strong>{{ item.otherCleaningMaterialRequestsTotalCount }}</strong>
                                     </div>
-                                    <!-- <div v-if="item.printRequestsTotalCount">
-                                        print request ?
+                                    <div v-if="item.printRequestsTotalCount">
+                                        Druk 3D:
                                         <strong>{{ item.printRequestsTotalCount }}</strong>
-                                    </div>-->
+                                    </div>
                                     <div v-if="item.psychologicalSupportNeeded">
                                         Wsparcie psychologiczne:
                                         <strong>tak</strong>
                                     </div>
                                     <div v-if="item.sewingSuppliesNeeded">
                                         Materiały do szycia:
-                                        <strong>{{ item.sewingSuppliesNeeded }}</strong>
+                                        <strong>tak</strong>
                                     </div>
-                                    <!-- <div v-if="item.otherNeeded">
-                                        otherNeeded
-                                        <strong>{{ item.otherNeeded }}</strong>
-                                    </div>-->
+                                    <div v-if="item.otherNeeded">
+                                        Inne:
+                                        <strong>tak</strong>
+                                    </div>
                                 </v-col>
                             </v-row>
                         </div>
                     </v-radio-group>
                 </article>
-                <!-- render list of supplies here @seba -->
                 <v-row class="step-nav">
                     <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
                     <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>

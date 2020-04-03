@@ -28,7 +28,7 @@ export namespace Necessitous {
         psychologicalSupport: Request.PsychologicalSupport;
         sewingSupplies: Request.SewingSupplies;
         others: Request.Other;
-        // AdditionalComment:
+        additionalComment: string;
         prints: Request.Print;
     }>;
     export namespace Request {
@@ -139,7 +139,7 @@ export namespace Necessitous {
         export const AdditionalComment = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
 
         export const fromAdditionalComment = (comment?: string) => ({
-            others: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
+            additionalComment: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
         });
 
         type SupplyRequest<T> = {
@@ -197,7 +197,7 @@ export namespace Necessitous {
 
             const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
                 medicalCentre: O.some(Request.MedicalCentre(contact)),
-                // ...Request.AdditionalComment(summary.comment),
+                additionalComment: Request.AdditionalComment(summary.comment),
                 ...Request.fromSupplies(supplies)
             };
 
