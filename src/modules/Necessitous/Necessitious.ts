@@ -28,6 +28,7 @@ export namespace Necessitous {
         psychologicalSupport: Request.PsychologicalSupport;
         sewingSupplies: Request.SewingSupplies;
         others: Request.Other;
+        additionalComment: string;
         prints: Request.Print;
     }>;
     export namespace Request {
@@ -114,6 +115,11 @@ export namespace Necessitous {
         export const PsychologicalSupport = (data: Step.Supplies["psychologicalSupport"]) =>
             nonEmptyDesc(data.description);
 
+        export type Other = {
+            description: string;
+        };
+        export const Other = (data: Step.Supplies["other"]) => nonEmptyDesc(data.description);
+
         export type Print = SupplyRequest<{
             printType: PrintType;
             quantity: number;
@@ -127,13 +133,13 @@ export namespace Necessitous {
             description: string;
         };
         export const SewingSupplies = (data: Step.Supplies["sewingMaterial"]) => nonEmptyDesc(data.description);
-        export type Other = {
+        export type AdditionalComment = {
             description?: string;
         };
-        export const Other = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
+        export const AdditionalComment = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
 
-        export const fromOther = (comment?: string) => ({
-            others: pipe(comment, O.fromNullable, O.chain(Request.Other))
+        export const fromAdditionalComment = (comment?: string) => ({
+            additionalComment: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
         });
 
         type SupplyRequest<T> = {
@@ -155,7 +161,8 @@ export namespace Necessitous {
                 O.chain(Request.PsychologicalSupport)
             ),
             sewingSupplies: pipe(supplies.sewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
-            prints: pipe(supplies.print, O.fromNullable, O.chain(Request.Print))
+            prints: pipe(supplies.print, O.fromNullable, O.chain(Request.Print)),
+            others: pipe(supplies.other, O.fromNullable, O.chain(Request.Other))
         });
     }
 
@@ -190,7 +197,7 @@ export namespace Necessitous {
 
             const request: Record<keyof Necessitous.Request, O.Option<Necessitous>> = {
                 medicalCentre: O.some(Request.MedicalCentre(contact)),
-                ...Request.fromOther(summary.comment),
+                additionalComment: Request.AdditionalComment(summary.comment),
                 ...Request.fromSupplies(supplies)
             };
 

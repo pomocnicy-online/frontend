@@ -47,3 +47,20 @@ export interface ContactData {
     email: string;
     phone: string;
 }
+
+// export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
+//             pipe(
+//                 O.fromNullable(supplies),
+//                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+//                 O.getOrElse<[Brand, Order][]>(() => []),
+//                 A.map(([brand, supply]) => ({
+//                     brand,
+//                     icon: `${brand}-icon`,
+//                     title: supplyName(brand),
+//                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
+//                     description: supply.description
+//                 })),
+//                 A.filter(x =>
+//                     x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
+//                 )
+//             );

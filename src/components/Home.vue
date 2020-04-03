@@ -6,6 +6,8 @@
                 <p>
                     Aplikacja stworzona w celu łatwego i szybkiego wsparcia danej placowki lub wolontariusza w oparciu o
                     realne zapotrzebowanie.
+
+                    <a href="#/kontakt">Czytaj więcej o naszej misji</a>
                 </p>
             </article>
             <img src="@/assets/landing.svg" alt />

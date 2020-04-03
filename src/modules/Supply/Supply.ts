@@ -10,7 +10,8 @@ export const Supply = U.unionize({
     Grocery: U.ofType<Shared>(),
     SewingMaterial: U.ofType<Shared>(),
     PsychologicalSupport: U.ofType<Shared>(),
-    Print: U.ofType<Shared>()
+    Print: U.ofType<Shared>(),
+    Other: U.ofType<Shared>()
 });
 export type Supply = U.UnionOf<typeof Supply>;
 

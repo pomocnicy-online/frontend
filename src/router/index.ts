@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
-import { Step as NecessitousStep } from "@/views/Necessitous/Step.ts";
+import {Step, Step as NecessitousStep} from "@/views/Necessitous/Step.ts";
 import Necessitous from "@/views/Necessitous/Necessitous.vue";
 import NecessitousContact from "@/views/Necessitous/Contact.vue";
 import NecessitousDemand from "@/views/Necessitous/Demand.vue";
@@ -16,6 +16,7 @@ import CanHelpSummary from "@/views/CanHelp/Summary.vue";
 
 import NotFound from "@/components/NotFound.vue";
 import TermsOfService from "@/components/TermsOfService.vue";
+import Contact from "@/views/Contact.vue";
 
 Vue.use(VueRouter);
 
@@ -23,7 +24,24 @@ const routes = [
     {
         path: "/",
         name: "Home",
-        component: Home
+        component: Home,
+        meta: {
+            title: 'Pomocnicy',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'Pomagamy placówkom medycznym w walce z COVID-19.'
+                },
+                {
+                    property: 'og:description',
+                    content: 'Pomagamy placówkom medycznym w walce z koronawirusem'
+                },
+                {
+                    property: 'og:title',
+                    content: 'Pomocnicy - pomagamy placówkom medycznym w walce z koronawirusem'
+                }
+            ]
+        }
     },
     {
         path: "/potrzebujacy",
@@ -70,6 +88,10 @@ const routes = [
     {
         path: "/regulamin",
         component: TermsOfService
+    },
+    {
+        path: "/kontakt",
+        component: Contact
     },
     {
         path: "*",
