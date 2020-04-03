@@ -131,6 +131,23 @@
                 <AdditionalDesc :description.sync="supplies.psychologicalSupport.sewingMaterial" />
             </template>
         </medical-card>
+
+        <medical-card title="Druk 3D">
+            <template v-slot:icon>
+                <printIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <UsageTypes
+                    brand="print"
+                    :usageTypes="printType"
+                    :types="printType"
+                    :updateSupplies="updateSupplies"
+                />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.print.description" />
+            </template>
+        </medical-card>
     </v-col>
 </template>
 
@@ -141,10 +158,12 @@ import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddType from "@/components/AddType.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
+import Types from "@/components/Types.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
 
 import maskIcon from "@/components/icons/mask.vue";
+import printIcon from "@/components/icons/print.vue";
 import glovesIcon from "@/components/icons/gloves.vue";
 import disinfectantsIcon from "@/components/icons/disinfectants.vue";
 import overallsIcon from "@/components/icons/overalls.vue";
@@ -170,8 +189,10 @@ import { Supply } from "@/views/Supply";
         AdditionalDesc,
         AddType,
         UsageTypes,
+        Types,
         AddTypeWithInput,
-        AddInputForType
+        AddInputForType,
+        printIcon
     }
 })
 export default class SupplyContainer extends Vue {
@@ -188,6 +209,7 @@ export default class SupplyContainer extends Vue {
     private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
     private readonly usageTypes: Supply.UsageType[] = Object.values(Supply.UsageType);
     private readonly material: Supply.Material[] = Object.values(Supply.Material);
+    private readonly printType: Supply.PrintType[] = Object.values(Supply.PrintType);
 
     private overallTypes: string[] = [Supply.UsageType.Disposable];
     private gloveTypes: string[] = [Supply.Material.Latex];
