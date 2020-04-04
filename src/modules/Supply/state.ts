@@ -1,6 +1,8 @@
-import { U, ActionsUnion, createReducer, Effect, fromActions } from "@rxsv/core";
+import { U, ActionsUnion, createReducer, fromActions } from "@rxsv/core";
 import { map, pluck } from "rxjs/operators";
-import { Lens, fromTraversable, Prism } from "monocle-ts/es6";
+import { Lens, fromTraversable, Prism, Index, At, Optional } from "monocle-ts/es6";
+import { atRecord } from "monocle-ts/es6/At/Record";
+import { indexRecord } from "monocle-ts/es6/Index/Record";
 import { UUID } from "@/common/prelude";
 import * as R from "fp-ts/es6/Record";
 import * as A from "fp-ts/es6/Array";
@@ -8,85 +10,121 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply } from "../Supply";
+import { Supply, Supplies, Brand, Order, tags as SupplyTags } from "../Supply";
+import { AppState, AppEffect } from "@/root";
 
 export type SupplyId = UUID;
-export type SupplyListId = UUID;
+export type SupplyListId = string;
+export type SupplyTypeDescription = string;
 export interface StoreSupply {
   id: SupplyId;
   listId: SupplyListId;
   supply: Supply;
 }
+export interface SuppleDesc {
+  id: SupplyListId;
+  type: Supply["tag"];
+  text: string;
+}
+
+type DescMap = Record<Supply["tag"], SupplyTypeDescription>;
 
 export const Actions = U.createUnion(
   U.caseOf("ADD_SUPPLY_INTENT")<Omit<StoreSupply, "id">>(),
   U.caseOf("ADD_SUPPLY")<StoreSupply>(),
   U.caseOf("UPDATE_SUPPLY")<StoreSupply>(),
-  U.caseOf("REMOVE_SUPPLY")<StoreSupply>()
+  U.caseOf("REMOVE_SUPPLY")<StoreSupply>(),
+  U.caseOf("MODIFY_SUPPLY_TYPE_DESC")<SuppleDesc>()
 );
 export type Actions = ActionsUnion<typeof Actions>;
 
 export type State = {
   byId: Record<SupplyId, StoreSupply>;
   byList: Record<SupplyListId, SupplyId[]>;
+  descriptions: Record<SupplyListId, DescMap>;
 };
 export namespace State {
-  export const empty = (): State => ({ byId: {}, byList: {} });
+  export const empty = (): State => ({ byId: {}, byList: {}, descriptions: {} });
 }
 
-export namespace Select {
+export namespace Lenses {
+  const supplies = Lens.fromProp<AppState>()("supplies");
   const byId = Lens.fromProp<State>()("byId");
   const byList = Lens.fromProp<State>()("byList");
-  const supply = Lens.fromProp<StoreSupply>()("supply");
+  const desc = Lens.fromProp<State>()("descriptions");
 
-  const supplyTraversal = fromTraversable(R.record)<StoreSupply>();
-  const getSupplyPrism = (id: UUID) => Prism.fromPredicate<StoreSupply>(s => s.id === id);
-  const getSupplyTraversal = (id: UUID) =>
-    byId
-      .composeTraversal(supplyTraversal)
-      .composePrism(getSupplyPrism(id))
-      .composeLens(supply);
+  const descMapById = flow(indexRecord<DescMap>().index, desc.composeOptional);
+  const descByIdAndTag = (id: SupplyListId) => (tag: Supply["tag"]) =>
+    descMapById(id).composeOptional(indexRecord<SupplyTypeDescription>().index(tag));
+  const supplyById = flow(indexRecord<StoreSupply>().index, byId.composeOptional);
 
-  // const listTraversal = fromTraversable(A.array)<>
-
-  export const updateSupply = (s: StoreSupply) => getSupplyTraversal(s.id).set(s.supply);
-  export const removeSupply = (s: StoreSupply) =>
-    flow(
-      byId.modify(R.deleteAt(s.id)),
-      byList.modify(r =>
-        pipe(
-          r,
-          R.modifyAt(
-            s.listId,
-            A.filter(id => id !== s.id)
-          ),
-          O.getOrElse(() => r)
-        )
+  // TODO: convert functions below to Traversals / Ats / Indexs
+  // http://julien-truffaut.github.io/Monocle/examples/university_example.html
+  // https://github.com/gcanti/monocle-ts/pull/86/files#diff-8961b15799571485d2c53f6bc4b04631
+  const modifyByList = (listId: SupplyListId) => (fn: (a: SupplyId[]) => SupplyId[]) =>
+    byList.modify(r =>
+      pipe(
+        r,
+        R.modifyAt(listId, fn),
+        O.getOrElse(() => r)
       )
     );
+
+  const suppliesByListIdAndTag = (listId: SupplyListId) => (tag: Supply["tag"]) => (state: State) =>
+    pipe(
+      byList.get(state),
+      r => R.lookup(listId, r),
+      O.map(
+        flow(
+          A.reduce<UUID, StoreSupply[]>([], (acc, supplyId) =>
+            pipe(
+              R.lookup(supplyId, byId.get(state)),
+              O.map(s => A.snoc(acc, s)),
+              O.getOrElse(() => acc)
+            )
+          ),
+          A.filter(a => a.supply.tag === tag)
+        )
+      ),
+      O.getOrElse<StoreSupply[]>(() => [])
+    );
+
+  export const suppliesPerTypeByListId = (listId: SupplyListId) => (appState: AppState) => {
+    const state = supplies.get(appState);
+
+    return pipe(
+      SupplyTags,
+      A.reduce({} as Supplies, (acc, tag) => ({
+        ...acc,
+        [tag]: {
+          positions: suppliesByListIdAndTag(listId)(tag)(state),
+          description: pipe(descByIdAndTag(listId)(tag).getOption(state), O.toUndefined)
+        }
+      }))
+    );
+  };
+
+  export const updateSupply = (s: StoreSupply) => supplyById(s.id).set(s);
+  export const removeSupply = (s: StoreSupply) =>
+    flow(byId.modify(R.deleteAt(s.id)), modifyByList(s.listId)(A.filter(id => id !== s.id)));
   export const addSupply = (s: StoreSupply) =>
     flow(
       byId.modify(R.insertAt(s.id, s)),
-      byList.modify(r =>
-        pipe(
-          r,
-          R.modifyAt(s.listId, r => A.snoc(r, s.id)),
-          O.getOrElse(() => r)
-        )
-      )
+      modifyByList(s.listId)(a => A.snoc(a, s.id))
     );
 
-  export const suppliesByList = (id: SupplyListId) => null;
+  export const modifyDesc = (s: SuppleDesc) => descByIdAndTag(s.id)(s.type).set(s.text);
 }
 
 export const reducer = createReducer(State.empty())<Actions>({
+  MODIFY_SUPPLY_TYPE_DESC: (s, { payload }) => Lenses.modifyDesc(payload)(s),
   ADD_SUPPLY_INTENT: identity,
-  ADD_SUPPLY: (s, { payload }) => Select.addSupply(payload)(s),
-  UPDATE_SUPPLY: (s, { payload }) => Select.updateSupply(payload)(s),
-  REMOVE_SUPPLY: (s, { payload }) => Select.removeSupply(payload)(s)
+  ADD_SUPPLY: (s, { payload }) => Lenses.addSupply(payload)(s),
+  UPDATE_SUPPLY: (s, { payload }) => Lenses.updateSupply(payload)(s),
+  REMOVE_SUPPLY: (s, { payload }) => Lenses.removeSupply(payload)(s)
 });
 
-export const effect: Effect<Actions, State> = action$ =>
+export const effect: AppEffect = action$ =>
   action$.pipe(
     fromActions(Actions.ADD_SUPPLY_INTENT),
     pluck("payload"),
@@ -94,69 +132,55 @@ export const effect: Effect<Actions, State> = action$ =>
     map(Actions.ADD_SUPPLY)
   );
 
-type DiscriminateUnion<U, K extends keyof U, V extends U[K]> = U extends Record<K, V> ? U : never;
+// TODO: use i18n
+const supplyName = Supply.match({
+  Mask: () => "Maseczki",
+  Glove: () => "Rekawiczki",
+  Disinfectant: () => "Środki do dezynfekcji",
+  Suit: () => "Kombinezony",
+  Cleaning: () => "Inne środki czystości",
+  PsychologicalSupport: () => "Wsparcie psychologiczne",
+  Grocery: () => "Artykuły spozywcze",
+  SewingMaterial: () => "Materiały do szycia",
+  Print: () => "Druk 3D",
+  Other: () => "Inner"
+});
 
-export type Supplies = {
-  [T in Supply["tag"]]: {
-    positions: DiscriminateUnion<Supply, "tag", T>[];
-    description?: string;
-  };
-};
-
-export namespace Supplies {
-  export type Brand = keyof Supplies;
-  export type Order = Supplies[Brand];
-
-  // TODO: use i18n
-  const supplyName = Supply.match({
-    Mask: () => "Maseczki",
-    Glove: () => "Rekawiczki",
-    Disinfectant: () => "Środki do dezynfekcji",
-    Suit: () => "Kombinezony",
-    Cleaning: () => "Inne środki czystości",
-    PsychologicalSupport: () => "Wsparcie psychologiczne",
-    Grocery: () => "Artykuły spozywcze",
-    SewingMaterial: () => "Materiały do szycia",
-    Print: () => "Druk 3D",
-    Other: () => "Inner"
-  });
-
-  export interface SummaryViewData {
-    brand: Brand;
-    icon: string;
-    title: string;
-    quantity: number;
-  }
-
-  // export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
-  //     pipe(
-  //         O.fromNullable(supplies),
-  //         O.map(x => R.toArray<Brand, Order>(x as Supplies)),
-  //         O.getOrElse<[Brand, Order][]>(() => []),
-  //         A.filter(([brand, supply]) => (brand === "PsychologicalSupport" ? supply.description !== "" : true)),
-  //         A.map(([brand, supply]) => ({
-  //             brand,
-  //             icon: `${brand}-icon`,
-  //             title: supplyName(brand),
-  //             quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
-  //         })),
-  //         A.filter(x => x.quantity > 0)
-  //     );
-
-  // export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
-  //             pipe(
-  //                 O.fromNullable(supplies),
-  //                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
-  //                 O.getOrElse<[Brand, Order][]>(() => []),
-  //                 A.map(([brand, supply]) => ({
-  //                     brand,
-  //                     icon: `${brand}-icon`,
-  //                     title: supplyName(brand),
-  //                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
-  //                     description: supply.description
-  //                 })),
-  //                 A.filter(x =>
-  //                     x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
-  //                 )
-  //             );
+export interface SummaryViewData {
+  brand: Brand;
+  icon: string;
+  title: string;
+  quantity: number;
 }
+
+// export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
+//     pipe(
+//         O.fromNullable(supplies),
+//         O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+//         O.getOrElse<[Brand, Order][]>(() => []),
+//         A.filter(([brand, supply]) => (brand === "PsychologicalSupport" ? supply.description !== "" : true)),
+//         A.map(([brand, supply]) => ({
+//             brand,
+//             icon: `${brand}-icon`,
+//             title: supplyName(brand),
+//             quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
+//         })),
+//         A.filter(x => x.quantity > 0)
+//     );
+
+// export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
+//             pipe(
+//                 O.fromNullable(supplies),
+//                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+//                 O.getOrElse<[Brand, Order][]>(() => []),
+//                 A.map(([brand, supply]) => ({
+//                     brand,
+//                     icon: `${brand}-icon`,
+//                     title: supplyName(brand),
+//                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
+//                     description: supply.description
+//                 })),
+//                 A.filter(x =>
+//                     x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
+//                 )
+//             );

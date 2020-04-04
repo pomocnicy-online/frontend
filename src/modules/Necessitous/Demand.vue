@@ -1,144 +1,105 @@
 <template>
-    <div class="step-main">
-        <article class="step-desc">
-            <h2>Wybierz zapotrzebowanie</h2>
-            <p>
-                Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby podać w opisie jak najwięcej szczegółowych
-                informacji zeby wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
-            </p>
-            <img class="step-img" src="@/assets/need-help.svg" alt />
-        </article>
-        <section>
-            <v-container class="pa-2">
-                <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
-                <supply-container
-                    :supplies="demand.supplies"
-                    :updateSupplies="updateSupplies"
-                    :deleteSupplies="deleteSupplies"
-                />
-                <v-row class="step-nav">
-                    <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
-                    <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
-                </v-row>
-            </v-container>
-        </section>
-    </div>
+  <div class="step-main">
+    <article class="step-desc">
+      <h2>Wybierz zapotrzebowanie</h2>
+      <p>
+        Określ czego potrzebujesz i w jakiej ilości. Pamiętaj, żeby podać w opisie jak najwięcej szczegółowych
+        informacji zeby wolontariusz mógł szybko poznać Twoje realne zapotrzebowanie!
+      </p>
+      <img class="step-img" src="@/assets/need-help.svg" alt />
+    </article>
+    <section>
+      <v-container class="pa-2">
+        <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
+        <supply-container :supplies="supplies$" />
+        <v-row class="step-nav">
+          <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
+          <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
+        </v-row>
+      </v-container>
+    </section>
+  </div>
 </template>
 
 <script lang="ts">
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
-import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
+import { Component, Vue, Emit, Watch, Prop, Inject } from "vue-property-decorator";
+import { AppStore } from "@/root";
 
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/views/SupplyContainer.vue";
 
 import { Step } from "./Step";
+import { Observables } from "vue-rx";
+import { select } from "@rxsv/core";
+import { Select } from "@/modules/Supply";
+import { UUID } from "../../common/prelude";
 
-@Component({
-    components: {
-        StepHeader,
-        SupplyContainer
-    }
+@Component<NecessitousDemand>({
+  components: {
+    StepHeader,
+    SupplyContainer
+  },
+  subscriptions(): Observables {
+    return {
+      supplies$: this.rxStore.state$.pipe(select(Select.suppliesByListIdFromRoot("demand")))
+    };
+  }
 })
 export default class NecessitousDemand extends Vue {
-    // TODO: use smart constructors for this, vue.$set might be helpful
-    demand: Step.DemandData = {
-        supplies: {
-            mask: {
-                positions: [],
-                description: ""
-            },
-            glove: {
-                positions: [],
-                description: ""
-            },
-            suit: {
-                positions: [],
-                description: ""
-            },
-            disinfectant: {
-                positions: []
-            },
-            cleaning: {
-                positions: [],
-                description: ""
-            },
-            other: {
-                positions: [],
-                description: ""
-            },
-            grocery: {
-                positions: [],
-                description: ""
-            },
-            sewingMaterial: {
-                positions: [],
-                description: ""
-            },
-            psychologicalSupport: {
-                positions: [],
-                description: ""
-            },
-            print: {
-                positions: [],
-                description: ""
-            }
-        }
-    };
+  @Inject("rxstore") public readonly rxStore!: AppStore;
 
-    @Emit("nextStep")
-    onNext(): Step.Demand {
-        return this.step();
-    }
+  //   @Emit("nextStep")
+  //   onNext(): Step {
+  //     return this.step();
+  //   }
 
-    @Emit("prevStep")
-    onPrev(): Step.Demand {
-        return this.step();
-    }
+  //   @Emit("prevStep")
+  //   onPrev(): Step {
+  //     return this.step();
+  //   }
 
-    // TODO: getting to previous step doesn't work properly
-    // need to refactor `updateSupplies` and the components first
+  // TODO: getting to previous step doesn't work properly
+  // need to refactor `updateSupplies` and the components first
 
-    // @Prop()
-    // steps!: Step.Dict;
+  // @Prop()
+  // steps!: Step.Dict;
 
-    // @Watch("steps", { immediate: true })
-    // onStepsChange(steps: Partial<Step.Dict>) {
-    //     if (steps.demand) {
-    //         // this.$set(this.demand, "supplies", (steps.demand.data as Step.DemandData).supplies);
-    //         this.demand = steps.demand.data as Step.DemandData;
-    //     }
-    // }
+  // @Watch("steps", { immediate: true })
+  // onStepsChange(steps: Partial<Step.Dict>) {
+  //     if (steps.demand) {
+  //         // this.$set(this.demand, "supplies", (steps.demand.data as Step.DemandData).supplies);
+  //         this.demand = steps.demand.data as Step.DemandData;
+  //     }
+  // }
 
-    // TODO: this function is a mess, refactor it and type properly
-    private updateSupplies(type: keyof Step.Supplies, position: any) {
-        pipe(
-            O.fromNullable(this.demand.supplies),
-            O.map(supplies => supplies[type]),
-            O.map((supply: any) => {
-                supply.positions = supply.positions
-                    .filter((item: any) =>
-                        item.style === position.style && item.type === position.type ? false : true
-                    )
-                    .filter((item: any) => item.quantity !== 0);
+  // TODO: this function is a mess, refactor it and type properly
+  //   private updateSupplies(type: keyof Step.Supplies, position: any) {
+  //     pipe(
+  //       O.fromNullable(this.demand.supplies),
+  //       O.map(supplies => supplies[type]),
+  //       O.map((supply: any) => {
+  //         supply.positions = supply.positions
+  //           .filter((item: any) => (item.style === position.style && item.type === position.type ? false : true))
+  //           .filter((item: any) => item.quantity !== 0);
 
-                supply.positions.push(position);
-            })
-        );
-    }
+  //         supply.positions.push(position);
+  //       })
+  //     );
+  //   }
 
-    private deleteSupplies(type: keyof Step.Supplies, itemType: string) {
-        pipe(
-            O.fromNullable(this.demand.supplies),
-            O.mapNullable(supplies => supplies[type]),
-            O.map((supply: any) => {
-                supply.positions = supply.positions.filter((item: any) => item.type !== itemType);
-            })
-        );
-    }
+  //   private deleteSupplies(type: keyof Step.Supplies, itemType: string) {
+  //     pipe(
+  //       O.fromNullable(this.demand.supplies),
+  //       O.mapNullable(supplies => supplies[type]),
+  //       O.map((supply: any) => {
+  //         supply.positions = supply.positions.filter((item: any) => item.type !== itemType);
+  //       })
+  //     );
+  //   }
 
-    private step = () => Step.Demand({ ...this.demand });
+  //   private step = () => Step.Demand({ ...this.demand });
 }
 </script>
 
