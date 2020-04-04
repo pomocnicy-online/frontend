@@ -136,7 +136,11 @@ export namespace Necessitous {
         export type AdditionalComment = {
             description?: string;
         };
-        export const AdditionalComment = (data: Step.SummaryData["comment"]) => nonEmptyDesc(data);
+        export const AdditionalComment = (data: Step.SummaryData["comment"]) =>
+            pipe(
+                O.fromNullable(data),
+                O.filter(d => d !== "")
+            );
 
         export const fromAdditionalComment = (comment?: string) => ({
             additionalComment: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
