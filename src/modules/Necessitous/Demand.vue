@@ -25,16 +25,15 @@
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
 import { Component, Vue, Emit, Watch, Prop, Inject } from "vue-property-decorator";
-import { AppStore } from "@/root";
 
+import { AppStore } from "@/root";
 import StepHeader from "@/components/StepHeader.vue";
-import SupplyContainer from "@/views/SupplyContainer.vue";
+import SupplyContainer from "@/modules/Supply/SupplyContainer.vue";
 
 import { Step } from "./Step";
 import { Observables } from "vue-rx";
 import { select } from "@rxsv/core";
-import { Select } from "@/modules/Supply";
-import { UUID } from "../../common/prelude";
+import { Lenses } from "@/modules/Supply";
 
 @Component<NecessitousDemand>({
   components: {
@@ -43,7 +42,7 @@ import { UUID } from "../../common/prelude";
   },
   subscriptions(): Observables {
     return {
-      supplies$: this.rxStore.state$.pipe(select(Select.suppliesByListIdFromRoot("demand")))
+      supplies$: this.rxStore.state$.pipe(select(Lenses.suppliesPerTypeByListId("necessitous-demand")))
     };
   }
 })

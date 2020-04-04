@@ -1,7 +1,6 @@
 import { U, ActionsUnion, createReducer, fromActions } from "@rxsv/core";
 import { map, pluck } from "rxjs/operators";
-import { Lens, fromTraversable, Prism, Index, At, Optional } from "monocle-ts/es6";
-import { atRecord } from "monocle-ts/es6/At/Record";
+import { Lens } from "monocle-ts/es6";
 import { indexRecord } from "monocle-ts/es6/Index/Record";
 import { UUID } from "@/common/prelude";
 import * as R from "fp-ts/es6/Record";
@@ -10,7 +9,7 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply, Supplies, Brand, Order, tags as SupplyTags } from "../Supply";
+import { Supply, Supplies, tags as SupplyTags } from "../Supply";
 import { AppState, AppEffect } from "@/root";
 
 export type SupplyId = UUID;
@@ -61,6 +60,7 @@ export namespace Lenses {
   // TODO: convert functions below to Traversals / Ats / Indexs
   // http://julien-truffaut.github.io/Monocle/examples/university_example.html
   // https://github.com/gcanti/monocle-ts/pull/86/files#diff-8961b15799571485d2c53f6bc4b04631
+
   const modifyByList = (listId: SupplyListId) => (fn: (a: SupplyId[]) => SupplyId[]) =>
     byList.modify(r =>
       pipe(
@@ -70,7 +70,7 @@ export namespace Lenses {
       )
     );
 
-  const suppliesByListIdAndTag = (listId: SupplyListId) => (tag: Supply["tag"]) => (state: State) =>
+  const suppliesByListIdAndTag = (listId: SupplyListId) => (tag: Supply["tag"]) => (state: State): StoreSupply[] =>
     pipe(
       byList.get(state),
       r => R.lookup(listId, r),
@@ -89,7 +89,7 @@ export namespace Lenses {
       O.getOrElse<StoreSupply[]>(() => [])
     );
 
-  export const suppliesPerTypeByListId = (listId: SupplyListId) => (appState: AppState) => {
+  export const suppliesPerTypeByListId = (listId: SupplyListId) => (appState: AppState): Supplies => {
     const state = supplies.get(appState);
 
     return pipe(
@@ -131,56 +131,3 @@ export const effect: AppEffect = action$ =>
     map(s => ({ ...s, id: UUID.gen() })),
     map(Actions.ADD_SUPPLY)
   );
-
-// TODO: use i18n
-const supplyName = Supply.match({
-  Mask: () => "Maseczki",
-  Glove: () => "Rekawiczki",
-  Disinfectant: () => "Środki do dezynfekcji",
-  Suit: () => "Kombinezony",
-  Cleaning: () => "Inne środki czystości",
-  PsychologicalSupport: () => "Wsparcie psychologiczne",
-  Grocery: () => "Artykuły spozywcze",
-  SewingMaterial: () => "Materiały do szycia",
-  Print: () => "Druk 3D",
-  Other: () => "Inner"
-});
-
-export interface SummaryViewData {
-  brand: Brand;
-  icon: string;
-  title: string;
-  quantity: number;
-}
-
-// export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
-//     pipe(
-//         O.fromNullable(supplies),
-//         O.map(x => R.toArray<Brand, Order>(x as Supplies)),
-//         O.getOrElse<[Brand, Order][]>(() => []),
-//         A.filter(([brand, supply]) => (brand === "PsychologicalSupport" ? supply.description !== "" : true)),
-//         A.map(([brand, supply]) => ({
-//             brand,
-//             icon: `${brand}-icon`,
-//             title: supplyName(brand),
-//             quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
-//         })),
-//         A.filter(x => x.quantity > 0)
-//     );
-
-// export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
-//             pipe(
-//                 O.fromNullable(supplies),
-//                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
-//                 O.getOrElse<[Brand, Order][]>(() => []),
-//                 A.map(([brand, supply]) => ({
-//                     brand,
-//                     icon: `${brand}-icon`,
-//                     title: supplyName(brand),
-//                     quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
-//                     description: supply.description
-//                 })),
-//                 A.filter(x =>
-//                     x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
-//                 )
-//             );

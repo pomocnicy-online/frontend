@@ -1,25 +1,25 @@
 <template>
-    <div class="step-main">
-        <article class="step-desc">
-            <h2>Chce pomóc</h2>
-            <p>
-                Wypełnij formularz pełnymi danymi kontaktowymi w celu ulatwienia kontaktu z wybranym przez Ciebie
-                potrzebującym. * dane osobowe podawane są dobrowolnie na potrzeby akcji charytatywnej.
-            </p>
-            <img class="step-img" src="@/assets/offer-help.svg" alt />
-        </article>
+  <div class="step-main">
+    <article class="step-desc">
+      <h2>Chce pomóc</h2>
+      <p>
+        Wypełnij formularz pełnymi danymi kontaktowymi w celu ulatwienia kontaktu z wybranym przez Ciebie potrzebującym.
+        * dane osobowe podawane są dobrowolnie na potrzeby akcji charytatywnej.
+      </p>
+      <img class="step-img" src="@/assets/offer-help.svg" alt />
+    </article>
 
-        <section class="contact-form">
-            <step-header name="Wprowadź dane kontaktowe" current="1" outOf="4" />
-            <contact-form
-                namePlaceholder="Imię"
-                :name.sync="contact.name"
-                :email.sync="contact.email"
-                :phone.sync="contact.phone"
-                @submit="onSubmit"
-            />
-        </section>
-    </div>
+    <section class="contact-form">
+      <step-header name="Wprowadź dane kontaktowe" current="1" outOf="4" />
+      <contact-form
+        namePlaceholder="Imię"
+        :name.sync="contact.name"
+        :email.sync="contact.email"
+        :phone.sync="contact.phone"
+        @submit="onSubmit"
+      />
+    </section>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,34 +27,34 @@ import StepHeader from "@/components/StepHeader.vue";
 import ContactForm from "@/components/ContactForm.vue";
 
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { Step } from "./Step";
+import { Step, ContactData, StepDict } from "./Step";
 
 @Component({
-    components: {
-        StepHeader,
-        ContactForm
-    }
+  components: {
+    StepHeader,
+    ContactForm
+  }
 })
 export default class CanHelpContact extends Vue {
-    contact: Step.ContactData = {
-        name: "",
-        email: "",
-        phone: ""
-    };
+  contact: ContactData = {
+    name: "",
+    email: "",
+    phone: ""
+  };
 
-    @Prop()
-    steps!: Step.Dict;
+  @Prop()
+  steps!: StepDict;
 
-    @Watch("steps", { immediate: true })
-    onStepsChange(steps: Partial<Step.Dict>) {
-        if (steps.contact) {
-            this.contact = steps.contact.data as Step.ContactData;
-        }
+  @Watch("steps", { immediate: true })
+  onStepsChange(steps: Partial<StepDict>) {
+    if (steps.Contact) {
+      this.contact = steps.Contact;
     }
+  }
 
-    onSubmit() {
-        this.$emit("nextStep", Step.Contact({ ...this.contact }));
-    }
+  onSubmit() {
+    this.$emit("nextStep", Step.Contact({ ...this.contact }));
+  }
 }
 </script>
 
@@ -62,7 +62,7 @@ export default class CanHelpContact extends Vue {
 @import "@/common/styles.scss";
 
 .contact-form {
-    width: 100%;
+  width: 100%;
 }
 
 @include step-main;

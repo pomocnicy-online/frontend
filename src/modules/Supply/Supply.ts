@@ -1,4 +1,8 @@
 import * as U from "unionize";
+import * as O from "fp-ts/es6/Option";
+import * as A from "fp-ts/es6/Array";
+import * as R from "fp-ts/es6/Record";
+import { pipe } from "fp-ts/es6/pipeable";
 import { NonEmptyArray } from "fp-ts/es6/NonEmptyArray";
 
 export const Supply = U.unionize({
@@ -11,7 +15,7 @@ export const Supply = U.unionize({
   Grocery: U.ofType<Shared>(),
   SewingMaterial: U.ofType<Shared>(),
   PsychologicalSupport: U.ofType<Shared>(),
-  Print: U.ofType<Shared>()
+  Print: U.ofType<{ quantity: number; printType: PrintType }>()
 });
 export type Supply = U.UnionOf<typeof Supply>;
 
@@ -70,3 +74,40 @@ export enum Material {
   Vinyl = "Vinyl",
   Foil = "Foil"
 }
+
+export interface SummaryViewData {
+  brand: Brand;
+  icon: string;
+  title: string;
+  quantity: number;
+}
+
+// TODO: use i18n
+const supplyName = (brand: Brand) =>
+  ({
+    Mask: () => "Maseczki",
+    Glove: () => "Rekawiczki",
+    Disinfectant: () => "Środki do dezynfekcji",
+    Suit: () => "Kombinezony",
+    Cleaning: () => "Inne środki czystości",
+    PsychologicalSupport: () => "Wsparcie psychologiczne",
+    Grocery: () => "Artykuły spozywcze",
+    SewingMaterial: () => "Materiały do szycia",
+    Print: () => "Druk 3D",
+    Other: () => "Inner"
+  }[brand]());
+
+export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
+  pipe(
+    O.fromNullable(supplies),
+    O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+    O.getOrElse<[Brand, Order][]>(() => []),
+    A.map(([brand, supply]) => ({
+      brand,
+      icon: `${brand}-icon`,
+      title: supplyName(brand),
+      quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
+      description: supply.description
+    })),
+    A.filter(x => (x.brand === "PsychologicalSupport" || x.brand === "Other" ? x.description !== "" : x.quantity > 0))
+  );

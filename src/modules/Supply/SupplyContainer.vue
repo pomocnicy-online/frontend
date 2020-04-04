@@ -172,8 +172,8 @@ import cleaningProductsIcon from "@/components/icons/cleaning-products.vue";
 import groceriesIcon from "@/components/icons/groceries.vue";
 import sewingSuppliesIcon from "@/components/icons/sewing-supplies.vue";
 
-import { Step } from "@/views/Necessitous/Step";
-import { Supply } from "@/views/Supply";
+import { Step, DemandData } from "@/modules/Necessitous/Step";
+import { Supply, Style, Size, UsageType, Material, PrintType } from "@/modules/Supply";
 
 @Component({
   components: {
@@ -197,7 +197,7 @@ import { Supply } from "@/views/Supply";
   }
 })
 export default class SupplyContainer extends Vue {
-  @Prop() supplies!: Step.DemandData;
+  @Prop() supplies!: DemandData;
   @Prop() updateSupplies!: any;
   @Prop() deleteSupplies!: any;
   @Prop() description!: string;
@@ -206,14 +206,14 @@ export default class SupplyContainer extends Vue {
   groceryCount = 1;
   cleaningCount = 1;
 
-  private readonly styles: Supply.Style[] = Object.values(Supply.Style);
-  private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
-  private readonly usageTypes: Supply.UsageType[] = Object.values(Supply.UsageType);
-  private readonly material: Supply.Material[] = Object.values(Supply.Material);
-  private readonly printType: Supply.PrintType[] = Object.values(Supply.PrintType);
+  //   private readonly styles: Style[] = Object.values(Supply.Style);
+  //   private readonly sizes: Size[] = Object.values(Supply.Size);
+  //   private readonly usageTypes: .UsageType[] = Object.values(Supply.UsageType);
+  //   private readonly material: Supply.Material[] = Object.values(Supply.Material);
+  //   private readonly printType: Supply.PrintType[] = Object.values(Supply.PrintType);
 
-  private overallTypes: string[] = [Supply.UsageType.Disposable];
-  private gloveTypes: string[] = [Supply.Material.Latex];
+  //   private overallTypes: string[] = [Supply.UsageType.Disposable];
+  //   private gloveTypes: string[] = [Supply.Material.Latex];
 }
 </script>
 <style lang="scss">
