@@ -93,6 +93,8 @@ export namespace Step {
                     return "Materiały do szycia";
                 case "print":
                     return "Druk 3D";
+                case "other":
+                    return "Inne";
             }
         };
 
@@ -101,6 +103,7 @@ export namespace Step {
             icon: string;
             title: string;
             quantity: number;
+            description?: string;
         }
 
         export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
@@ -108,14 +111,16 @@ export namespace Step {
                 O.fromNullable(supplies),
                 O.map(x => R.toArray<Brand, Order>(x as Supplies)),
                 O.getOrElse<[Brand, Order][]>(() => []),
-                A.filter(([brand, supply]) => (brand === "psychologicalSupport" ? supply.description !== "" : true)),
                 A.map(([brand, supply]) => ({
                     brand,
                     icon: `${brand}-icon`,
                     title: supplyName(brand),
-                    quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0)
+                    quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
+                    description: supply.description
                 })),
-                A.filter(x => x.quantity > 0)
+                A.filter(x =>
+                    x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
+                )
             );
     }
 

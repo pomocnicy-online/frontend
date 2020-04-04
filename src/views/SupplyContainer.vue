@@ -128,7 +128,38 @@
                 <sewingSuppliesIcon />
             </template>
             <template v-slot:additionalDesc>
-                <AdditionalDesc :description.sync="supplies.psychologicalSupport.sewingMaterial" />
+                <AdditionalDesc :description.sync="supplies.sewingMaterial.description" />
+            </template>
+        </medical-card>
+
+        <medical-card title="Druk 3D" class="print-card">
+            <template v-slot:icon>
+                <printIcon />
+            </template>
+            <template v-slot:usageTypes>
+                <Types
+                    class="print-card__types"
+                    v-for="type in printType"
+                    :key="type"
+                    brand="print"
+                    justifyTypes="start"
+                    justifyCounter="end"
+                    :usageTyps="type"
+                    :type="type"
+                    :updateSupplies="updateSupplies"
+                />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.print.description" />
+            </template>
+        </medical-card>
+
+        <medical-card title="Inne">
+            <template v-slot:icon>
+                <otherIcon />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.other.description" />
             </template>
         </medical-card>
     </v-col>
@@ -141,10 +172,13 @@ import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddType from "@/components/AddType.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
+import Types from "@/components/Types.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
 
 import maskIcon from "@/components/icons/mask.vue";
+import otherIcon from "@/components/icons/other.vue";
+import printIcon from "@/components/icons/print.vue";
 import glovesIcon from "@/components/icons/gloves.vue";
 import disinfectantsIcon from "@/components/icons/disinfectants.vue";
 import overallsIcon from "@/components/icons/overalls.vue";
@@ -159,6 +193,7 @@ import { Supply } from "@/views/Supply";
 @Component({
     components: {
         maskIcon,
+        otherIcon,
         glovesIcon,
         overallsIcon,
         disinfectantsIcon,
@@ -170,8 +205,10 @@ import { Supply } from "@/views/Supply";
         AdditionalDesc,
         AddType,
         UsageTypes,
+        Types,
         AddTypeWithInput,
-        AddInputForType
+        AddInputForType,
+        printIcon
     }
 })
 export default class SupplyContainer extends Vue {
@@ -188,10 +225,22 @@ export default class SupplyContainer extends Vue {
     private readonly sizes: Supply.Size[] = Object.values(Supply.Size);
     private readonly usageTypes: Supply.UsageType[] = Object.values(Supply.UsageType);
     private readonly material: Supply.Material[] = Object.values(Supply.Material);
+    private readonly printType: Supply.PrintType[] = Object.values(Supply.PrintType);
 
     private overallTypes: string[] = [Supply.UsageType.Disposable];
     private gloveTypes: string[] = [Supply.Material.Latex];
 }
 </script>
+<style lang="scss">
+.print-card {
+    &__types {
+        .medical-type__title {
+            padding-left: 0.75rem;
+        }
 
-<style lang="scss" scoped></style>
+        .counter {
+            padding-right: 0.75rem;
+        }
+    }
+}
+</style>

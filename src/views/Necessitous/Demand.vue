@@ -64,11 +64,10 @@ export default class NecessitousDemand extends Vue {
                 positions: [],
                 description: ""
             },
-            // Not yet used
-            // other: {
-            //     positions: [],
-            //     description: ""
-            // },
+            other: {
+                positions: [],
+                description: ""
+            },
             grocery: {
                 positions: [],
                 description: ""

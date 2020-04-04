@@ -41,7 +41,7 @@ export namespace CanHelp {
                 keyof Supplies,
                 O.Option<{ [K in keyof Supplies]: Supplies[K] }[keyof Supplies]>
             > = {
-                ...Necessitous.Request.fromOther(summary.comment),
+                ...Necessitous.Request.fromAdditionalComment(summary.comment),
                 ...Necessitous.Request.fromSupplies(supplies)
             };
 
