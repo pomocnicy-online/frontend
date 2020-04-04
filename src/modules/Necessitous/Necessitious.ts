@@ -6,7 +6,7 @@ import { pipe } from "fp-ts/es6/pipeable";
 import { flow } from "fp-ts/es6/function";
 
 import { Step } from "./Necessitous/Step";
-import { UsageType, Style, Supply, Material, Size, PrintType } from "./Supply";
+import { UsageType, Style, Supply, Material, Size, PrintType } from "../Supply";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export type Necessitous = {
