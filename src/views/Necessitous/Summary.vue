@@ -110,7 +110,6 @@ export default class NecessitousSummary extends Vue {
     }
 
     private get supplies() {
-        console.log(this.steps);
         return Step.Supplies.toSummary((this.steps?.demand as Step.Demand | undefined)?.data.supplies);
     }
 

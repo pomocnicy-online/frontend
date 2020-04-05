@@ -14,9 +14,12 @@
             <article class="desc">
                 <h2>Chcesz budować aplikację razem z nami?</h2>
                 <p>
-                    Nasz zespół składa się z zdolnych programistów, grafików, product ownerów, ale pomagają nawet prawnicy.<br/><br/> Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu <a href="mailto:info@pomocnicy.online">info@pomocnicy.online</a>.
+                    Nasz zespół składa się z zdolnych <strong>programistów, grafików, product ownerów, ale pomagają nawet prawnicy</strong>.<br/><br/> Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu <a href="mailto:info@pomocnicy.online">info@pomocnicy.online</a>.
                 </p>
+                <br/>
+                <h2>Partnerzy</h2>       
             </article>
+            <a href="https://miejgest.org/" target="_blank">test<img class="img img-parnters" src="@/assets/gest.png" alt /></a>
         </div>
     </div>
 </template>
@@ -59,6 +62,12 @@
             margin-top: rem;
             grid-template-columns: minmax(auto, 1fr) 1fr;
             padding: 2rem;
+
+            
+        }
+
+         .img-partners {
+            max-width: 500px;
         }
 
         h2 {
@@ -81,4 +90,6 @@
             margin-bottom: 1rem;
         }
     }
+
+   
 </style>
