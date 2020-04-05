@@ -27,8 +27,8 @@ import Counter from "@/components/Counter.vue";
   }
 })
 export default class AddTypeWithInput extends Vue {
-  @Prop() readonly updateSupplies!: any;
-  @Prop() readonly deleteSupplies!: any;
+  // @Prop() readonly updateSupplies!: any;
+  // @Prop() readonly deleteSupplies!: any;
   @Prop() readonly type!: string;
   @Prop() readonly usageType!: string;
   @Prop() readonly brand!: string;
@@ -50,7 +50,7 @@ export default class AddTypeWithInput extends Vue {
   }
 
   private deleteType() {
-    this.deleteSupplies(this.brand, this.kind);
+    // this.deleteSupplies(this.brand, this.kind);
   }
 
   @Watch("quantity")
@@ -69,7 +69,7 @@ export default class AddTypeWithInput extends Vue {
       quantity: this.quantity
     };
 
-    this.updateSupplies(this.brand, position);
+    // this.updateSupplies(this.brand, position);
   }
 }
 </script>

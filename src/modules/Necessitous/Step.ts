@@ -1,7 +1,7 @@
 import * as U from "unionize";
 import { M } from "@/common/prelude";
 
-import { Supplies } from "../Supply";
+import { Supplies } from "../Supply/Supply";
 
 export const Step = U.unionize({
   Contact: U.ofType<ContactData>(),

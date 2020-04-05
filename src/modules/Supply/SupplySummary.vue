@@ -1,6 +1,11 @@
 <template>
   <v-col md="12" class="pa-0">
-    <medical-card-header v-for="supply in supplies" :title="supply.title" :key="supply.title" class="summary">
+    <medical-card-header
+      v-for="supply in supplies"
+      :title="supply.title"
+      :key="supply.title"
+      class="summary"
+    >
       <template v-slot:icon>
         <Component :is="supply.icon" />
       </template>
@@ -29,7 +34,7 @@ import groceryIcon from "@/components/icons/groceries.vue";
 import sewingMaterialIcon from "@/components/icons/sewing-supplies.vue";
 import otherIcon from "@/components/icons/other.vue";
 
-import { SummaryViewData } from "@/modules/Supply";
+import { SummaryViewData } from "./Supply";
 
 @Component({
   components: {

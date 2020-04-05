@@ -28,7 +28,8 @@
           <div class="summary__outlet">
             <article v-if="outlet">
               <h2>Placówka czekająca na Twoją pomoc:</h2>
-              <Address :contact="outlet" /><br />
+              <Address :contact="outlet" />
+              <br />
               <p>Szczegółowe dane kontaktowe placówki otrzymasz na maila po wysłaniu zgłoszenia.</p>
             </article>
             <article v-else>
@@ -50,7 +51,7 @@
                             <v-row class="summary__deliver-checkbox">
                                 <v-checkbox v-model="willDeliverTheSupplies" />Dostarczę produkty
                             </v-row>
-                            </label>-->
+              </label>-->
             </article>
             <article v-else>
               <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
@@ -92,7 +93,7 @@ import { pipe } from "fp-ts/es6/pipeable";
 import * as A from "fp-ts/es6/Array";
 
 import TermsCheckbox from "@/components/TermsCheckBox.vue";
-import { toSummary } from "@/modules/Supply";
+import { toSummary } from "@/modules/Supply/Supply";
 import SupplySummary from "@/modules/Supply/SupplySummary.vue";
 
 import { StepDict, Step, OutletData } from "./Step";

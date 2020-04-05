@@ -17,24 +17,23 @@ export default class NecessitousView extends Vue {
 
   steps = {} as Partial<StepDict>;
 
-  //   onNextStep(step: Step) {
-  //     this.steps[step.type] = step;
+  onNextStep(step: Step) {
+    // this.steps[step.type] = step;
+    // const path = pipe(Step.nextPath(step), O.toUndefined);
+    // path && this.$router.push({ path });
+  }
 
-  //     const path = pipe(Step.nextPath(step), O.toUndefined);
-  //     path && this.$router.push({ path });
-  //   }
+  onPrevStep(step: Step) {
+    // const path = pipe(Step.prevPath(step), O.toUndefined);
+    // path && this.$router.push({ path });
+  }
 
-  //   onPrevStep(step: Step) {
-  //     const path = pipe(Step.prevPath(step), O.toUndefined);
-  //     path && this.$router.push({ path });
-  //   }
-
-  //   onSendData() {
-  //     // TODO: move this whole flow to effect(s)
-  //     pipe({ ...this.steps }, Necessitous.createRequest, TE.fromEither, TE.chain(Necessitous.send))().then(() => {
-  //       this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
-  //       this.$router.push({ path: "/" });
-  //     });
-  //   }
+  onSendData() {
+    // TODO: move this whole flow to effect(s)
+    // pipe({ ...this.steps }, Necessitous.createRequest, TE.fromEither, TE.chain(Necessitous.send))().then(() => {
+    //   this.rxStore.action$.next(Actions.SHOW_THANK_YOU_MODAL());
+    //   this.$router.push({ path: "/" });
+    // });
+  }
 }
 </script>

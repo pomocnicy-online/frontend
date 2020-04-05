@@ -7,8 +7,12 @@
           Naszą wspólną misją jest wsparcie placówek medycznych podczas walki z koronawirusem. Poprzez dobry proces,
           odpowiednie skoordynowanie działań oraz dobry przepływ informacji możemy dostarczyć ogromne ilości niezbędnych
           środków takich jak maski, płyny dezynfekujące, rękawiczki, kombinezony, artykuły spożywcze czy nawet niezbędne
-          wsparcie psychologiczne.<br /><br />Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej
-          okolicy, niezależnie od rodzaju pomocy.<br /><br />
+          wsparcie psychologiczne.
+          <br />
+          <br />Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej
+          okolicy, niezależnie od rodzaju pomocy.
+          <br />
+          <br />
         </p>
       </article>
       <img class="img" src="@/assets/offer-help.svg" alt />
@@ -17,9 +21,12 @@
       <article class="desc">
         <h2>Chcesz budować aplikację razem z nami?</h2>
         <p>
-          Nasz zespół składa się z zdolnych programistów, grafików, product ownerów, ale pomagają nawet prawnicy.<br /><br />
-          Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu
-          <a href="mailto:info@pomocnicy.online">info@pomocnicy.online</a>.
+          Nasz zespół składa się z zdolnych programistów, grafików, product ownerów, ale pomagają nawet prawnicy.
+          <br />
+          <br />Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu
+          <a
+            href="mailto:info@pomocnicy.online"
+          >info@pomocnicy.online</a>.
         </p>
       </article>
     </div>

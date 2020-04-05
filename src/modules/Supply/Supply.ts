@@ -19,7 +19,7 @@ export const Supply = U.unionize({
 });
 export type Supply = U.UnionOf<typeof Supply>;
 
-export const tags = [
+export const brands = [
   "Mask",
   "Glove",
   "Suit",
@@ -30,15 +30,17 @@ export const tags = [
   "SewingMaterial",
   "PsychologicalSupport",
   "Print"
-] as NonEmptyArray<Supply["tag"]>;
+] as NonEmptyArray<Brand>;
 
-export type Brand = keyof Supplies;
+export type Brand = typeof Supply._Tags;
 export type Order = Supplies[Brand];
 
 type DiscriminateUnion<U, K extends keyof U, V extends U[K]> = U extends Record<K, V> ? U : never;
+export type SupplyCaseOf<T extends Brand> = DiscriminateUnion<Supply, "tag", T>;
+
 export type Supplies = {
-  [T in Supply["tag"]]: {
-    positions: DiscriminateUnion<Supply, "tag", T>[];
+  [T in Brand]: {
+    positions: SupplyCaseOf<T>[];
     description?: string;
   };
 };

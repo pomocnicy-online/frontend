@@ -63,7 +63,7 @@ import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
 import voiceIcon from "@/components/icons/voice.vue";
 import Address from "@/components/Address.vue";
 import TermsCheckbox from "@/components/TermsCheckBox.vue";
-import { toSummary } from "@/modules/Supply";
+import { toSummary } from "@/modules/Supply/Supply";
 import SupplySummary from "@/modules/Supply/SupplySummary.vue";
 
 import { Step, StepDict, SummaryData } from "./Step";

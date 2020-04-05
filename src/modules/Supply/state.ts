@@ -9,7 +9,7 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply, Supplies, tags as SupplyTags } from "../Supply";
+import { Supply, Supplies, Brand, brands } from "../Supply/Supply";
 import { AppState, AppEffect } from "@/root";
 
 export type SupplyId = UUID;
@@ -52,10 +52,10 @@ export namespace Lenses {
   const byList = Lens.fromProp<State>()("byList");
   const desc = Lens.fromProp<State>()("descriptions");
 
-  const descMapById = flow(indexRecord<DescMap>().index, desc.composeOptional);
-  const descByIdAndTag = (id: SupplyListId) => (tag: Supply["tag"]) =>
+  const descMapById = flow(indexRecord<DescMap>().index, x => desc.composeOptional(x));
+  const descByIdAndBrand = (id: SupplyListId) => (tag: Brand) =>
     descMapById(id).composeOptional(indexRecord<SupplyTypeDescription>().index(tag));
-  const supplyById = flow(indexRecord<StoreSupply>().index, byId.composeOptional);
+  const supplyById = flow(indexRecord<StoreSupply>().index, x => byId.composeOptional(x));
 
   // TODO: convert functions below to Traversals / Ats / Indexs
   // http://julien-truffaut.github.io/Monocle/examples/university_example.html
@@ -70,7 +70,7 @@ export namespace Lenses {
       )
     );
 
-  const suppliesByListIdAndTag = (listId: SupplyListId) => (tag: Supply["tag"]) => (state: State): StoreSupply[] =>
+  const suppliesByListIdAndBrand = (listId: SupplyListId) => (brand: Brand) => (state: State): StoreSupply[] =>
     pipe(
       byList.get(state),
       r => R.lookup(listId, r),
@@ -83,7 +83,7 @@ export namespace Lenses {
               O.getOrElse(() => acc)
             )
           ),
-          A.filter(a => a.supply.tag === tag)
+          A.filter(a => a.supply.tag === brand)
         )
       ),
       O.getOrElse<StoreSupply[]>(() => [])
@@ -93,12 +93,12 @@ export namespace Lenses {
     const state = supplies.get(appState);
 
     return pipe(
-      SupplyTags,
-      A.reduce({} as Supplies, (acc, tag) => ({
+      brands,
+      A.reduce({} as Supplies, (acc, brand) => ({
         ...acc,
-        [tag]: {
-          positions: suppliesByListIdAndTag(listId)(tag)(state),
-          description: pipe(descByIdAndTag(listId)(tag).getOption(state), O.toUndefined)
+        [brand]: {
+          positions: suppliesByListIdAndBrand(listId)(brand)(state),
+          description: pipe(descByIdAndBrand(listId)(brand).getOption(state), O.toUndefined)
         }
       }))
     );
@@ -113,7 +113,7 @@ export namespace Lenses {
       modifyByList(s.listId)(a => A.snoc(a, s.id))
     );
 
-  export const modifyDesc = (s: SuppleDesc) => descByIdAndTag(s.id)(s.type).set(s.text);
+  export const modifyDesc = (s: SuppleDesc) => descByIdAndBrand(s.id)(s.type).set(s.text);
 }
 
 export const reducer = createReducer(State.empty())<Actions>({

@@ -31,7 +31,7 @@ import { select } from "@rxsv/core";
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/modules/Supply/SupplyContainer.vue";
 import { AppStore } from "@/root";
-import { Lenses } from "@/modules/Supply";
+import { Lenses } from "@/modules/Supply/state";
 
 import { Step } from "./Step";
 import { Step as NecessitousStep } from "../Necessitous/Step";

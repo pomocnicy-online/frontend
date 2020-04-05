@@ -24,6 +24,7 @@
 <script lang="ts">
 import * as O from "fp-ts/es6/Option";
 import { pipe } from "fp-ts/es6/pipeable";
+import { tap } from "rxjs/operators";
 import { Component, Vue, Emit, Watch, Prop, Inject } from "vue-property-decorator";
 
 import { AppStore } from "@/root";
@@ -33,7 +34,7 @@ import SupplyContainer from "@/modules/Supply/SupplyContainer.vue";
 import { Step } from "./Step";
 import { Observables } from "vue-rx";
 import { select } from "@rxsv/core";
-import { Lenses } from "@/modules/Supply";
+import { Lenses } from "@/modules/Supply/state";
 
 @Component<NecessitousDemand>({
   components: {
@@ -41,23 +42,28 @@ import { Lenses } from "@/modules/Supply";
     SupplyContainer
   },
   subscriptions(): Observables {
+    const supplies$ = this.rxStore.state$.pipe(
+      select(Lenses.suppliesPerTypeByListId("necessitous-demand"))
+      // tap(x => console.log("supplies", x))
+    );
+
     return {
-      supplies$: this.rxStore.state$.pipe(select(Lenses.suppliesPerTypeByListId("necessitous-demand")))
+      supplies$
     };
   }
 })
 export default class NecessitousDemand extends Vue {
   @Inject("rxstore") public readonly rxStore!: AppStore;
 
-  //   @Emit("nextStep")
-  //   onNext(): Step {
-  //     return this.step();
-  //   }
+  @Emit("nextStep")
+  onNext() {
+    // return this.step();
+  }
 
-  //   @Emit("prevStep")
-  //   onPrev(): Step {
-  //     return this.step();
-  //   }
+  @Emit("prevStep")
+  onPrev() {
+    // return this.step();
+  }
 
   // TODO: getting to previous step doesn't work properly
   // need to refactor `updateSupplies` and the components first
