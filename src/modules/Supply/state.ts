@@ -9,31 +9,30 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply, Supplies, Brand, brands } from "../Supply/Supply";
+import { Supply, Supplies, Brand, brands, Order } from "../Supply/Supply";
 import { AppState, AppEffect } from "@/root";
+import { merge } from "rxjs";
 
 export type SupplyId = UUID;
 export type SupplyListId = string;
 export type SupplyTypeDescription = string;
-export interface StoreSupply {
-  id: SupplyId;
-  listId: SupplyListId;
-  supply: Supply;
-}
-export interface SuppleDesc {
-  id: SupplyListId;
-  type: Supply["tag"];
-  text: string;
-}
+export type StoreSupply = { id: SupplyId; supply: Supply };
+export type SupplyPayload = { listId: SupplyListId } & StoreSupply;
+export type SupplyDescPayload = { listId: SupplyListId; brand: Brand; text: string };
+export type SupplyAddIntentPayload = Omit<SupplyPayload, "id">;
+export type SupplyRemovalPayload = { id: SupplyId; listId: SupplyListId };
+export type UpdateIntendPayload = { order: Order } & SupplyAddIntentPayload;
 
-type DescMap = Record<Supply["tag"], SupplyTypeDescription>;
+type DescMap = Record<Brand, SupplyTypeDescription>;
 
 export const Actions = U.createUnion(
-  U.caseOf("ADD_SUPPLY_INTENT")<Omit<StoreSupply, "id">>(),
-  U.caseOf("ADD_SUPPLY")<StoreSupply>(),
-  U.caseOf("UPDATE_SUPPLY")<StoreSupply>(),
-  U.caseOf("REMOVE_SUPPLY")<StoreSupply>(),
-  U.caseOf("MODIFY_SUPPLY_TYPE_DESC")<SuppleDesc>()
+  U.caseOf("ADD_SUPPLY_INTENT")<SupplyAddIntentPayload>(),
+  U.caseOf("ADD_SUPPLY")<SupplyPayload>(),
+  U.caseOf("UPDATE_SUPPLY_INTENT")<UpdateIntendPayload>(),
+  U.caseOf("UPDATE_SUPPLY")<SupplyPayload>(),
+  U.caseOf("REMOVE_SUPPLY")<SupplyRemovalPayload>(),
+  U.caseOf("MODIFY_SUPPLY_TYPE_DESC")<SupplyDescPayload>(),
+  U.caseOf("ADD_SUPPLY_LIST_ID")<SupplyListId>()
 );
 export type Actions = ActionsUnion<typeof Actions>;
 
@@ -43,7 +42,11 @@ export type State = {
   descriptions: Record<SupplyListId, DescMap>;
 };
 export namespace State {
-  export const empty = (): State => ({ byId: {}, byList: {}, descriptions: {} });
+  export const empty = (): State => ({
+    byId: {},
+    byList: {},
+    descriptions: {}
+  });
 }
 
 export namespace Lenses {
@@ -53,8 +56,8 @@ export namespace Lenses {
   const desc = Lens.fromProp<State>()("descriptions");
 
   const descMapById = flow(indexRecord<DescMap>().index, x => desc.composeOptional(x));
-  const descByIdAndBrand = (id: SupplyListId) => (tag: Brand) =>
-    descMapById(id).composeOptional(indexRecord<SupplyTypeDescription>().index(tag));
+  const descByIdAndBrand = (listId: SupplyListId) => (tag: Brand) =>
+    descMapById(listId).composeOptional(indexRecord<SupplyTypeDescription>().index(tag));
   const supplyById = flow(indexRecord<StoreSupply>().index, x => byId.composeOptional(x));
 
   // TODO: convert functions below to Traversals / Ats / Indexs
@@ -104,30 +107,74 @@ export namespace Lenses {
     );
   };
 
-  export const updateSupply = (s: StoreSupply) => supplyById(s.id).set(s);
-  export const removeSupply = (s: StoreSupply) =>
+  export const updateSupply = (s: SupplyPayload) => supplyById(s.id).set(s);
+  export const removeSupply = (s: SupplyRemovalPayload) =>
     flow(byId.modify(R.deleteAt(s.id)), modifyByList(s.listId)(A.filter(id => id !== s.id)));
-  export const addSupply = (s: StoreSupply) =>
+  export const addSupply = (s: SupplyPayload) =>
     flow(
       byId.modify(R.insertAt(s.id, s)),
       modifyByList(s.listId)(a => A.snoc(a, s.id))
+      // byList.modify(r =>
+      //   O.isNone(R.lookup(s.listId, r))
+      //     ? pipe(r, R.insertAt(s.listId, [s.id]))
+      //     : pipe(
+      //         r,
+      //         R.modifyAt(s.listId, a => A.snoc(a, s.id)),
+      //         O.getOrElse(() => r)
+      //       )
+      // )
     );
 
-  export const modifyDesc = (s: SuppleDesc) => descByIdAndBrand(s.id)(s.type).set(s.text);
+  export const modifyDesc = (s: SupplyDescPayload) => descByIdAndBrand(s.listId)(s.brand).set(s.text);
+  export const addListId = (listId: SupplyListId) =>
+    flow(
+      byList.modify(R.insertAt(listId, [] as SupplyId[])),
+      desc.modify(
+        R.insertAt(
+          listId,
+          pipe(
+            brands,
+            A.reduce({} as DescMap, (acc, brand) => ({ ...acc, [brand]: "" }))
+          )
+        )
+      )
+    );
 }
 
 export const reducer = createReducer(State.empty())<Actions>({
   MODIFY_SUPPLY_TYPE_DESC: (s, { payload }) => Lenses.modifyDesc(payload)(s),
   ADD_SUPPLY_INTENT: identity,
   ADD_SUPPLY: (s, { payload }) => Lenses.addSupply(payload)(s),
+  UPDATE_SUPPLY_INTENT: identity,
   UPDATE_SUPPLY: (s, { payload }) => Lenses.updateSupply(payload)(s),
-  REMOVE_SUPPLY: (s, { payload }) => Lenses.removeSupply(payload)(s)
+  REMOVE_SUPPLY: (s, { payload }) => Lenses.removeSupply(payload)(s),
+  ADD_SUPPLY_LIST_ID: (s, { payload }) => Lenses.addListId(payload)(s)
 });
 
-export const effect: AppEffect = action$ =>
-  action$.pipe(
+export const effect: AppEffect = action$ => {
+  const addIntent$ = action$.pipe(
     fromActions(Actions.ADD_SUPPLY_INTENT),
     pluck("payload"),
     map(s => ({ ...s, id: UUID.gen() })),
     map(Actions.ADD_SUPPLY)
   );
+
+  // const updateIntent$ = action$.pipe(
+  //   fromActions(Actions.UPDATE_SUPPLY_INTENT),
+  //   pluck("payload"),
+  //   map(({ order, supply, listId, }) => {
+  //     const pos = order.positions
+
+  //     // const action = pipe(
+  //     //   order.positions,
+  //     //   A.findFirst(a => a.supply.style === supply.style && a.supply.type === supply.type),
+  //     //   O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
+  //     //   O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
+  //     // );
+
+  //     return;
+  //   })
+  // );
+
+  return merge(addIntent$);
+};

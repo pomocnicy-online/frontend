@@ -6,13 +6,7 @@
       </v-row>
     </v-col>
     <v-col cols="6" class="pa-2">
-      <Counter
-        :quantity.sync="quantity"
-        :plus="plus"
-        :minus="minus"
-        :kind="type"
-        :justify="justifyCounter"
-      />
+      <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :kind="type" :justify="justifyCounter" />
     </v-col>
   </v-row>
 </template>
@@ -21,7 +15,7 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
-import { Brand } from "@/modules/Supply/Supply";
+import { Brand, Order } from "@/modules/Supply/Supply";
 
 @Component({
   components: {
@@ -31,13 +25,13 @@ import { Brand } from "@/modules/Supply/Supply";
 export default class Types<U extends string, T extends string> extends Vue {
   @Prop() readonly type!: T;
   @Prop() readonly usageType!: U;
-  @Prop() readonly brand!: Brand;
   @Prop() readonly updateSupplies: any;
+  // @Prop() readonly order!: Order;
 
   @Prop({ default: "center" }) readonly justifyTypes!: string;
   @Prop({ default: "center" }) readonly justifyCounter!: string;
 
-  quantity = 0;
+  quantity = 0; // TODO: take count from order
 
   private plus() {
     this.quantity = Number(this.quantity) + 1;
@@ -54,13 +48,7 @@ export default class Types<U extends string, T extends string> extends Vue {
       return;
     }
 
-    const position = {
-      style: this.type,
-      type: this.usageType,
-      quantity: this.quantity
-    };
-
-    // this.updateSupplies(this.brand, position);
+    this.updateSupplies(this.quantity, this.type, this.usageType);
   }
 
   @Watch("quantity")

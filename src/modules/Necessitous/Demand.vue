@@ -11,7 +11,7 @@
     <section>
       <v-container class="pa-2">
         <step-header name="Szczegóły zapotrzebowania" current="2" outOf="3" />
-        <supply-container :supplies="supplies$" />
+        <supply-container :suppliesListId="suppliesListId" />
         <v-row class="step-nav">
           <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
           <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
@@ -22,38 +22,27 @@
 </template>
 
 <script lang="ts">
-import * as O from "fp-ts/es6/Option";
-import { pipe } from "fp-ts/es6/pipeable";
-import { tap } from "rxjs/operators";
-import { Component, Vue, Emit, Watch, Prop, Inject } from "vue-property-decorator";
+import { Component, Vue, Emit, Inject } from "vue-property-decorator";
 
 import { AppStore } from "@/root";
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/modules/Supply/SupplyContainer.vue";
-
-import { Step } from "./Step";
-import { Observables } from "vue-rx";
-import { select } from "@rxsv/core";
-import { Lenses } from "@/modules/Supply/state";
+import { Actions } from "@/modules/Supply/state";
 
 @Component<NecessitousDemand>({
   components: {
     StepHeader,
     SupplyContainer
-  },
-  subscriptions(): Observables {
-    const supplies$ = this.rxStore.state$.pipe(
-      select(Lenses.suppliesPerTypeByListId("necessitous-demand"))
-      // tap(x => console.log("supplies", x))
-    );
-
-    return {
-      supplies$
-    };
   }
 })
 export default class NecessitousDemand extends Vue {
   @Inject("rxstore") public readonly rxStore!: AppStore;
+
+  suppliesListId = "necessitous-demand";
+
+  created() {
+    this.rxStore.action$.next(Actions.ADD_SUPPLY_LIST_ID(this.suppliesListId));
+  }
 
   @Emit("nextStep")
   onNext() {

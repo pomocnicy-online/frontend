@@ -27,15 +27,11 @@ import Counter from "@/components/Counter.vue";
   }
 })
 export default class AddTypeWithInput extends Vue {
-  // @Prop() readonly updateSupplies!: any;
-  // @Prop() readonly deleteSupplies!: any;
-  @Prop() readonly type!: string;
-  @Prop() readonly usageType!: string;
-  @Prop() readonly brand!: string;
-  @Prop() description!: string[];
+  @Prop() readonly updateSupplies!: any;
+  @Prop() readonly deleteSupplies!: any;
 
   quantity = 0;
-  kind = "";
+  type = "";
 
   private plus() {
     this.quantity = Number(this.quantity) + 1;
@@ -50,11 +46,11 @@ export default class AddTypeWithInput extends Vue {
   }
 
   private deleteType() {
-    // this.deleteSupplies(this.brand, this.kind);
+    this.deleteSupplies(this.type);
   }
 
   @Watch("quantity")
-  quantityChanged(quantity: number) {
+  quantityChanged() {
     this.updatePosition();
   }
 
@@ -63,13 +59,7 @@ export default class AddTypeWithInput extends Vue {
       return;
     }
 
-    const position = {
-      style: this.type,
-      type: this.kind,
-      quantity: this.quantity
-    };
-
-    // this.updateSupplies(this.brand, position);
+    this.updateSupplies(this.quantity, this.type);
   }
 }
 </script>

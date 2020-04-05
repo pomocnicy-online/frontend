@@ -2,12 +2,13 @@ import * as U from "unionize";
 import * as O from "fp-ts/es6/Option";
 import * as A from "fp-ts/es6/Array";
 import * as R from "fp-ts/es6/Record";
+import { UUID } from "@/common/prelude";
 import { pipe } from "fp-ts/es6/pipeable";
 import { NonEmptyArray } from "fp-ts/es6/NonEmptyArray";
 
 export const Supply = U.unionize({
   Mask: U.ofType<{ style: Style; type: UsageType; quantity: number }>(),
-  Glove: U.ofType<{ type: UsageType; size: Size; quantity: number; material: Material }>(),
+  Glove: U.ofType<{ size: Size; quantity: number; material: Material }>(),
   Suit: U.ofType<{ size: Size } & Shared>(),
   Disinfectant: U.ofType<Shared>(),
   Cleaning: U.ofType<Shared>(),
@@ -18,6 +19,9 @@ export const Supply = U.unionize({
   Print: U.ofType<{ quantity: number; printType: PrintType }>()
 });
 export type Supply = U.UnionOf<typeof Supply>;
+
+export type SupplyId = UUID;
+export type SupplyListId = string;
 
 export const brands = [
   "Mask",
@@ -40,7 +44,7 @@ export type SupplyCaseOf<T extends Brand> = DiscriminateUnion<Supply, "tag", T>;
 
 export type Supplies = {
   [T in Brand]: {
-    positions: SupplyCaseOf<T>[];
+    positions: { supply: SupplyCaseOf<T>; id: SupplyId }[];
     description?: string;
   };
 };
@@ -99,17 +103,20 @@ const supplyName = (brand: Brand) =>
     Other: () => "Inner"
   }[brand]());
 
+export type OrderPos = Order["positions"] extends Array<infer T> ? T[] : never;
+const quantity = (orderPos: OrderPos) => orderPos.reduce((acc, pos) => acc + pos.supply.quantity, 0);
+
 export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
   pipe(
     O.fromNullable(supplies),
     O.map(x => R.toArray<Brand, Order>(x as Supplies)),
     O.getOrElse<[Brand, Order][]>(() => []),
-    A.map(([brand, supply]) => ({
+    A.map(([brand, order]) => ({
       brand,
       icon: `${brand}-icon`,
       title: supplyName(brand),
-      quantity: (supply.positions as Supply[]).reduce((acc, pos) => acc + pos.quantity, 0),
-      description: supply.description
+      quantity: quantity(order.positions),
+      description: order.description
     })),
     A.filter(x => (x.brand === "PsychologicalSupport" || x.brand === "Other" ? x.description !== "" : x.quantity > 0))
   );

@@ -6,7 +6,7 @@ import { pipe } from "fp-ts/es6/pipeable";
 import { flow } from "fp-ts/es6/function";
 
 import { ContactData, SummaryData, StepDict } from "./Step";
-import { UsageType, Style, Material, Size, PrintType, Supplies } from "../Supply/Supply";
+import { UsageType, Style, Material, Size, PrintType, Supplies, Brand, OrderPos } from "../Supply/Supply";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export type Necessitous = {
@@ -53,8 +53,14 @@ export namespace Necessitous {
 
     // TODO: refactor serialization, io-ts ?, move to supplies ?
 
-    const nonEmpty = <A extends keyof Supplies, B>(fn: (data: Supplies[A]) => B) => (data: Supplies[A]) =>
+    const nonEmpty = <A extends Brand, B>(fn: (data: Supplies[A]) => B) => (data: Supplies[A]) =>
       data.positions.length > 0 ? O.some(fn(data)) : O.none;
+
+    const toReq = <A extends Brand, B extends SupplyRequest<any>>(data: Supplies[A]): B =>
+      ({
+        ...data,
+        positions: (data.positions as OrderPos).map(a => a.supply)
+      } as B);
 
     const nonEmptyDesc = (desc?: string) =>
       pipe(
@@ -72,8 +78,8 @@ export namespace Necessitous {
     export const Mask = nonEmpty<"Mask", Mask>(data => ({
       ...data,
       positions: data.positions.map(a => ({
-        ...a,
-        usageType: a.type
+        ...a.supply,
+        usageType: a.supply.type
       }))
     }));
 
@@ -82,32 +88,32 @@ export namespace Necessitous {
       quantity: number;
       size: Size;
     }>;
-    export const Glove = nonEmpty<"Glove", Glove>(a => a);
+    export const Glove = nonEmpty<"Glove", Glove>(toReq);
 
     export type Grocery = SupplyRequest<{
       quantity: number;
       description?: string;
     }>;
-    export const Grocery = nonEmpty<"Grocery", Grocery>(a => a);
+    export const Grocery = nonEmpty<"Grocery", Grocery>(toReq);
 
     export type Disinfectant = SupplyRequest<{
       quantity: number;
       description?: string;
     }>;
-    export const Disinfectant = nonEmpty<"Disinfectant", Disinfectant>(a => a);
+    export const Disinfectant = nonEmpty<"Disinfectant", Disinfectant>(toReq);
 
     export type Suite = SupplyRequest<{
       material?: Material;
       quantity: number;
       size: Size;
     }>;
-    export const Suite = nonEmpty<"Suit", Suite>(a => a);
+    export const Suite = nonEmpty<"Suit", Suite>(toReq);
 
     export type Cleaning = SupplyRequest<{
       quantity: number;
       description?: string;
     }>;
-    export const Cleaning = nonEmpty<"Cleaning", Cleaning>(a => a);
+    export const Cleaning = nonEmpty<"Cleaning", Cleaning>(toReq);
 
     export type PsychologicalSupport = {
       description: string;
@@ -123,7 +129,7 @@ export namespace Necessitous {
       printType: PrintType;
       quantity: number;
     }>;
-    export const Print = nonEmpty<"Print", Print>(data => data);
+    export const Print = nonEmpty<"Print", Print>(toReq);
 
     export type SewingSupplies = {
       description: string;

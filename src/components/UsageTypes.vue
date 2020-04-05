@@ -3,7 +3,7 @@
     <v-row v-for="item in usageTypes" :key="item" align="start" justify="center">
       <v-col cols="4" justify="start" class="pa-7">
         <v-row align="center" justify="center">
-          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${item}`)}}</h3>
+          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${item}`) }}</h3>
         </v-row>
       </v-col>
       <v-col cols="8">

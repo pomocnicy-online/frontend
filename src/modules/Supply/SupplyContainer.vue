@@ -1,11 +1,23 @@
 <template>
   <v-col md="12" class="pa-0">
-    <Component v-for="(item, brand) in supplies" :key="brand" :is="`${brand}Card`" :item="item" />
+    <Component
+      v-for="(item, brand) in supplies$"
+      :key="brand"
+      :is="`${brand}Card`"
+      :item="item"
+      :suppliesListId="suppliesListId"
+    />
   </v-col>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { tap } from "rxjs/operators";
+import { Component, Vue, Prop, Inject } from "vue-property-decorator";
+import { Observables } from "vue-rx";
+import { select } from "@rxsv/core";
+
+import { Lenses } from "@/modules/Supply/state";
+import { AppStore } from "@/root";
 
 import MaskCard from "./components/Mask.vue";
 import GloveCard from "./components/Glove.vue";
@@ -17,10 +29,9 @@ import GroceryCard from "./components/Grocery.vue";
 import PrintCard from "./components/Print.vue";
 import OtherCard from "./components/Other.vue";
 import SewingMaterialCard from "./components/SewingMaterial.vue";
+import { SupplyListId } from "./Supply";
 
-import { Supplies } from "./Supply";
-
-@Component({
+@Component<SupplyContainer>({
   components: {
     MaskCard,
     GloveCard,
@@ -32,10 +43,20 @@ import { Supplies } from "./Supply";
     PrintCard,
     OtherCard,
     SewingMaterialCard
+  },
+  subscriptions(): Observables {
+    const supplies$ = this.rxStore.state$.pipe(
+      select(Lenses.suppliesPerTypeByListId(this.suppliesListId))
+      // tap(x => console.log("supplies", x))
+    );
+
+    return {
+      supplies$
+    };
   }
 })
 export default class SupplyContainer extends Vue {
-  @Prop() supplies!: Supplies;
+  @Inject("rxstore") readonly rxStore!: AppStore;
+  @Prop() readonly suppliesListId!: SupplyListId;
 }
 </script>
-

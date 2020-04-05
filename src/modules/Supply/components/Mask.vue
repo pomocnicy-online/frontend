@@ -4,81 +4,63 @@
       <maskIcon />
     </template>
     <template v-slot:usageTypes>
-      <UsageTypes brand="Mask" :usageTypes="usageTypes" :types="styles" />
+      <UsageTypes brand="Mask" :usageTypes="usageTypes" :types="styles" :updateSupplies="updateSupplies" />
     </template>
     <template v-slot:additionalDesc>
-      <AdditionalDesc :description="item.description" />
+      <AdditionalDesc :description="item.description" @update:description="modifyDesc" />
     </template>
   </medical-card>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Inject } from "vue-property-decorator";
+import * as A from "fp-ts/es6/Array";
+import * as O from "fp-ts/es6/Option";
+import { pipe } from "fp-ts/es6/pipeable";
 
 import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
-import AddType from "@/components/AddType.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
-import Types from "@/components/Types.vue";
-import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
-import AddInputForType from "@/components/AddInputForType.vue";
-
 import maskIcon from "@/components/icons/mask.vue";
-import otherIcon from "@/components/icons/other.vue";
-import printIcon from "@/components/icons/print.vue";
-import glovesIcon from "@/components/icons/gloves.vue";
-import disinfectantsIcon from "@/components/icons/disinfectants.vue";
-import overallsIcon from "@/components/icons/overalls.vue";
-import psychologicalSupportIcon from "@/components/icons/psychological-support.vue";
-import cleaningProductsIcon from "@/components/icons/cleaning-products.vue";
-import groceriesIcon from "@/components/icons/groceries.vue";
-import sewingSuppliesIcon from "@/components/icons/sewing-supplies.vue";
+import { AppStore } from "@/root";
 
-import { Step, DemandData } from "@/modules/Necessitous/Step";
-import { Supply, Style, Size, UsageType, Material, PrintType, SupplyCaseOf } from "../Supply";
+import { Supply, Style, UsageType, Supplies, SupplyListId } from "../Supply";
+import { Actions } from "../state";
 
 @Component({
   components: {
     maskIcon,
-    otherIcon,
-    glovesIcon,
-    overallsIcon,
-    disinfectantsIcon,
-    cleaningProductsIcon,
-    groceriesIcon,
-    psychologicalSupportIcon,
-    sewingSuppliesIcon,
     MedicalCard,
     AdditionalDesc,
-    AddType,
-    UsageTypes,
-    Types,
-    AddTypeWithInput,
-    AddInputForType,
-    printIcon
+
+    UsageTypes
   }
 })
 export default class MaskCard extends Vue {
-  @Prop() item!: SupplyCaseOf<"Mask">;
-
-  disinfectantCount = 1;
-  groceryCount = 1;
-  cleaningCount = 1;
+  @Prop() readonly item!: Supplies["Mask"];
+  @Prop() readonly suppliesListId!: SupplyListId;
+  @Inject("rxstore") readonly rxStore!: AppStore;
 
   private readonly styles: Style[] = Object.values(Style);
-  private readonly sizes: Size[] = Object.values(Size);
   private readonly usageTypes: UsageType[] = Object.values(UsageType);
-  private readonly material: Material[] = Object.values(Material);
-  private readonly printType: PrintType[] = Object.values(PrintType);
 
-  private overallTypes: string[] = [UsageType.Disposable];
-  private gloveTypes: string[] = [Material.Latex];
+  modifyDesc(text: string) {
+    this.rxStore.action$.next(Actions.MODIFY_SUPPLY_TYPE_DESC({ listId: this.suppliesListId, text, brand: "Mask" }));
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  updateSupplies() {}
+  updateSupplies(quantity: number, style: Style, type: UsageType) {
+    const listId = this.suppliesListId;
+    const supply = Supply.Mask({ style, type, quantity });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  deleteSupplies() {}
+    const action = pipe(
+      this.item.positions,
+      A.findFirst(a => a.supply.style === style && a.supply.type === type),
+      O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
+      O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
+    );
+
+    this.rxStore.action$.next(action);
+  }
 }
 </script>
 

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@rxsv/core": "^1.2.0",
+    "@rxsv/tools": "^1.2.0",
     "core-js": "^3.6.4",
     "fp-ts": "^2.5.3",
     "monocle-ts": "^2.1.0",
