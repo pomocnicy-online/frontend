@@ -1,7 +1,7 @@
 <template>
   <medical-card title="Artykuły spozywcze">
     <template v-slot:icon>
-      <cleaningProductsIcon />
+      <groceryIcon />
     </template>
     <template v-slot:usageTypes>
       <AddTypeWithInput
@@ -31,8 +31,7 @@ import UsageTypes from "@/components/UsageTypes.vue";
 import Types from "@/components/Types.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
-
-import groceriesIcon from "@/components/icons/groceries.vue";
+import groceryIcon from "@/components/icons/groceries.vue";
 
 import { Supply, Supplies, SupplyListId } from "../Supply";
 import { AppStore } from "@/root";
@@ -40,7 +39,7 @@ import { Actions } from "../state";
 
 @Component({
   components: {
-    groceriesIcon,
+    groceryIcon,
     MedicalCard,
     AdditionalDesc,
     AddType,

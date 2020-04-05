@@ -33,7 +33,7 @@ import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
 
 import disinfectantsIcon from "@/components/icons/disinfectants.vue";
-import { UsageType, Supply, SupplyListId, Supplies } from "../Supply";
+import { Supply, SupplyListId, Supplies } from "../Supply";
 import { AppStore } from "../../../root";
 import { Actions } from "../state";
 

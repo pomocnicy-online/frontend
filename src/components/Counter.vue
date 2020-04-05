@@ -1,12 +1,12 @@
 <template>
   <v-row align="center" :justify="justify" class="counter">
-    <v-btn icon @click="minus" color="primary" :disabled="!kind">
+    <v-btn icon @click="minus" color="primary" :disabled="!type">
       <v-icon>$backArrow</v-icon>
     </v-btn>
 
     <v-col cols="3" class="pa-0">
       <v-text-field
-        :disabled="!kind"
+        :disabled="!type"
         hide-details
         dense
         class="pa-0 centered-input"
@@ -16,7 +16,7 @@
       ></v-text-field>
     </v-col>
 
-    <v-btn icon color="primary" @click="plus" :disabled="!kind">
+    <v-btn icon color="primary" @click="plus" :disabled="!type">
       <v-icon>$nextArrow</v-icon>
     </v-btn>
   </v-row>
@@ -30,7 +30,7 @@ export default class Counter extends Vue {
   @Prop() quantity!: number;
   @Prop() plus!: any;
   @Prop() minus!: any;
-  @Prop() kind!: string;
+  @Prop() type!: string;
 
   @Prop({ default: "center" }) justify!: string;
 }

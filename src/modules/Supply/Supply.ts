@@ -71,7 +71,11 @@ export enum Size {
 }
 
 export enum PrintType {
-  VenturiNozzle = "VenturiNozzle"
+  VenturiNozzle = "VenturiNozzle",
+  VenturiValve = "VenturiValve",
+  PositiveExperienceValve = "PositiveExperienceValve",
+  PlexiFaceCover = "PlexiFaceCover",
+  CoverMask = "CoverMask"
 }
 
 export enum Material {

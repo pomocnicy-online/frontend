@@ -1,7 +1,7 @@
 <template>
   <medical-card title="Kombinezony">
     <template v-slot:icon>
-      <overallsIcon />
+      <suitIcon />
     </template>
     <template v-slot:usageTypes>
       <UsageTypes brand="Suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
@@ -21,7 +21,7 @@ import { pipe } from "fp-ts/es6/pipeable";
 import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
-import maskIcon from "@/components/icons/mask.vue";
+import suitIcon from "@/components/icons/overalls.vue";
 import { AppStore } from "@/root";
 
 import { Supply, Size, UsageType, Supplies, SupplyListId } from "../Supply";
@@ -29,7 +29,7 @@ import { Actions } from "../state";
 
 @Component({
   components: {
-    maskIcon,
+    suitIcon,
     MedicalCard,
     AdditionalDesc,
     UsageTypes

@@ -4,14 +4,14 @@
       <v-text-field
         @focus="deleteType"
         @blur="updatePosition"
-        v-model="kind"
+        v-model="type"
         label="Rodzaj"
         filled
         hide-details
       ></v-text-field>
     </v-col>
     <v-col cols="4" class="pa-2">
-      <Counter :kind="kind" :quantity.sync="quantity" :plus="plus" :minus="minus" />
+      <Counter :type="type" :quantity.sync="quantity" :plus="plus" :minus="minus" />
     </v-col>
   </v-row>
 </template>

@@ -6,7 +6,7 @@
       </v-row>
     </v-col>
     <v-col cols="6" class="pa-2">
-      <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :kind="type" :justify="justifyCounter" />
+      <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :type="type" :justify="justifyCounter" />
     </v-col>
   </v-row>
 </template>
@@ -15,7 +15,6 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
-import { Brand, Order } from "@/modules/Supply/Supply";
 
 @Component({
   components: {

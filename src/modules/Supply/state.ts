@@ -11,7 +11,6 @@ import * as O from "fp-ts/es6/Option";
 
 import { Supply, Supplies, Brand, brands, Order } from "../Supply/Supply";
 import { AppState, AppEffect } from "@/root";
-import { merge } from "rxjs";
 
 export type SupplyId = UUID;
 export type SupplyListId = string;
@@ -112,17 +111,8 @@ export namespace Lenses {
     flow(byId.modify(R.deleteAt(s.id)), modifyByList(s.listId)(A.filter(id => id !== s.id)));
   export const addSupply = (s: SupplyPayload) =>
     flow(
-      byId.modify(R.insertAt(s.id, s)),
+      byId.modify(R.insertAt(s.id, { supply: s.supply, id: s.id })),
       modifyByList(s.listId)(a => A.snoc(a, s.id))
-      // byList.modify(r =>
-      //   O.isNone(R.lookup(s.listId, r))
-      //     ? pipe(r, R.insertAt(s.listId, [s.id]))
-      //     : pipe(
-      //         r,
-      //         R.modifyAt(s.listId, a => A.snoc(a, s.id)),
-      //         O.getOrElse(() => r)
-      //       )
-      // )
     );
 
   export const modifyDesc = (s: SupplyDescPayload) => descByIdAndBrand(s.listId)(s.brand).set(s.text);
@@ -151,30 +141,10 @@ export const reducer = createReducer(State.empty())<Actions>({
   ADD_SUPPLY_LIST_ID: (s, { payload }) => Lenses.addListId(payload)(s)
 });
 
-export const effect: AppEffect = action$ => {
-  const addIntent$ = action$.pipe(
+export const effect: AppEffect = action$ =>
+  action$.pipe(
     fromActions(Actions.ADD_SUPPLY_INTENT),
     pluck("payload"),
     map(s => ({ ...s, id: UUID.gen() })),
     map(Actions.ADD_SUPPLY)
   );
-
-  // const updateIntent$ = action$.pipe(
-  //   fromActions(Actions.UPDATE_SUPPLY_INTENT),
-  //   pluck("payload"),
-  //   map(({ order, supply, listId, }) => {
-  //     const pos = order.positions
-
-  //     // const action = pipe(
-  //     //   order.positions,
-  //     //   A.findFirst(a => a.supply.style === supply.style && a.supply.type === supply.type),
-  //     //   O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
-  //     //   O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
-  //     // );
-
-  //     return;
-  //   })
-  // );
-
-  return merge(addIntent$);
-};
