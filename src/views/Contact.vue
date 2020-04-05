@@ -4,9 +4,11 @@
             <article class="desc">
                 <h2>Nasza misja</h2>
                 <p>
-                    Naszą wspólną misją jest wsparcie placówek medycznych podczas walki z koronawirusem. Poprzez dobry proces, odpowiednie skoordynowanie działań oraz dobry przepływ informacji możemy dostarczyć ogromne ilości niezbędnych środków takich jak maski, płyny dezynfekujące, rękawiczki, kombinezony, artykuły spożywcze czy nawet niezbędne wsparcie psychologiczne.<br/><br/>Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej okolicy, niezależnie od rodzaju pomocy.<br/><br/>
+                    Wsparcie placówek medycznych podczas <strong>wspólnej</strong> walki z koronawirusem. Koordynując działania oraz przepływ informacji  zapewnijmy razem ogromne ilości niezbędnych środków takich jak:
+                    <br/>
+                    <br/>
+                    Maseczki, rękawiczki, ombinezony, Środki do dezynfekcji, Przyłbice, 
                 </p>
-
             </article>
             <img class="img" src="@/assets/offer-help.svg" alt />
         </div>
@@ -19,7 +21,7 @@
                 <br/>
                 <h2>Partnerzy</h2>       
             </article>
-            <a href="https://miejgest.org/" target="_blank">test<img class="img img-parnters" src="@/assets/gest.png" alt /></a>
+            <a href="https://miejgest.org/" target="_blank"><img class="img img-parnters" src="@/assets/gest.png" alt /></a>
         </div>
     </div>
 </template>
