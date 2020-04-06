@@ -5,7 +5,7 @@ import * as R from "fp-ts/es6/Record";
 import { pipe } from "fp-ts/es6/pipeable";
 import { flow } from "fp-ts/es6/function";
 
-import { ContactData, SummaryData, StepDict } from "./Step";
+import { ContactData, SummaryData, StepDict, Step } from "./Step";
 import { UsageType, Style, Material, Size, PrintType, Supplies, Brand, OrderPos } from "../Supply/Supply";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -101,8 +101,13 @@ export namespace Necessitous {
 
     export type SewingSupplies = { description: string };
     export const SewingSupplies = (data: Supplies["SewingMaterial"]) => nonEmptyDesc(data.description);
+
     export type AdditionalComment = { description?: string };
-    export const AdditionalComment = (data: SummaryData["comment"]) => nonEmptyDesc(data);
+    export const AdditionalComment = (data: SummaryData["comment"]) =>
+      pipe(
+        O.fromNullable(data),
+        O.filter(d => d !== "")
+      );
 
     export const fromAdditionalComment = (comment?: string) => ({
       additionalComment: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
