@@ -4,10 +4,11 @@
             v-model="isCheckedModel"
             :rules="[v => !!v || 'Musisz się zgodzić by kontynuować']"
         >
-            <template v-slot:label>
-                <a href="/#/regulamin" target="_blank">Wyrażam zgodę na przetwarzanie moich danych w ramach procesu pomocy.</a>
+           <template v-slot:label>
+                Oswiadczam że zapoznałem się z regulaminem oraz polityką prywatności
             </template>
         </v-checkbox>
+            <a href="https://docs.google.com/document/d/1gWwc87JOSOeAIxN0Ya3xHB-ZNE22QrfFrPwvjZcSu0s/edit?usp=sharing" target="_blank">Regulamin oraz polityka prywatności</a>
     </v-row>
 </template>
 
@@ -37,6 +38,6 @@ export default class TermsCheckBox extends Vue {
     justify-content: space-between;
 
     height: 3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 6rem;
 }
 </style>

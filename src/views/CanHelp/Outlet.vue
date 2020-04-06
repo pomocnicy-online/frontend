@@ -21,7 +21,7 @@
                             v-for="item in filteredOutlets"
                             :key="item.name"
                         >
-                            <v-row>
+                            <v-row v-if="item.legalName !== 'test' && item.legalName !== 'Test'">
                                 <v-col cols="2" md="1">
                                     <v-radio :key="item.requestId" :value="item.requestId"></v-radio>
                                 </v-col>
