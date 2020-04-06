@@ -2,9 +2,10 @@ import * as E from "fp-ts/es6/Either";
 import * as O from "fp-ts/es6/Option";
 import * as A from "fp-ts/es6/Array";
 import * as R from "fp-ts/es6/Record";
-import { sequenceT } from "fp-ts/es6/Apply";
 import { flow } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
+
+import { M } from "@/common/prelude";
 
 import { Necessitous } from "../Necessitous/Necessitious";
 import { StepDict, ContactData, OutletSupplyRequest, SupplyData, SummaryData } from "./Step";
@@ -15,21 +16,12 @@ export type CanHelp = {
 export namespace CanHelp {
   export const canHelpPath = "/api/offerHelp";
 
-  export type Request = {
-    helper: Request.Helper;
-    requests: Request.SupplyRequest[];
-  };
-
+  export type Request = { helper: Request.Helper; requests: Request.SupplyRequest[] };
   export namespace Request {
     export type Supplies = Omit<Necessitous.Request, "medicalCentre">;
 
     export type Helper = { firstName: string; phoneNumber: string; email: string };
-    export const Helper = (data: ContactData) =>
-      O.some({
-        firstName: data.name,
-        phoneNumber: data.phone,
-        email: data.email
-      });
+    export const Helper = (d: ContactData) => O.some({ firstName: d.name, phoneNumber: d.phone, email: d.email });
 
     export type SupplyRequest = Supplies & { requestId: number };
     export const SupplyRequest = (
@@ -42,10 +34,7 @@ export namespace CanHelp {
         ...Necessitous.Request.fromSupplies(supplies)
       };
 
-      return O.some({
-        requestId,
-        ...R.compact(reqSupplies)
-      });
+      return O.some({ requestId, ...R.compact(reqSupplies) });
     };
   }
 
@@ -58,7 +47,7 @@ export namespace CanHelp {
     fromNonPartial,
     E.chain(steps =>
       pipe(
-        sequenceT(O.option)(
+        M.sequence(
           Request.Helper(steps.Contact),
           pipe(
             // for now we are only making one request at time

@@ -27,14 +27,20 @@
 </template>
 
 <script lang="ts">
+import { select } from "@rxsv/core";
+import { Component, Vue, Watch, Inject } from "vue-property-decorator";
+import { Observable } from "rxjs";
+import { pluck, filter } from "rxjs/operators";
+
+import { AppStore } from "@/root";
 import voiceIcon from "@/components/icons/voice.vue";
 import ContactForm from "@/components/ContactForm.vue";
 import StepHeader from "@/components/StepHeader.vue";
 
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { Step, ContactData, StepDict } from "./Step";
+import { Step, ContactData } from "./Step";
+import { Lenses, Actions } from "./state";
 
-@Component({
+@Component<NecessitousContact>({
   components: {
     voiceIcon,
     ContactForm,
@@ -42,28 +48,27 @@ import { Step, ContactData, StepDict } from "./Step";
   }
 })
 export default class NecessitousContact extends Vue {
-  contact: ContactData = {
-    name: "",
-    city: "",
-    street: "",
-    apartment: "",
-    building: "",
-    email: "",
-    phone: ""
-  };
+  @Inject("rxstore") public readonly rxStore!: AppStore;
 
-  @Prop()
-  steps!: StepDict;
+  contact: ContactData = { name: "", city: "", street: "", apartment: "", building: "", email: "", phone: "" };
 
-  @Watch("steps", { immediate: true })
-  onStepsChange(steps: Partial<StepDict>) {
-    if (steps.Contact) {
-      this.contact = steps.Contact;
-    }
+  created() {
+    // infinite update loop ??
+    // const contact$ = this.rxStore.state$.pipe(
+    //   select(Lenses.stepsFromRoot.get),
+    //   pluck("Contact"),
+    //   filter(c => !!c && Object.values(this.contact).some(a => a !== ""))
+    // ) as Observable<ContactData>;
+    // this.$subscribeTo(contact$, c => (this.contact = c));
+  }
+
+  @Watch("contact")
+  onContactChange(contact: ContactData) {
+    this.rxStore.action$.next(Actions.SET_NECESSITOUS_STEP(Step.Contact(contact)));
   }
 
   onSubmit() {
-    this.$emit("nextStep", Step.Contact({ ...this.contact }));
+    this.rxStore.action$.next(Actions.NEXT_NECESSITOUS_STEP(Step.Contact(this.contact)));
   }
 }
 </script>

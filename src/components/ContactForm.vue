@@ -68,9 +68,7 @@
             required
           ></v-text-field>
         </v-row>
-        <v-row
-          class="form__disclaimer"
-        >*dane osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej</v-row>
+        <v-row class="form__disclaimer">*dane osobowe są podawane dobrowolnie na potrzeby akcji charytatywnej</v-row>
         <v-row>
           <v-btn color="primary" @click="onNext" class="go-next-btn">Przejdź dalej</v-btn>
         </v-row>
@@ -88,6 +86,7 @@ type VForm = Vue & { validate: () => boolean };
 export default class ContactForm extends Vue {
   @Prop()
   namePlaceholder!: string;
+
   @Prop()
   name!: string;
   @Prop()

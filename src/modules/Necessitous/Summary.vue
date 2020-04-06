@@ -12,9 +12,9 @@
       <v-container>
         <v-form ref="form">
           <div class="summary__contact">
-            <article v-if="address">
+            <article v-if="address$">
               <h2>Twoja placówka czekająca na pomoc:</h2>
-              <Address :contact="address" />
+              <Address :contact="address$" />
             </article>
             <article v-else>
               <h2 class="warn">Brak wybranej placówki!</h2>
@@ -26,9 +26,9 @@
           </div>
 
           <div class="summary__demand">
-            <article v-if="supplies.length > 0">
+            <article v-if="suppliesSummary$.length > 0">
               <h2>Produkty, których potrzebujesz</h2>
-              <supply-summary :supplies="supplies" />
+              <supply-summary :supplies="suppliesSummary$" />
             </article>
             <article v-else>
               <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
@@ -48,7 +48,7 @@
             <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
 
             <v-row class="step-nav">
-              <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
+              <v-btn text color="primary" v-stream:click="prev$" class="go-next-btn">Wstecz</v-btn>
               <v-btn color="primary" @click="onSubmit" class="go-next-btn">Potwierdź Zgłoszenie</v-btn>
             </v-row>
           </div>
@@ -59,40 +59,49 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
+import { select } from "@rxsv/core";
+import { Component, Vue, Watch, Inject, Prop } from "vue-property-decorator";
+import { Observable } from "rxjs";
+import { pluck, filter, map } from "rxjs/operators";
+import { Observables } from "vue-rx";
+
+import { AppStore } from "@/root";
 import voiceIcon from "@/components/icons/voice.vue";
 import Address from "@/components/Address.vue";
 import TermsCheckbox from "@/components/TermsCheckBox.vue";
 import { toSummary } from "@/modules/Supply/Supply";
 import SupplySummary from "@/modules/Supply/SupplySummary.vue";
+import { Lenses as SupplyLenses, SupplyListId } from "@/modules/Supply/state";
 
-import { Step, StepDict, SummaryData } from "./Step";
+import { Step } from "./Step";
+import { Actions, Lenses } from "./state";
 
 type VForm = Vue & { validate: () => boolean };
 
-@Component({
+@Component<NecessitousSummary>({
   components: {
     voiceIcon,
     Address,
     SupplySummary,
     TermsCheckbox
+  },
+  domStreams: ["prev$"],
+  subscriptions(): Observables {
+    const { state$ } = this.rxStore;
+
+    return {
+      suppliesSummary$: state$.pipe(select(SupplyLenses.suppliesPerTypeByListId(this.suppliesListId)), map(toSummary)),
+      address$: state$.pipe(select(Lenses.stepsFromRoot.get), pluck("Contact"))
+    };
   }
 })
 export default class NecessitousSummary extends Vue {
-  @Prop()
-  steps!: Partial<StepDict>;
+  private comment = "";
+  private isTermsOfServiceAccepted = false;
 
-  comment = "";
-  isTermsOfServiceAccepted = false;
-
-  //   @Emit("prevStep")
-  //   onPrev(): Step.Summary {
-  //     return this.step;
-  //   }
-  //   @Watch("steps", { immediate: true })
-  //   onStepsChange(steps: Partial<Step.Dict>) {
-  //     this.comment = (steps.summary?.data as Step.SummaryData).comment ?? this.comment;
-  //   }
+  private readonly prev$!: Observable<void>;
+  @Inject("rxstore") public readonly rxStore!: AppStore;
+  @Prop() private readonly suppliesListId!: SupplyListId;
 
   get form(): VForm {
     return this.$refs.form as VForm;
@@ -100,21 +109,32 @@ export default class NecessitousSummary extends Vue {
 
   onSubmit() {
     if (this.form.validate()) {
-      this.$emit("nextStep", this.step);
-      this.$emit("sendData");
+      this.rxStore.action$.next(Actions.REQUEST_STARTED());
     }
   }
 
-  private get supplies() {
-    return toSummary(this.steps?.Demand?.supplies);
+  created() {
+    const { state$, action$ } = this.rxStore;
+
+    // this.$subscribeTo(
+    //   state$.pipe(
+    //     select(Lenses.stepsFromRoot.get),
+    //     pluck("Summary"),
+    //     pluck("comment"),
+    //     filter(c => !!c && this.comment !== "")
+    //   ) as Observable<string>,
+    //   c => (this.comment = c)
+    // );
+
+    this.$subscribeTo(
+      this.prev$.pipe(map(() => Actions.PREV_NECESSITOUS_STEP(Step.Summary({ comment: this.comment })))),
+      a => action$.next(a)
+    );
   }
 
-  private get address() {
-    return this.steps.Contact;
-  }
-
-  private get step() {
-    return Step.Summary(this.comment === "" ? {} : { comment: this.comment });
+  @Watch("comment")
+  onCommentChange(comment: string) {
+    this.rxStore.action$.next(Actions.SET_NECESSITOUS_STEP(Step.Summary({ comment })));
   }
 }
 </script>

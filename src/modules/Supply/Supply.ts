@@ -2,7 +2,7 @@ import * as U from "unionize";
 import * as O from "fp-ts/es6/Option";
 import * as A from "fp-ts/es6/Array";
 import * as R from "fp-ts/es6/Record";
-import { UUID } from "@/common/prelude";
+import { UUID, DiscriminateUnion } from "@/common/prelude";
 import { pipe } from "fp-ts/es6/pipeable";
 import { NonEmptyArray } from "fp-ts/es6/NonEmptyArray";
 
@@ -23,31 +23,18 @@ export type Supply = U.UnionOf<typeof Supply>;
 export type SupplyId = UUID;
 export type SupplyListId = string;
 
-export const brands = [
-  "Mask",
-  "Glove",
-  "Suit",
-  "Disinfectant",
-  "Cleaning",
-  "Other",
-  "Grocery",
-  "SewingMaterial",
-  "PsychologicalSupport",
-  "Print"
-] as NonEmptyArray<Brand>;
+export const brands = Object.keys(Supply._Record) as NonEmptyArray<Brand>;
 
 export type Brand = typeof Supply._Tags;
 export type Order = Supplies[Brand];
-
-type DiscriminateUnion<U, K extends keyof U, V extends U[K]> = U extends Record<K, V> ? U : never;
 export type SupplyCaseOf<T extends Brand> = DiscriminateUnion<Supply, "tag", T>;
-
 export type Supplies = {
   [T in Brand]: {
     positions: { supply: SupplyCaseOf<T>; id: SupplyId }[];
     description?: string;
   };
 };
+export type OrderPos = Order["positions"] extends Array<infer T> ? T[] : never;
 
 type Shared = { type: string; quantity: number };
 
@@ -107,7 +94,6 @@ const supplyName = (brand: Brand) =>
     Other: () => "Inner"
   }[brand]());
 
-export type OrderPos = Order["positions"] extends Array<infer T> ? T[] : never;
 const quantity = (orderPos: OrderPos) => orderPos.reduce((acc, pos) => acc + pos.supply.quantity, 0);
 
 export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>

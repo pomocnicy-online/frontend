@@ -43,13 +43,15 @@ export namespace Necessitous {
       email: string;
       phoneNumber: string;
     }
-    export const MedicalCentre = (data: ContactData): MedicalCentre => ({
-      ...data,
-      legalName: data.name,
-      buildingNumber: data.building,
-      apartmentNumber: data.apartment,
-      phoneNumber: data.phone
+    export const MedicalCentre = (d: ContactData): MedicalCentre => ({
+      ...d,
+      legalName: d.name,
+      buildingNumber: d.building,
+      apartmentNumber: d.apartment,
+      phoneNumber: d.phone
     });
+
+    type SupplyRequest<T> = { description?: string; positions: T[] };
 
     // TODO: refactor serialization, io-ts ?, move to supplies ?
 
@@ -57,10 +59,7 @@ export namespace Necessitous {
       data.positions.length > 0 ? O.some(fn(data)) : O.none;
 
     const toReq = <A extends Brand, B extends SupplyRequest<any>>(data: Supplies[A]): B =>
-      ({
-        ...data,
-        positions: (data.positions as OrderPos).map(a => a.supply)
-      } as B);
+      ({ ...data, positions: (data.positions as OrderPos).map(a => a.supply) } as B);
 
     const nonEmptyDesc = (desc?: string) =>
       pipe(
@@ -70,84 +69,44 @@ export namespace Necessitous {
         O.map(d => ({ description: d }))
       );
 
-    export type Mask = SupplyRequest<{
-      usageType: UsageType;
-      quantity: number;
-      style: Style;
-    }>;
+    export type Mask = SupplyRequest<{ usageType: UsageType; quantity: number; style: Style }>;
     export const Mask = nonEmpty<"Mask", Mask>(data => ({
       ...data,
-      positions: data.positions.map(a => ({
-        ...a.supply,
-        usageType: a.supply.type
-      }))
+      positions: data.positions.map(a => ({ ...a.supply, usageType: a.supply.type }))
     }));
 
-    export type Glove = SupplyRequest<{
-      material: Material;
-      quantity: number;
-      size: Size;
-    }>;
+    export type Glove = SupplyRequest<{ material: Material; quantity: number; size: Size }>;
     export const Glove = nonEmpty<"Glove", Glove>(toReq);
 
-    export type Grocery = SupplyRequest<{
-      quantity: number;
-      description?: string;
-    }>;
+    export type Grocery = SupplyRequest<{ quantity: number; description?: string }>;
     export const Grocery = nonEmpty<"Grocery", Grocery>(toReq);
 
-    export type Disinfectant = SupplyRequest<{
-      quantity: number;
-      description?: string;
-    }>;
+    export type Disinfectant = SupplyRequest<{ quantity: number; description?: string }>;
     export const Disinfectant = nonEmpty<"Disinfectant", Disinfectant>(toReq);
 
-    export type Suite = SupplyRequest<{
-      material?: Material;
-      quantity: number;
-      size: Size;
-    }>;
+    export type Suite = SupplyRequest<{ material?: Material; quantity: number; size: Size }>;
     export const Suite = nonEmpty<"Suit", Suite>(toReq);
 
-    export type Cleaning = SupplyRequest<{
-      quantity: number;
-      description?: string;
-    }>;
+    export type Cleaning = SupplyRequest<{ quantity: number; description?: string }>;
     export const Cleaning = nonEmpty<"Cleaning", Cleaning>(toReq);
 
-    export type PsychologicalSupport = {
-      description: string;
-    };
+    export type PsychologicalSupport = { description: string };
     export const PsychologicalSupport = (data: Supplies["PsychologicalSupport"]) => nonEmptyDesc(data.description);
 
-    export type Other = {
-      description: string;
-    };
+    export type Other = { description: string };
     export const Other = (data: Supplies["Other"]) => nonEmptyDesc(data.description);
 
-    export type Print = SupplyRequest<{
-      printType: PrintType;
-      quantity: number;
-    }>;
+    export type Print = SupplyRequest<{ printType: PrintType; quantity: number }>;
     export const Print = nonEmpty<"Print", Print>(toReq);
 
-    export type SewingSupplies = {
-      description: string;
-    };
+    export type SewingSupplies = { description: string };
     export const SewingSupplies = (data: Supplies["SewingMaterial"]) => nonEmptyDesc(data.description);
-    export type AdditionalComment = {
-      description?: string;
-    };
+    export type AdditionalComment = { description?: string };
     export const AdditionalComment = (data: SummaryData["comment"]) => nonEmptyDesc(data);
 
     export const fromAdditionalComment = (comment?: string) => ({
       additionalComment: pipe(comment, O.fromNullable, O.chain(Request.AdditionalComment))
     });
-
-    type SupplyRequest<T> = {
-      description?: string;
-      positions: T[];
-    };
 
     // TODO: made Supply a custom Monad instance
     export const fromSupplies = (supplies: Partial<Supplies>) => ({
@@ -164,7 +123,7 @@ export namespace Necessitous {
     });
   }
 
-  export interface Response {}
+  export type Response = string;
 
   const isNotPartial = (steps: Partial<StepDict>): steps is StepDict =>
     !!(steps.Contact && steps.Demand && steps.Summary);
@@ -183,7 +142,7 @@ export namespace Necessitous {
       () => new Error("Failed to send the request")
     )();
 
-  export const send = (req: Request) => sender(req, necessitousPath);
+  export const send = (req: Request) => sender<Request, Response>(req, necessitousPath);
 
   export const createRequest = flow(
     fromNonPartial,

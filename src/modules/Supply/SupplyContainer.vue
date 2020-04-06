@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts">
-import { tap } from "rxjs/operators";
 import { Component, Vue, Prop, Inject } from "vue-property-decorator";
 import { Observables } from "vue-rx";
 import { select } from "@rxsv/core";
@@ -45,13 +44,8 @@ import { SupplyListId } from "./Supply";
     SewingMaterialCard
   },
   subscriptions(): Observables {
-    const supplies$ = this.rxStore.state$.pipe(
-      select(Lenses.suppliesPerTypeByListId(this.suppliesListId))
-      // tap(x => console.log("supplies", x))
-    );
-
     return {
-      supplies$
+      supplies$: this.rxStore.state$.pipe(select(Lenses.suppliesPerTypeByListId(this.suppliesListId)))
     };
   }
 })
