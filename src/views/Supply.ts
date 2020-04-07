@@ -8,7 +8,8 @@ export type Supply =
     | Supply.SewingMaterial
     | Supply.PsychologicalSupport
     | Supply.Print
-    | Supply.Other;
+    | Supply.Other
+    | Supply.Transport;
 
 export namespace Supply {
     export enum UsageType {
@@ -106,6 +107,12 @@ export namespace Supply {
     export interface Print {
         __brand: "print";
         type: PrintType;
+        quantity: number;
+    }
+
+    export interface Transport {
+        __brand: "transport";
+        type: string;
         quantity: number;
     }
 }

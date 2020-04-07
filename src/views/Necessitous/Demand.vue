@@ -83,6 +83,10 @@ export default class NecessitousDemand extends Vue {
             print: {
                 positions: [],
                 description: ""
+            },
+            transport: {
+                positions: [],
+                description: ""
             }
         }
     };

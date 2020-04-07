@@ -16,11 +16,7 @@
                             <v-col cols="10" md="6">Zapotrzebowanie</v-col>
                         </v-row>
 
-                        <div
-                            class="step-table__row-container"
-                            v-for="item in filteredOutlets"
-                            :key="item.name"
-                        >
+                        <div class="step-table__row-container" v-for="item in filteredOutlets" :key="item.name">
                             <v-row>
                                 <v-col cols="2" md="1">
                                     <v-radio :key="item.requestId" :value="item.requestId"></v-radio>
@@ -34,11 +30,7 @@
                                         {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
                                     </div>
                                 </v-col>
-                                <v-col
-                                    class="step-table__supplies offset-2 offset-md-0"
-                                    cols="10"
-                                    md="6"
-                                >
+                                <v-col class="step-table__supplies offset-2 offset-md-0" cols="10" md="6">
                                     <div v-if="item.maskRequestsTotalCount">
                                         Maseczki:
                                         <strong>{{ item.maskRequestsTotalCount }}</strong>
@@ -75,6 +67,12 @@
                                         Materiały do szycia:
                                         <strong>tak</strong>
                                     </div>
+
+                                    <div>
+                                        Transport:
+                                        <strong>tak</strong>
+                                    </div>
+
                                     <div v-if="item.otherNeeded">
                                         Inne:
                                         <strong>tak</strong>

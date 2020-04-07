@@ -28,7 +28,7 @@
                     <div class="summary__outlet">
                         <article v-if="outlet">
                             <h2>Placówka czekająca na Twoją pomoc:</h2>
-                            <Address :contact="outlet" /><br/>
+                            <Address :contact="outlet" /><br />
                             <p>Szczegółowe dane kontaktowe placówki otrzymasz na maila po wysłaniu zgłoszenia.</p>
                         </article>
                         <article v-else>
@@ -55,7 +55,7 @@
                         <article v-else>
                             <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
                             <p>
-                                by je dodać wróć
+                                by je dodać wróć do
                                 <router-link to="/pomagajacy/3">poprzedniego kroku</router-link>
                             </p>
                         </article>
@@ -73,17 +73,10 @@
                             <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
 
                             <v-row class="step-nav">
-                                <v-btn
-                                    text
-                                    color="primary"
-                                    @click="onPrev"
-                                    class="go-next-btn"
-                                >Wstecz</v-btn>
-                                <v-btn
-                                    color="primary"
-                                    @click="onSubmit"
-                                    class="go-next-btn"
-                                >Potwierdź Zgłoszenie</v-btn>
+                                <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
+                                <v-btn color="primary" @click="onSubmit" class="go-next-btn"
+                                    >Potwierdź Zgłoszenie</v-btn
+                                >
                             </v-row>
                         </div>
                     </div>

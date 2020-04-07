@@ -93,6 +93,8 @@ export namespace Step {
                     return "Materiały do szycia";
                 case "print":
                     return "Druk 3D";
+                case "transport":
+                    return "Transport";
                 case "other":
                     return "Inne";
             }
@@ -119,7 +121,7 @@ export namespace Step {
                     description: supply.description
                 })),
                 A.filter(x =>
-                    x.brand === "psychologicalSupport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
+                    x.brand === "psychologicalSupport" || x.brand === "transport" || x.brand === "other" ? x.description !== "" : x.quantity > 0
                 )
             );
     }

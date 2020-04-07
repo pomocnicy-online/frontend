@@ -82,6 +82,10 @@ export default class CanHelpSupply extends Vue {
             print: {
                 positions: [],
                 description: ""
+            },
+            transport: {
+                positions: [],
+                description: ""
             }
         }
     };

@@ -5,12 +5,7 @@
                 <maskIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes
-                    brand="mask"
-                    :usageTypes="usageTypes"
-                    :types="styles"
-                    :updateSupplies="updateSupplies"
-                />
+                <UsageTypes brand="mask" :usageTypes="usageTypes" :types="styles" :updateSupplies="updateSupplies" />
             </template>
             <template v-slot:additionalDesc>
                 <AdditionalDesc :description.sync="supplies.mask.description" />
@@ -22,12 +17,7 @@
                 <glovesIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes
-                    brand="glove"
-                    :usageTypes="gloveTypes"
-                    :types="sizes"
-                    :updateSupplies="updateSupplies"
-                />
+                <UsageTypes brand="glove" :usageTypes="gloveTypes" :types="sizes" :updateSupplies="updateSupplies" />
             </template>
             <template v-slot:addType>
                 <AddType :types="material" :usageTypes.sync="gloveTypes" />
@@ -62,12 +52,7 @@
                 <overallsIcon />
             </template>
             <template v-slot:usageTypes>
-                <UsageTypes
-                    brand="suit"
-                    :usageTypes="overallTypes"
-                    :types="sizes"
-                    :updateSupplies="updateSupplies"
-                />
+                <UsageTypes brand="suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
             </template>
             <template v-slot:additionalDesc>
                 <AdditionalDesc :description.sync="supplies.suit.description" />
@@ -154,6 +139,15 @@
             </template>
         </medical-card>
 
+        <medical-card title="Transport">
+            <template v-slot:icon>
+                <transportIcon />
+            </template>
+            <template v-slot:additionalDesc>
+                <AdditionalDesc :description.sync="supplies.transport.description" />
+            </template>
+        </medical-card>
+
         <medical-card title="Inne">
             <template v-slot:icon>
                 <otherIcon />
@@ -186,6 +180,7 @@ import psychologicalSupportIcon from "@/components/icons/psychological-support.v
 import cleaningProductsIcon from "@/components/icons/cleaning-products.vue";
 import groceriesIcon from "@/components/icons/groceries.vue";
 import sewingSuppliesIcon from "@/components/icons/sewing-supplies.vue";
+import transportIcon from "@/components/icons/transport.vue";
 
 import { Step } from "@/views/Necessitous/Step";
 import { Supply } from "@/views/Supply";
@@ -208,7 +203,8 @@ import { Supply } from "@/views/Supply";
         Types,
         AddTypeWithInput,
         AddInputForType,
-        printIcon
+        printIcon,
+        transportIcon
     }
 })
 export default class SupplyContainer extends Vue {
