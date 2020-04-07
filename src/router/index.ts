@@ -17,6 +17,7 @@ import CanHelpSummary from "@/views/CanHelp/Summary.vue";
 import NotFound from "@/components/NotFound.vue";
 import TermsOfService from "@/components/TermsOfService.vue";
 import Contact from "@/views/Contact.vue";
+import OutletDetails from '@/views/OutletDetails.vue';
 
 Vue.use(VueRouter);
 
@@ -92,6 +93,19 @@ const routes = [
     {
         path: "/kontakt",
         component: Contact
+    },
+    { 
+        path: '/placowka/:id', 
+        component: OutletDetails,
+        meta: {
+            title: 'Placówka',
+            metaTags: [
+                {
+                    name: 'description',
+                    content: 'something'
+                },
+            ]
+        }
     },
     {
         path: "*",

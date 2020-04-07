@@ -33,6 +33,9 @@
                                         {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
                                         {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
                                     </div>
+                                    <div>
+                                        <router-link color="primary" :to="`/placowka/${item.requestId}`" exact>Szczególy</router-link>
+                                    </div>
                                 </v-col>
                                 <v-col
                                     class="step-table__supplies offset-2 offset-md-0"
