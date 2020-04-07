@@ -14,12 +14,18 @@
       <step-header name="Kto potrzebuje pomocy:" current="1" outOf="3" />
       <contact-form
         namePlaceholder="Nazwa firmy, placówka"
-        :name.sync="contact.name"
-        :addressCity.sync="contact.city"
-        :addressStreet.sync="contact.street"
-        :addressNumber.sync="contact.building"
-        :email.sync="contact.email"
-        :phone.sync="contact.phone"
+        :name="name$"
+        :addressCity="city$"
+        :addressStreet="street$"
+        :addressNumber="building$"
+        :email="email$"
+        :phone="phone$"
+        @update:name="updateField('name', $event)"
+        @update:addressCity="updateField('city', $event)"
+        @update:addressStreet="updateField('street', $event)"
+        @update:addressNumber="updateField('building', $event)"
+        @update:email="updateField('email', $event)"
+        @update:phone="updateField('phone', $event)"
         @submit="onSubmit"
       />
     </section>
@@ -28,9 +34,9 @@
 
 <script lang="ts">
 import { select } from "@rxsv/core";
-import { Component, Vue, Watch, Inject } from "vue-property-decorator";
-import { Observable } from "rxjs";
-import { pluck, filter } from "rxjs/operators";
+import { Component, Vue, Inject } from "vue-property-decorator";
+import { Observable, merge } from "rxjs";
+import { map, pluck, withLatestFrom } from "rxjs/operators";
 
 import { AppStore } from "@/root";
 import voiceIcon from "@/components/icons/voice.vue";
@@ -45,31 +51,44 @@ import { Lenses, Actions } from "./state";
     voiceIcon,
     ContactForm,
     StepHeader
+  },
+  subscriptions() {
+    const { action$, state$ } = this.rxStore;
+    const initialContact = { name: "", city: "", street: "", building: "", email: "", phone: "" };
+
+    const submit$: Observable<void> = this.$createObservableMethod("onSubmit");
+    const updateField$: Observable<[string, string]> = this.$createObservableMethod("updateField");
+    const contact$: Observable<ContactData> = state$.pipe(
+      select(Lenses.stepsFromRoot.get),
+      pluck("Contact"),
+      map(c => ({ ...initialContact, ...c }))
+    );
+
+    const formAction$ = merge(
+      updateField$.pipe(
+        withLatestFrom(contact$),
+        map(([[field, value], c]) => ({ ...c, [field]: value })),
+        map(Step.Contact),
+        map(Actions.SET_NECESSITOUS_STEP)
+      ),
+      submit$.pipe(withLatestFrom(contact$), pluck("1"), map(Step.Contact), map(Actions.NEXT_NECESSITOUS_STEP))
+    );
+
+    this.$subscribeTo(formAction$, a => action$.next(a));
+
+    return {
+      contact$,
+      name$: contact$.pipe(pluck("name")),
+      city$: contact$.pipe(pluck("city")),
+      street$: contact$.pipe(pluck("street")),
+      building$: contact$.pipe(pluck("building")),
+      email$: contact$.pipe(pluck("email")),
+      phone$: contact$.pipe(pluck("phone"))
+    };
   }
 })
 export default class NecessitousContact extends Vue {
   @Inject("rxstore") public readonly rxStore!: AppStore;
-
-  contact: ContactData = { name: "", city: "", street: "", apartment: "", building: "", email: "", phone: "" };
-
-  created() {
-    // infinite update loop ??
-    // const contact$ = this.rxStore.state$.pipe(
-    //   select(Lenses.stepsFromRoot.get),
-    //   pluck("Contact"),
-    //   filter(c => !!c && Object.values(this.contact).some(a => a !== ""))
-    // ) as Observable<ContactData>;
-    // this.$subscribeTo(contact$, c => (this.contact = c));
-  }
-
-  @Watch("contact")
-  onContactChange(contact: ContactData) {
-    this.rxStore.action$.next(Actions.SET_NECESSITOUS_STEP(Step.Contact(contact)));
-  }
-
-  onSubmit() {
-    this.rxStore.action$.next(Actions.NEXT_NECESSITOUS_STEP(Step.Contact(this.contact)));
-  }
 }
 </script>
 

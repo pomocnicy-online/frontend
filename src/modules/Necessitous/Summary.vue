@@ -42,7 +42,7 @@
           <div class="summary__other">
             <h2>Dodaj komentarz</h2>
             <v-row>
-              <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
+              <v-text-field :value="comment$" @input="onCommentUpdate" label="Komentarz..." filled></v-text-field>
             </v-row>
 
             <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
@@ -60,9 +60,9 @@
 
 <script lang="ts">
 import { select } from "@rxsv/core";
-import { Component, Vue, Watch, Inject, Prop } from "vue-property-decorator";
-import { Observable } from "rxjs";
-import { pluck, filter, map } from "rxjs/operators";
+import { Component, Vue, Inject, Prop } from "vue-property-decorator";
+import { Observable, merge } from "rxjs";
+import { pluck, filter, map, withLatestFrom } from "rxjs/operators";
 import { Observables } from "vue-rx";
 
 import { AppStore } from "@/root";
@@ -87,54 +87,57 @@ type VForm = Vue & { validate: () => boolean };
   },
   domStreams: ["prev$"],
   subscriptions(): Observables {
-    const { state$ } = this.rxStore;
+    const { state$, action$ } = this.rxStore;
+
+    const commentUpdate$: Observable<string> = this.$createObservableMethod("onCommentUpdate");
+    const submit$: Observable<void> = this.$createObservableMethod("onSubmit");
+    const address$ = state$.pipe(select(Lenses.stepsFromRoot.get), pluck("Contact"));
+    const comment$ = state$.pipe(
+      select(Lenses.stepsFromRoot.get),
+      pluck("Summary"),
+      map(a => a?.comment ?? "")
+    );
+    const suppliesSummary$ = state$.pipe(
+      select(SupplyLenses.suppliesPerTypeByListId(this.suppliesListId)),
+      map(toSummary)
+    );
+
+    const summaryAction$ = merge(
+      submit$.pipe(
+        filter(() => this.form.validate()),
+        map(Actions.REQUEST_STARTED)
+      ),
+      commentUpdate$.pipe(
+        map(comment => ({ comment })),
+        map(Step.Summary),
+        map(Actions.SET_NECESSITOUS_STEP)
+      ),
+      this.prev$.pipe(
+        withLatestFrom(comment$),
+        map(([, comment]) => ({ comment })),
+        map(Step.Summary),
+        map(Actions.PREV_NECESSITOUS_STEP)
+      )
+    );
+
+    this.$subscribeTo(summaryAction$, a => action$.next(a));
 
     return {
-      suppliesSummary$: state$.pipe(select(SupplyLenses.suppliesPerTypeByListId(this.suppliesListId)), map(toSummary)),
-      address$: state$.pipe(select(Lenses.stepsFromRoot.get), pluck("Contact"))
+      suppliesSummary$,
+      address$,
+      comment$
     };
   }
 })
 export default class NecessitousSummary extends Vue {
-  private comment = "";
-  private isTermsOfServiceAccepted = false;
-
-  private readonly prev$!: Observable<void>;
   @Inject("rxstore") public readonly rxStore!: AppStore;
   @Prop() private readonly suppliesListId!: SupplyListId;
 
+  private readonly prev$!: Observable<void>;
+  private readonly isTermsOfServiceAccepted = false;
+
   get form(): VForm {
     return this.$refs.form as VForm;
-  }
-
-  onSubmit() {
-    if (this.form.validate()) {
-      this.rxStore.action$.next(Actions.REQUEST_STARTED());
-    }
-  }
-
-  created() {
-    const { state$, action$ } = this.rxStore;
-
-    // this.$subscribeTo(
-    //   state$.pipe(
-    //     select(Lenses.stepsFromRoot.get),
-    //     pluck("Summary"),
-    //     pluck("comment"),
-    //     filter(c => !!c && this.comment !== "")
-    //   ) as Observable<string>,
-    //   c => (this.comment = c)
-    // );
-
-    this.$subscribeTo(
-      this.prev$.pipe(map(() => Actions.PREV_NECESSITOUS_STEP(Step.Summary({ comment: this.comment })))),
-      a => action$.next(a)
-    );
-  }
-
-  @Watch("comment")
-  onCommentChange(comment: string) {
-    this.rxStore.action$.next(Actions.SET_NECESSITOUS_STEP(Step.Summary({ comment })));
   }
 }
 </script>
