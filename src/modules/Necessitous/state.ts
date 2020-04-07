@@ -22,13 +22,11 @@ export const Actions = U.createUnion(
   U.caseOf("NEXT_NECESSITOUS_STEP")<Step>(),
   U.caseOf("PREV_NECESSITOUS_STEP")<Step>(),
   U.caseOf("SET_NECESSITOUS_STEP")<Step>(),
-  U.caseOf("REQUEST_STARTED")(),
-  U.caseOf("REQUEST_DONE")<RequestId>(),
-  U.caseOf("REQUEST_FAILED")<Error>()
+  U.caseOf("NECESSITOUS_REQUEST_STARTED")(),
+  U.caseOf("NECESSITOUS_REQUEST_DONE")<RequestId>(),
+  U.caseOf("NECESSITOUS_REQUEST_FAILED")<Error>()
 );
 export type Actions = ActionsUnion<typeof Actions>;
-
-console.log(Step._TaggedRecord);
 type RequestId = string;
 
 export type State = { steps: Partial<StepDict>; request: RD.RemoteData<Error, RequestId> };
@@ -49,24 +47,24 @@ export const reducer = createReducer(State.empty())<Actions>({
   NEXT_NECESSITOUS_STEP: (s, { payload }) => Lenses.setStep(payload)(s),
   PREV_NECESSITOUS_STEP: (s, { payload }) => Lenses.setStep(payload)(s),
   SET_NECESSITOUS_STEP: (s, { payload }) => Lenses.setStep(payload)(s),
-  REQUEST_STARTED: Lenses.request.set(RD.pending),
-  REQUEST_DONE: (s, { payload }) => Lenses.request.set(RD.success(payload))(s),
-  REQUEST_FAILED: (s, { payload }) => Lenses.request.set(RD.failure(payload))(s)
+  NECESSITOUS_REQUEST_STARTED: Lenses.request.set(RD.pending),
+  NECESSITOUS_REQUEST_DONE: (s, { payload }) => Lenses.request.set(RD.success(payload))(s),
+  NECESSITOUS_REQUEST_FAILED: (s, { payload }) => Lenses.request.set(RD.failure(payload))(s)
 });
 
 export const effect: AppEffect = (action$, state$) => {
   const request$ = action$.pipe(
-    fromActions(Actions.REQUEST_STARTED),
+    fromActions(Actions.NECESSITOUS_REQUEST_STARTED),
     withLatestFrom(state$),
     switchMap(([, state]) =>
       from(
         pipe(state, Lenses.stepsFromRoot.get, Necessitous.createRequest, TE.fromEither, TE.chain(Necessitous.send))()
       )
     ),
-    map(flow(E.fold<Error, RequestId, AppAction>(Actions.REQUEST_FAILED, Actions.REQUEST_DONE)))
+    map(flow(E.fold<Error, RequestId, AppAction>(Actions.NECESSITOUS_REQUEST_FAILED, Actions.NECESSITOUS_REQUEST_DONE)))
   );
 
-  const requestDone$ = action$.pipe(fromActions(Actions.REQUEST_DONE));
+  const requestDone$ = action$.pipe(fromActions(Actions.NECESSITOUS_REQUEST_DONE));
 
   const step$ = merge(
     action$.pipe(fromActions(Actions.NEXT_NECESSITOUS_STEP), pluck("payload"), map(nextStep)),

@@ -11,10 +11,10 @@
     <section>
       <v-container>
         <step-header name="Jak możesz pomóc?" current="3" outOf="4" />
-        <supply-container :supplies="supplies$" />
+        <supply-container :suppliesListId="suppliesListId" />
         <v-row class="step-nav">
-          <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
-          <v-btn color="primary" @click="onNext">Przejdź dalej</v-btn>
+          <v-btn text color="primary" v-stream:click="prev$" class="go-next-btn">Wstecz</v-btn>
+          <v-btn color="primary" v-stream:click="next$">Przejdź dalej</v-btn>
         </v-row>
       </v-container>
     </section>
@@ -22,61 +22,49 @@
 </template>
 
 <script lang="ts">
-import * as O from "fp-ts/es6/Option";
-import { pipe } from "fp-ts/es6/pipeable";
-import { Component, Vue, Emit, Inject } from "vue-property-decorator";
-import { Observables } from "vue-rx";
+import { Component, Vue, Inject, Prop } from "vue-property-decorator";
 import { select } from "@rxsv/core";
+import { Observable, merge } from "rxjs";
+import { withLatestFrom, map } from "rxjs/operators";
 
+import { AppStore } from "@/root";
 import StepHeader from "@/components/StepHeader.vue";
 import SupplyContainer from "@/modules/Supply/SupplyContainer.vue";
-import { AppStore } from "@/root";
-import { Lenses } from "@/modules/Supply/state";
+import { Lenses, SupplyListId } from "@/modules/Supply/state";
 
 import { Step } from "./Step";
-import { Step as NecessitousStep } from "../Necessitous/Step";
-
-// TODO: this whole thing is almost 1:1 copy of `Demand.vue`, refactor it later
+import { Actions as NecessitousActions } from "./state";
 
 @Component<CanHelpSupply>({
   components: {
     StepHeader,
     SupplyContainer
   },
-  subscriptions(): Observables {
-    return {
-      supplies$: this.rxStore.state$.pipe(select(Lenses.suppliesPerTypeByListId("canHelp-supplies")))
-    };
-  }
+  domStreams: ["next$", "prev$"]
 })
 export default class CanHelpSupply extends Vue {
+  private readonly next$!: Observable<void>;
+  private readonly prev$!: Observable<void>;
   @Inject("rxstore") public readonly rxStore!: AppStore;
+  @Prop() private readonly suppliesListId!: SupplyListId;
 
-  //   @Emit("nextStep")
-  //   onNext(): Step.Supply {
-  //     return this.step();
-  //   }
+  created() {
+    const supplies$ = this.rxStore.state$.pipe(select(Lenses.suppliesPerTypeByListId(this.suppliesListId)));
 
-  //   @Emit("prevStep")
-  //   onPrev(): Step.Supply {
-  //     return this.step();
-  //   }
-
-  //   private updateSupplies(type: keyof NecessitousStep.Supplies, position: any) {
-  //     pipe(
-  //       O.fromNullable(this.supply.supplies),
-  //       O.map(supplies => supplies[type]),
-  //       O.map((supply: any) => {
-  //         supply.positions = supply.positions
-  //           .filter((item: any) => (item.style === position.style && item.type === position.type ? false : true))
-  //           .filter((item: any) => item.quantity !== 0);
-
-  //         supply.positions.push(position);
-  //       })
-  //     );
-  //   }
-
-  //   private step = () => Step.Supply({ ...this.supply });
+    this.$subscribeTo(
+      merge(
+        this.next$.pipe(
+          withLatestFrom(supplies$),
+          map(([, supplies]) => NecessitousActions.NEXT_CAN_HELP_STEP(Step.Supply({ supplies })))
+        ),
+        this.prev$.pipe(
+          withLatestFrom(supplies$),
+          map(([, supplies]) => NecessitousActions.PREV_CAN_HELP_STEP(Step.Supply({ supplies })))
+        )
+      ),
+      a => this.rxStore.action$.next(a)
+    );
+  }
 }
 </script>
 

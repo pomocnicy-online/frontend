@@ -105,7 +105,7 @@ type VForm = Vue & { validate: () => boolean };
     const summaryAction$ = merge(
       submit$.pipe(
         filter(() => this.form.validate()),
-        map(Actions.REQUEST_STARTED)
+        map(Actions.NECESSITOUS_REQUEST_STARTED)
       ),
       commentUpdate$.pipe(
         map(comment => ({ comment })),

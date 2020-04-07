@@ -86,10 +86,15 @@
 </template>
 
 <script lang="ts">
+import { Observable, merge } from "rxjs";
+import { map, withLatestFrom, pluck } from "rxjs/operators";
+import { Component, Vue, Watch, Inject } from "vue-property-decorator";
+
+import { AppStore } from "@/root";
 import StepHeader from "@/components/StepHeader.vue";
 
-import { Component, Vue, Emit, Watch, Prop } from "vue-property-decorator";
-import { Step, OutletData, StepDict } from "./Step";
+import { Step } from "./Step";
+import { Actions } from "./state";
 
 type ResOutlet = {
   legalName: string;
@@ -97,41 +102,50 @@ type ResOutlet = {
   city: string;
 };
 
-@Component({
+@Component<CanHelpOutlet>({
   components: {
     StepHeader
+  },
+
+  subscriptions() {
+    const { action$ } = this.rxStore;
+
+    const radioChange$: Observable<number> = this.$createObservableMethod("onRadioChange");
+    const next$ = this.$createObservableMethod("onNext");
+    const prev$ = this.$createObservableMethod("onPrev");
+
+    const outletStep$ = radioChange$.pipe(
+      map(id => ({
+        request: [
+          {
+            requestId: id,
+            name: this.outlets.find(outlet => outlet.requestId === id)?.legalName || ""
+          }
+        ]
+      })),
+      map(Step.Outlet)
+    );
+
+    const outletAction$ = merge(
+      outletStep$.pipe(map(Actions.SET_CAN_HELP_STEP)),
+      next$.pipe(withLatestFrom(outletStep$), pluck("1"), map(Actions.NEXT_CAN_HELP_STEP)),
+      prev$.pipe(withLatestFrom(outletStep$), pluck("1"), map(Actions.PREV_CAN_HELP_STEP))
+    );
+
+    this.$subscribeTo(outletAction$, a => action$.next(a));
+
+    return {};
   }
 })
 export default class CanHelpOutlet extends Vue {
-  outlet: OutletData = {
-    request: []
-  };
+  @Inject("rxstore") public readonly rxStore!: AppStore;
+
+  // TODO: refactor this to rxsv
   outlets = [] as ResOutlet[];
   filteredOutlets = [] as ResOutlet[];
   towns = ["Wszystkie"];
   selectedTown = "";
   path = "/api/requests/";
-
-  @Prop()
-  steps!: StepDict;
-
-  onRadioChange(id: number) {
-    this.outlet = {
-      request: [
-        {
-          requestId: id,
-          name: this.outlets.find(outlet => outlet.requestId === id)?.legalName || ""
-        }
-      ]
-    };
-  }
-
-  @Watch("steps", { immediate: true })
-  onStepsChange(steps: Partial<StepDict>) {
-    if (steps.Outlet) {
-      this.outlet = steps.Outlet;
-    }
-  }
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {
@@ -152,6 +166,7 @@ export default class CanHelpOutlet extends Vue {
     this.filteredOutlets = this.outlets;
   }
 
+  // TODO: move this to effects
   getAllOutlets() {
     return fetch(this.path, {
       method: "get",
@@ -160,16 +175,6 @@ export default class CanHelpOutlet extends Vue {
       }
     }).then(res => res.json());
   }
-
-  //   @Emit("nextStep")
-  //   onNext(): Step.Outlet {
-  //     return Step.Outlet({ ...this.outlet });
-  //   }
-
-  //   @Emit("prevStep")
-  //   onPrev(): Step.Outlet {
-  //     return Step.Outlet({ ...this.outlet });
-  //   }
 }
 </script>
 

@@ -14,12 +14,12 @@
       <step-header name="Kto potrzebuje pomocy:" current="1" outOf="3" />
       <contact-form
         namePlaceholder="Nazwa firmy, placówka"
-        :name="name$"
-        :addressCity="city$"
-        :addressStreet="street$"
-        :addressNumber="building$"
-        :email="email$"
-        :phone="phone$"
+        :name="contact$.name"
+        :addressCity="contact$.city"
+        :addressStreet="contact$.street"
+        :addressNumber="contact$.building"
+        :email="contact$.email"
+        :phone="contact$.phone"
         @update:name="updateField('name', $event)"
         @update:addressCity="updateField('city', $event)"
         @update:addressStreet="updateField('street', $event)"
@@ -76,15 +76,7 @@ import { Lenses, Actions } from "./state";
 
     this.$subscribeTo(formAction$, a => action$.next(a));
 
-    return {
-      contact$,
-      name$: contact$.pipe(pluck("name")),
-      city$: contact$.pipe(pluck("city")),
-      street$: contact$.pipe(pluck("street")),
-      building$: contact$.pipe(pluck("building")),
-      email$: contact$.pipe(pluck("email")),
-      phone$: contact$.pipe(pluck("phone"))
-    };
+    return { contact$ };
   }
 })
 export default class NecessitousContact extends Vue {

@@ -13,9 +13,12 @@
       <step-header name="Wprowadź dane kontaktowe" current="1" outOf="4" />
       <contact-form
         namePlaceholder="Imię"
-        :name.sync="contact.name"
-        :email.sync="contact.email"
-        :phone.sync="contact.phone"
+        :name="contact$.name"
+        :email="contact$.email"
+        :phone="contact$.phone"
+        @update:name="updateField('name', $event)"
+        @update:email="updateField('email', $event)"
+        @update:phone="updateField('phone', $event)"
         @submit="onSubmit"
       />
     </section>
@@ -23,38 +26,54 @@
 </template>
 
 <script lang="ts">
+import { select } from "@rxsv/core";
+import { pluck, map, withLatestFrom } from "rxjs/operators";
+import { Component, Vue, Inject } from "vue-property-decorator";
+
 import StepHeader from "@/components/StepHeader.vue";
 import ContactForm from "@/components/ContactForm.vue";
 
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { Step, ContactData, StepDict } from "./Step";
+import { Step } from "./Step";
+import { AppStore } from "../../root";
+import { Lenses, Actions } from "./state";
+import { Observable, merge } from "rxjs";
 
-@Component({
+@Component<CanHelpContact>({
   components: {
     StepHeader,
     ContactForm
+  },
+  subscriptions() {
+    const { state$, action$ } = this.rxStore;
+    const initialContact = { name: "", email: "", phone: "" };
+
+    const submit$: Observable<void> = this.$createObservableMethod("onSubmit");
+    const updateField$: Observable<[string, string]> = this.$createObservableMethod("updateField");
+    const contact$ = state$.pipe(
+      select(Lenses.stepsFromRoot.get),
+      pluck("Contact"),
+      map(c => ({ ...initialContact, c }))
+    );
+
+    const formAction$ = merge(
+      updateField$.pipe(
+        withLatestFrom(contact$),
+        map(([[field, value], c]) => ({ ...c, [field]: value })),
+        map(Step.Contact),
+        map(Actions.SET_CAN_HELP_STEP)
+      ),
+      submit$.pipe(withLatestFrom(contact$), pluck("1"), map(Step.Contact), map(Actions.NEXT_CAN_HELP_STEP))
+    );
+
+    this.$subscribeTo(formAction$, a => action$.next(a));
+
+    return {
+      contact$
+    };
   }
 })
 export default class CanHelpContact extends Vue {
-  contact: ContactData = {
-    name: "",
-    email: "",
-    phone: ""
-  };
-
-  @Prop()
-  steps!: StepDict;
-
-  @Watch("steps", { immediate: true })
-  onStepsChange(steps: Partial<StepDict>) {
-    if (steps.Contact) {
-      this.contact = steps.Contact;
-    }
-  }
-
-  onSubmit() {
-    this.$emit("nextStep", Step.Contact({ ...this.contact }));
-  }
+  @Inject("rxstore") public readonly rxStore!: AppStore;
 }
 </script>
 

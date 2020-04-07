@@ -42,7 +42,7 @@ export namespace CanHelp {
     !!(steps.Contact && steps.Outlet && steps.Supply && steps.Summary);
   const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
-  export const send = (req: Request) => Necessitous.sender(req, canHelpPath);
+  export const send = (req: Request) => Necessitous.sender<Request, string>(req, canHelpPath);
   export const createRequest = flow(
     fromNonPartial,
     E.chain(steps =>
