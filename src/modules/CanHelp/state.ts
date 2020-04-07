@@ -1,7 +1,7 @@
 import { U, ActionsUnion, createReducer, fromActions } from "@rxsv/core";
 
 import router from "@/router";
-import { ignoreElements, pluck, map, switchMap, withLatestFrom, mapTo } from "rxjs/operators";
+import { ignoreElements, pluck, map, switchMap, withLatestFrom, mapTo, tap } from "rxjs/operators";
 import { merge, from } from "rxjs";
 import * as RD from "@devexperts/remote-data-ts";
 import { Lens } from "monocle-ts/es6";
@@ -23,13 +23,13 @@ export const Actions = U.createUnion(
   U.caseOf("PREV_CAN_HELP_STEP")<Step>(),
   U.caseOf("SET_CAN_HELP_STEP")<Step>(),
   U.caseOf("CAN_HELP_REQUEST_STARTED")(),
-  U.caseOf("CAN_HELP_REQUEST_DONE")<RequestId>(),
+  U.caseOf("CAN_HELP_REQUEST_DONE")<void>(),
   U.caseOf("CAN_HELP_REQUEST_FAILED")<Error>()
 );
 export type Actions = ActionsUnion<typeof Actions>;
 type RequestId = string;
 
-export type State = { steps: Partial<StepDict>; request: RD.RemoteData<Error, RequestId> };
+export type State = { steps: Partial<StepDict>; request: RD.RemoteData<Error, void> };
 export namespace State {
   export const empty = (): State => ({ steps: {}, request: RD.initial });
 }
@@ -48,7 +48,7 @@ export const reducer = createReducer(State.empty())<Actions>({
   PREV_CAN_HELP_STEP: (s, { payload }) => Lenses.setStep(payload)(s),
   SET_CAN_HELP_STEP: (s, { payload }) => Lenses.setStep(payload)(s),
   CAN_HELP_REQUEST_STARTED: Lenses.request.set(RD.pending),
-  CAN_HELP_REQUEST_DONE: (s, { payload }) => Lenses.request.set(RD.success(payload))(s),
+  CAN_HELP_REQUEST_DONE: Lenses.request.set(RD.success(void 0)),
   CAN_HELP_REQUEST_FAILED: (s, { payload }) => Lenses.request.set(RD.failure(payload))(s)
 });
 
@@ -59,7 +59,7 @@ export const effect: AppEffect = (action$, state$) => {
     switchMap(([, state]) =>
       from(pipe(state, Lenses.stepsFromRoot.get, CanHelp.createRequest, TE.fromEither, TE.chain(CanHelp.send))())
     ),
-    map(flow(E.fold<Error, RequestId, AppAction>(Actions.CAN_HELP_REQUEST_FAILED, Actions.CAN_HELP_REQUEST_DONE)))
+    map(flow(E.fold<Error, void, AppAction>(Actions.CAN_HELP_REQUEST_FAILED, Actions.CAN_HELP_REQUEST_DONE)))
   );
 
   const requestDone$ = action$.pipe(fromActions(Actions.CAN_HELP_REQUEST_DONE));

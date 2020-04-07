@@ -52,7 +52,7 @@ import { Observable, merge } from "rxjs";
     const contact$ = state$.pipe(
       select(Lenses.stepsFromRoot.get),
       pluck("Contact"),
-      map(c => ({ ...initialContact, c }))
+      map(c => ({ ...initialContact, ...c }))
     );
 
     const formAction$ = merge(

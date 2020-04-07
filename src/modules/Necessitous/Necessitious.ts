@@ -134,16 +134,14 @@ export namespace Necessitous {
     !!(steps.Contact && steps.Demand && steps.Summary);
   const fromNonPartial = E.fromPredicate(isNotPartial, () => new Error("Partial request"));
 
-  export const sender = <Req, Res>(req: Req, path: string): TE.TaskEither<Error, Res> =>
+  export const sender = <Req, Res>(req: Req, path: string, parse = true): TE.TaskEither<Error, Res> =>
     TE.tryCatchK(
       () =>
         fetch(path, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(req)
-        }).then(res => res.json()),
+        }).then(res => (parse ? res.json() : res)),
       () => new Error("Failed to send the request")
     )();
 

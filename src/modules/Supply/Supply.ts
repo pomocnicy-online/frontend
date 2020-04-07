@@ -91,7 +91,7 @@ const supplyName = (brand: Brand) =>
     Grocery: () => "Artykuły spozywcze",
     SewingMaterial: () => "Materiały do szycia",
     Print: () => "Druk 3D",
-    Other: () => "Inner"
+    Other: () => "Inne"
   }[brand]());
 
 const quantity = (orderPos: OrderPos) => orderPos.reduce((acc, pos) => acc + pos.supply.quantity, 0);

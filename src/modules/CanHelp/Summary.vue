@@ -10,11 +10,11 @@
     </article>
     <div class="summary">
       <v-container>
-        <v-form v-model="valid" ref="form">
+        <v-form ref="form">
           <div class="summary__contact">
-            <article v-if="contact">
+            <article v-if="address$">
               <h2>Kontakt do Ciebie:</h2>
-              <Address :contact="contact" />
+              <Address :contact="address$" />
             </article>
             <article v-else>
               <h2 class="warn">Brak danych kontakowych</h2>
@@ -26,9 +26,9 @@
           </div>
 
           <div class="summary__outlet">
-            <article v-if="outlet">
+            <article v-if="outlet$">
               <h2>Placówka czekająca na Twoją pomoc:</h2>
-              <Address :contact="outlet" />
+              <Address :contact="outlet$" />
               <br />
               <p>Szczegółowe dane kontaktowe placówki otrzymasz na maila po wysłaniu zgłoszenia.</p>
             </article>
@@ -42,9 +42,9 @@
           </div>
 
           <div class="summary__supply">
-            <article v-if="supplies.length > 0">
+            <article v-if="suppliesSummary$.length > 0">
               <h2>Produkty, które zdecydowałeś się przekazać:</h2>
-              <supply-summary :supplies="supplies" />
+              <supply-summary :supplies="suppliesSummary$" />
 
               <!-- not supported by backend -->
               <!-- <label>
@@ -67,14 +67,19 @@
               <label>
                 <h2>Dodaj komentarz</h2>
                 <v-row>
-                  <v-text-field v-model="comment" label="Komentarz..." filled></v-text-field>
+                  <v-text-field
+                    :value="comment$"
+                    @input="onCommentUpdate"
+                    label="Komentarz..."
+                    filled
+                  ></v-text-field>
                 </v-row>
               </label>
 
               <terms-checkbox :isChecked.sync="isTermsOfServiceAccepted" />
 
               <v-row class="step-nav">
-                <v-btn text color="primary" @click="onPrev" class="go-next-btn">Wstecz</v-btn>
+                <v-btn text color="primary" v-stream:click="prev$" class="go-next-btn">Wstecz</v-btn>
                 <v-btn color="primary" @click="onSubmit" class="go-next-btn">Potwierdź Zgłoszenie</v-btn>
               </v-row>
             </div>
@@ -86,72 +91,92 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit, Prop, Watch } from "vue-property-decorator";
-import Address from "@/components/Address.vue";
+import { select } from "@rxsv/core";
+import { Component, Vue, Inject, Prop } from "vue-property-decorator";
+import { Observable, merge } from "rxjs";
+import { pluck, filter, map, withLatestFrom } from "rxjs/operators";
 import * as O from "fp-ts/es6/Option";
-import { pipe } from "fp-ts/es6/pipeable";
 import * as A from "fp-ts/es6/Array";
+import { flow } from "fp-ts/es6/function";
 
+import { AppStore } from "@/root";
+import Address from "@/components/Address.vue";
 import TermsCheckbox from "@/components/TermsCheckBox.vue";
 import { toSummary } from "@/modules/Supply/Supply";
 import SupplySummary from "@/modules/Supply/SupplySummary.vue";
+import { Lenses as SupplyLenses, SupplyListId } from "@/modules/Supply/state";
 
-import { StepDict, Step, OutletData } from "./Step";
-import { Step as NecessitousStep } from "../Necessitous/Step";
+import { Step } from "./Step";
+import { Actions, Lenses } from "./state";
 
 type VForm = Vue & { validate: () => boolean };
 
-@Component({
+@Component<CanHelpSummary>({
   components: {
     Address,
     SupplySummary,
     TermsCheckbox
+  },
+  domStreams: ["prev$"],
+  subscriptions() {
+    const { state$, action$ } = this.rxStore;
+
+    const commentUpdate$: Observable<string> = this.$createObservableMethod("onCommentUpdate");
+    const submit$: Observable<void> = this.$createObservableMethod("onSubmit");
+    const address$ = state$.pipe(select(Lenses.stepsFromRoot.get), pluck("Contact"));
+    const comment$ = state$.pipe(
+      select(Lenses.stepsFromRoot.get),
+      pluck("Summary"),
+      map(a => a?.comment ?? "")
+    );
+    const suppliesSummary$ = state$.pipe(
+      select(SupplyLenses.suppliesPerTypeByListId(this.suppliesListId)),
+      map(toSummary)
+    );
+
+    const outlet$ = this.rxStore.state$.pipe(
+      select(Lenses.stepsFromRoot.get),
+      map(x => x.Outlet?.request),
+      map(flow(O.fromNullable, O.chain(A.head), O.toUndefined))
+    );
+
+    const summaryAction$ = merge(
+      submit$.pipe(
+        filter(() => this.form.validate()),
+        map(Actions.CAN_HELP_REQUEST_STARTED)
+      ),
+      commentUpdate$.pipe(
+        map(comment => ({ comment, willDeliverTheSupplies: false })),
+        map(Step.Summary),
+        map(Actions.SET_CAN_HELP_STEP)
+      ),
+      this.prev$.pipe(
+        withLatestFrom(comment$),
+        map(([, comment]) => ({ comment, willDeliverTheSupplies: false })),
+        map(Step.Summary),
+        map(Actions.PREV_CAN_HELP_STEP)
+      )
+    );
+
+    this.$subscribeTo(summaryAction$, a => action$.next(a));
+
+    return {
+      suppliesSummary$,
+      address$,
+      comment$,
+      outlet$
+    };
   }
 })
 export default class CanHelpSummary extends Vue {
-  @Prop()
-  steps!: Partial<StepDict>;
+  @Inject("rxstore") public readonly rxStore!: AppStore;
+  @Prop() private readonly suppliesListId!: SupplyListId;
+  private readonly prev$!: Observable<void>;
 
-  comment = "";
-  willDeliverTheSupplies = false;
   isTermsOfServiceAccepted = false;
-
-  //   @Emit("prevStep")
-  //   onPrev(): Step.Summary {
-  //     return this.step;
-  //   }
-  //   @Watch("steps", { immediate: true })
-  //   onStepsChange(steps: Partial<StepDict>) {
-  //     const summaryData = steps.summary?.data as Step.SummaryData | undefined;
-  //     this.comment = summaryData?.comment ?? this.comment;
-  //     this.willDeliverTheSupplies = summaryData?.willDeliverTheSupplies ?? false;
-  //   }
-
-  onSubmit() {
-    if (this.form.validate()) {
-      this.$emit("nextStep", this.step);
-      this.$emit("sendData");
-    }
-  }
 
   get form(): VForm {
     return this.$refs.form as VForm;
-  }
-
-  private get supplies() {
-    return toSummary(this.steps?.Supply?.supplies);
-  }
-
-  private get outlet() {
-    return pipe(O.fromNullable(this.steps.Outlet?.request), O.chain(A.head), O.toUndefined);
-  }
-
-  private get contact() {
-    return this.steps.Contact;
-  }
-
-  private get step() {
-    return Step.Summary({ willDeliverTheSupplies: this.willDeliverTheSupplies, comment: this.comment });
   }
 }
 </script>
