@@ -55,7 +55,7 @@
                                         <strong>{{ item.suitRequestsTotalCount }}</strong>
                                     </div>
                                     <div v-if="item.groceryRequestsTotalCount">
-                                        Artykuły spozywcze:
+                                        Artykuły spożywcze:
                                         <strong>{{ item.groceryRequestsTotalCount }}</strong>
                                     </div>
                                     <div v-if="item.disinfectionMeasureRequestsTotalCount">
