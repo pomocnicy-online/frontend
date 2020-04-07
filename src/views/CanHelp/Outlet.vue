@@ -30,7 +30,7 @@
                                         <strong>{{ item.legalName }}</strong>
                                     </div>
                                     <div>
-                                        {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
+                                        {{item.postalCode}} {{ item.city }}, ul. {{ item.street }} {{ item.buildingNumber }}
                                         {{ item.apartmentNumber && `/ ${item.apartmentNumber}` }}
                                     </div>
                                 </v-col>
