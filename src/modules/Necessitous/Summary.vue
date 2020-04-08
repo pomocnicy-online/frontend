@@ -62,7 +62,7 @@
 import { select } from "@rxsv/core";
 import { Component, Vue, Inject, Prop } from "vue-property-decorator";
 import { Observable, merge } from "rxjs";
-import { pluck, filter, map, withLatestFrom } from "rxjs/operators";
+import { pluck, filter, map, withLatestFrom, startWith } from "rxjs/operators";
 import { Observables } from "vue-rx";
 
 import { AppStore } from "@/root";
@@ -108,6 +108,7 @@ type VForm = Vue & { validate: () => boolean };
         map(Actions.NECESSITOUS_REQUEST_STARTED)
       ),
       commentUpdate$.pipe(
+        startWith(""),
         map(comment => ({ comment })),
         map(Step.Summary),
         map(Actions.SET_NECESSITOUS_STEP)

@@ -94,7 +94,7 @@
 import { select } from "@rxsv/core";
 import { Component, Vue, Inject, Prop } from "vue-property-decorator";
 import { Observable, merge } from "rxjs";
-import { pluck, filter, map, withLatestFrom } from "rxjs/operators";
+import { pluck, filter, map, withLatestFrom, startWith } from "rxjs/operators";
 import * as O from "fp-ts/es6/Option";
 import * as A from "fp-ts/es6/Array";
 import { flow } from "fp-ts/es6/function";
@@ -146,6 +146,7 @@ type VForm = Vue & { validate: () => boolean };
         map(Actions.CAN_HELP_REQUEST_STARTED)
       ),
       commentUpdate$.pipe(
+        startWith(""),
         map(comment => ({ comment, willDeliverTheSupplies: false })),
         map(Step.Summary),
         map(Actions.SET_CAN_HELP_STEP)
