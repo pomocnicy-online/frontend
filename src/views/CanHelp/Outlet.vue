@@ -68,7 +68,7 @@
                                         <strong>tak</strong>
                                     </div>
 
-                                    <div>
+                                    <div v-if="item.transport">
                                         Transport:
                                         <strong>tak</strong>
                                     </div>
