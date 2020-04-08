@@ -16,6 +16,7 @@
                 namePlaceholder="Nazwa firmy, placówka"
                 :name.sync="contact.name"
                 :addressCity.sync="contact.city"
+                :postalCode.sync="contact.postalCode"
                 :addressStreet.sync="contact.street"
                 :addressNumber.sync="contact.building"
                 :email.sync="contact.email"
@@ -45,6 +46,7 @@ export default class NecessitousContact extends Vue {
     contact: Step.ContactData = {
         name: "",
         city: "",
+        postalCode: "",
         street: "",
         apartment: "",
         building: "",
