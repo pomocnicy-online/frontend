@@ -105,6 +105,19 @@ type ResOutlet = {
     city: string;
 };
 
+// it is normalizing town name, since people insert names without caution
+// it is needed to support lack proper validation
+// sample: kAtoWice => Katowice
+const normalizeTown = (cityName: string) => {
+    return [
+        ...cityName
+            .toLowerCase()
+            .trim()
+        ]
+        .map((char, index) => index === 0 ? char.toUpperCase() : char)
+        .join("")
+}
+
 @Component({
     components: {
         StepHeader
@@ -143,7 +156,9 @@ export default class CanHelpOutlet extends Vue {
 
     @Watch("outlets", { immediate: true })
     onOutletsChange(outlets: ResOutlet[]) {
-        this.towns = [...this.towns, ...outlets.map(outlet => outlet.city)];
+        const townsNormalized = [...new Set(outlets.map(outlet => normalizeTown(outlet.city)))];
+
+        this.towns = [...this.towns, ...townsNormalized];
     }
 
     @Watch("selectedTown", { immediate: true })
@@ -152,7 +167,7 @@ export default class CanHelpOutlet extends Vue {
             this.filteredOutlets = this.outlets;
         } else {
             this.filteredOutlets = this.outlets.filter(
-                outlet => outlet.city.toLowerCase() === selectedTown.toLowerCase()
+                outlet => outlet.city.toLowerCase().trim() === selectedTown.toLowerCase().trim()
             );
         }
     }
