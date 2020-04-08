@@ -2,22 +2,13 @@
     <div class="main">
         <div>
             <article class="desc">
-                <h2>Nasza misja</h2>
-                <p>
-                    Wsparcie placówek medycznych podczas <strong>wspólnej</strong> walki z koronawirusem. Koordynując działania oraz przepływ informacji  zapewnijmy razem ogromne ilości niezbędnych środków takich jak:
-                    <br/>
-                    <br/>
-                    Maseczki, rękawiczki, ombinezony, Środki do dezynfekcji, Przyłbice, 
-                </p>
+                <h2>Partnerzy</h2>    
+                <a href="https://ihelpyou.app/" target="_blank"><img class="img img-partners" src="@/assets/ihelpyou.png" alt /></a>
             </article>
-            <img class="img" src="@/assets/offer-help.svg" alt />
         </div>
         <div>
             <article class="desc">
-                <h2>Chcesz budować aplikację razem z nami?</h2>
-                <p>
-                    Nasz zespół składa się z zdolnych <strong>programistów, grafików, product ownerów, ale pomagają nawet prawnicy</strong>.<br/><br/> Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu <a href="mailto:info@pomocnicy.online">info@pomocnicy.online</a>.
-                </p>
+                <a href="https://miejgest.org/" target="_blank"><img class="img img-gest" src="@/assets/gest.png" alt /></a>
             </article>
         </div>
     </div>
@@ -60,13 +51,16 @@
         @include at(medium) {
             margin-top: 7rem;
             grid-template-columns: minmax(auto, 1fr) 1fr;
-            padding: 2rem;
-
-            
+            padding: 2rem;    
         }
 
          .img-partners {
-            max-width: 500px;
+            max-width: 400px;
+        }
+
+        .img-gest {
+            max-width: 255px;
+            margin-top: 100px;
         }
 
         h2 {
@@ -83,7 +77,6 @@
     }
 
     .desc {
-        max-width: 31rem;
 
         h2 {
             margin-bottom: 1rem;

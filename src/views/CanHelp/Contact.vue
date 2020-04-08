@@ -8,7 +8,6 @@
             </p>
             <img class="step-img" src="@/assets/offer-help.svg" alt />
         </article>
-
         <section class="contact-form">
             <step-header name="Wprowadź dane kontaktowe" current="1" outOf="4" />
             <contact-form

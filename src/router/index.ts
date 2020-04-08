@@ -13,6 +13,8 @@ import CanHelpContact from "@/views/CanHelp/Contact.vue";
 import CanHelpOutlet from "@/views/CanHelp/Outlet.vue";
 import CanHelpSupply from "@/views/CanHelp/Supply.vue";
 import CanHelpSummary from "@/views/CanHelp/Summary.vue";
+import Partners from "@/views/Partners.vue"
+import Instructions from "@/views/Instructions.vue"
 
 import NotFound from "@/components/NotFound.vue";
 import TermsOfService from "@/components/TermsOfService.vue";
@@ -92,6 +94,14 @@ const routes = [
     {
         path: "/kontakt",
         component: Contact
+    },
+    {
+        path: "/instrukcja",
+        component: Instructions
+    },
+    {
+        path: "/partners",
+        component: Partners
     },
     {
         path: "*",
