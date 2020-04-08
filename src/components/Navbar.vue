@@ -100,7 +100,8 @@ export default class Navbar extends Vue {
     &__link {
         position: relative;
         color: var(--text-primary);
-        padding-right: 3.4rem;
+        margin-right: 3.4rem;
+        padding-bottom: 1px;
         line-height: 21px;
         font-style: normal;
         font-weight: normal;
@@ -108,8 +109,7 @@ export default class Navbar extends Vue {
         &:hover,
         &:focus,
         &--active {
-            text-decoration: underline;
-            text-underline-position: under;
+            border-bottom: 1px solid var(--text-primary);
         }
     }
 
