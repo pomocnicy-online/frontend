@@ -8,6 +8,7 @@
             <v-autocomplete
               v-model="selectedTown"
               :items="towns"
+              clearable="true"
               no-data-text="Brak placówek w podanym mieście"
               label="Miasto"
             ></v-autocomplete>
