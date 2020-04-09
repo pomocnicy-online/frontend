@@ -5,7 +5,13 @@
         <step-header name="Wybierz placówkę" current="2" outOf="4" />
         <v-row>
           <v-col class="d-flex" cols="6" xs="6" md="3">
-            <v-select v-model="selectedTown" :items="towns" label="Miasto"></v-select>
+            <v-autocomplete
+              v-model="selectedTown"
+              :items="towns"
+              clearable="true"
+              no-data-text="Brak placówek w podanym mieście"
+              label="Miasto"
+            ></v-autocomplete>
           </v-col>
         </v-row>
         <article class="step-desc step-table">
