@@ -67,6 +67,10 @@
                     Materiały do szycia:
                     <strong>tak</strong>
                   </div>
+                  <div v-if="item.transport">
+                    Transport:
+                    <strong>tak</strong>
+                  </div>
                   <div v-if="item.otherNeeded">
                     Inne:
                     <strong>tak</strong>
