@@ -5,7 +5,12 @@
         <step-header name="Wybierz placówkę" current="2" outOf="4" />
         <v-row>
           <v-col class="d-flex" cols="6" xs="6" md="3">
-            <v-select v-model="selectedTown" :items="towns" label="Miasto"></v-select>
+            <v-autocomplete
+              v-model="selectedTown"
+              :items="towns"
+              no-data-text="Brak placówek w podanym mieście"
+              label="Miasto"
+            ></v-autocomplete>
           </v-col>
         </v-row>
         <article class="step-desc step-table">
@@ -149,6 +154,7 @@ export default class CanHelpOutlet extends Vue {
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {
+    console.log("towns", this.towns);
     this.towns = [...this.towns, ...outlets.map(outlet => outlet.city)];
   }
 
