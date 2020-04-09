@@ -40,10 +40,4 @@ export default class TransportCard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>
+<style lang="scss" scoped></style>
