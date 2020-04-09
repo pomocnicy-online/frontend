@@ -28,6 +28,7 @@ import GroceryCard from "./components/Grocery.vue";
 import PrintCard from "./components/Print.vue";
 import OtherCard from "./components/Other.vue";
 import SewingMaterialCard from "./components/SewingMaterial.vue";
+import TransportCard from "./components/Transport.vue";
 import { SupplyListId } from "./Supply";
 
 @Component<SupplyContainer>({
@@ -41,7 +42,8 @@ import { SupplyListId } from "./Supply";
     GroceryCard,
     PrintCard,
     OtherCard,
-    SewingMaterialCard
+    SewingMaterialCard,
+    TransportCard
   },
   subscriptions(): Observables {
     return {

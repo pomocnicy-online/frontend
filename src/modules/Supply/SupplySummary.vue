@@ -6,7 +6,7 @@
       </template>
       <template v-slot:desc>
         <v-row class="summary__quantity">
-          <span v-if="supply.quantity">{{ supply.quantity }} szt</span>
+          <span v-if="supply.quantity">{{ supply.quantity }} szt.</span>
         </v-row>
       </template>
     </medical-card-header>
@@ -27,6 +27,7 @@ import CleaningIcon from "@/components/icons/cleaning-products.vue";
 import PrintIcon from "@/components/icons/print.vue";
 import GroceryIcon from "@/components/icons/groceries.vue";
 import SewingMaterialIcon from "@/components/icons/sewing-supplies.vue";
+import TransportIcon from "@/components/icons/transport.vue";
 import OtherIcon from "@/components/icons/other.vue";
 
 import { SummaryViewData } from "./Supply";
@@ -43,6 +44,7 @@ import { SummaryViewData } from "./Supply";
     SewingMaterialIcon,
     SuitIcon,
     PrintIcon,
+    TransportIcon,
     MedicalCardHeader
   }
 })

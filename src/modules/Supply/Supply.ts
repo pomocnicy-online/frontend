@@ -16,7 +16,8 @@ export const Supply = U.unionize({
   Grocery: U.ofType<Shared>(),
   SewingMaterial: U.ofType<Shared>(),
   PsychologicalSupport: U.ofType<Shared>(),
-  Print: U.ofType<{ quantity: number; printType: PrintType }>()
+  Print: U.ofType<{ quantity: number; printType: PrintType }>(),
+  Transport: U.ofType<Shared>(),
 });
 export type Supply = U.UnionOf<typeof Supply>;
 
@@ -91,7 +92,8 @@ const supplyName = (brand: Brand) =>
     Grocery: () => "Artykuły spozywcze",
     SewingMaterial: () => "Materiały do szycia",
     Print: () => "Druk 3D",
-    Other: () => "Inne"
+    Other: () => "Inne",
+    Transport: () => "Transport"
   }[brand]());
 
 const quantity = (orderPos: OrderPos) => orderPos.reduce((acc, pos) => acc + pos.supply.quantity, 0);
@@ -108,5 +110,5 @@ export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
       quantity: quantity(order.positions),
       description: order.description
     })),
-    A.filter(x => (x.brand === "PsychologicalSupport" || x.brand === "Other" ? x.description !== "" : x.quantity > 0))
+    A.filter(({ brand, description, quantity }) => (brand === "PsychologicalSupport" || brand === "SewingMaterial" || brand === "Transport" || brand === "Other") ? description !== "" : quantity > 0)
   );

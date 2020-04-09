@@ -31,6 +31,7 @@ export namespace Necessitous {
     others: Request.Other;
     additionalComment: string;
     prints: Request.Print;
+    transport: Request.Transport;
   }>;
   export namespace Request {
     export interface MedicalCentre {
@@ -102,6 +103,9 @@ export namespace Necessitous {
     export type SewingSupplies = { description: string };
     export const SewingSupplies = (data: Supplies["SewingMaterial"]) => nonEmptyDesc(data.description);
 
+    export type Transport = { description: string };
+    export const Transport = (data: Supplies["Transport"]) => nonEmptyDesc(data.description);
+
     export type AdditionalComment = { description?: string };
     export const AdditionalComment = (data: SummaryData["comment"]) =>
       pipe(
@@ -124,7 +128,8 @@ export namespace Necessitous {
       psychologicalSupport: pipe(supplies.PsychologicalSupport, O.fromNullable, O.chain(Request.PsychologicalSupport)),
       sewingSupplies: pipe(supplies.SewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
       prints: pipe(supplies.Print, O.fromNullable, O.chain(Request.Print)),
-      others: pipe(supplies.Other, O.fromNullable, O.chain(Request.Other))
+      others: pipe(supplies.Other, O.fromNullable, O.chain(Request.Other)),
+      transport: pipe(supplies.Transport, O.fromNullable, O.chain(Request.Transport)),
     });
   }
 

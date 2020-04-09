@@ -56,7 +56,7 @@
             <article v-else>
               <h2 class="warn">Nie masz wybranych żadnych produktów!</h2>
               <p>
-                by je dodać wróć
+                by je dodać wróć do
                 <router-link to="/pomagajacy/3">poprzedniego kroku</router-link>
               </p>
             </article>
@@ -67,12 +67,7 @@
               <label>
                 <h2>Dodaj komentarz</h2>
                 <v-row>
-                  <v-text-field
-                    :value="comment$"
-                    @input="onCommentUpdate"
-                    label="Komentarz..."
-                    filled
-                  ></v-text-field>
+                  <v-text-field :value="comment$" @input="onCommentUpdate" label="Komentarz..." filled></v-text-field>
                 </v-row>
               </label>
 
