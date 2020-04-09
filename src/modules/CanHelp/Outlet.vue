@@ -155,7 +155,6 @@ export default class CanHelpOutlet extends Vue {
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {
-    console.log("towns", this.towns);
     this.towns = [...this.towns, ...outlets.map(outlet => outlet.city)];
   }
 
