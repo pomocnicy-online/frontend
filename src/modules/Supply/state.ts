@@ -1,5 +1,6 @@
 import { U, ActionsUnion, createReducer, fromActions } from "@rxsv/core";
 import { map, pluck } from "rxjs/operators";
+import { merge } from "rxjs";
 import { Lens } from "monocle-ts/es6";
 import { indexRecord } from "monocle-ts/es6/Index/Record";
 import { UUID } from "@/common/prelude";
@@ -9,8 +10,9 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply, Supplies, Brand, brands, Order } from "../Supply/Supply";
 import { AppState, AppEffect } from "@/root";
+
+import { Supply, Supplies, Brand, brands, Order, OrderPos, SupplyCaseOf } from "../Supply/Supply";
 
 export type SupplyId = UUID;
 export type SupplyListId = string;
@@ -20,7 +22,7 @@ export type SupplyPayload = { listId: SupplyListId } & StoreSupply;
 export type SupplyDescPayload = { listId: SupplyListId; brand: Brand; text: string };
 export type SupplyAddIntentPayload = Omit<SupplyPayload, "id">;
 export type SupplyRemovalPayload = { id: SupplyId; listId: SupplyListId };
-export type UpdateIntendPayload = { order: Order } & SupplyAddIntentPayload;
+export type UpdateIntendPayload = { positions: OrderPos } & SupplyAddIntentPayload;
 
 type DescMap = Record<Brand, SupplyTypeDescription>;
 
@@ -141,10 +143,41 @@ export const reducer = createReducer(State.empty())<Actions>({
   ADD_SUPPLY_LIST_ID: (s, { payload }) => Lenses.addListId(payload)(s)
 });
 
-export const effect: AppEffect = action$ =>
-  action$.pipe(
+export const effect: AppEffect = action$ => {
+  const addSupply$ = action$.pipe(
     fromActions(Actions.ADD_SUPPLY_INTENT),
     pluck("payload"),
     map(s => ({ ...s, id: UUID.gen() })),
     map(Actions.ADD_SUPPLY)
   );
+
+  // const addSupplyIntent$ = action$.pipe(
+  //   fromActions(Actions.UPDATE_SUPPLY_INTENT),
+  //   pluck("payload"),
+  //   map(({ positions, supply }) => {
+  //     // const comparator = Supply.match({
+  //     //   Cleaning:
+  //     // })(a.supply);
+  //     pipe(
+  //       positions,
+  //       A.findFirst(x =>
+  //         Supply.match({
+  //           Cleaning: a => a.type === (x.supply as SupplyCaseOf<"Cleaning">).type,
+  //           Disinfectant: a => a.type === (x.supply as SupplyCaseOf<"Disinfectant">).type,
+  //           Grocery:  a => a.type === (x.supply as SupplyCaseOf<"Grocery">).type,
+  //           Glove: () => true,
+  //           Mask: () => true,
+  //           Transport: () => true,
+  //           Print: () =>
+  //           default: a => a.type === (x.supply as SupplyCaseOf<"Grocery">).type,
+  //         })(supply)
+  //       )
+  //     );
+
+  //     // return pipe();
+  //     // a.
+  //   })
+  // );
+
+  return merge(addSupply$);
+};
