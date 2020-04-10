@@ -17,7 +17,7 @@ export const Supply = U.unionize({
   SewingMaterial: U.ofType<Shared>(),
   PsychologicalSupport: U.ofType<Shared>(),
   Print: U.ofType<{ quantity: number; printType: PrintType }>(),
-  Transport: U.ofType<Shared>(),
+  Transport: U.ofType<Shared>()
 });
 export type Supply = U.UnionOf<typeof Supply>;
 
@@ -36,8 +36,7 @@ export type Supplies = {
   };
 };
 export type OrderPos = Order["positions"] extends Array<infer T> ? T[] : never;
-
-type Shared = { type: string; quantity: number };
+export type Shared = { type: string; quantity: number };
 
 export enum UsageType {
   Disposable = "disposable",
@@ -101,7 +100,7 @@ const quantity = (orderPos: OrderPos) => orderPos.reduce((acc, pos) => acc + pos
 export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
   pipe(
     O.fromNullable(supplies),
-    O.map(x => R.toArray<Brand, Order>(x as Supplies)),
+    O.map(x => R.toArray(x as Supplies)),
     O.getOrElse<[Brand, Order][]>(() => []),
     A.map(([brand, order]) => ({
       brand,
@@ -110,5 +109,9 @@ export const toSummary = (supplies?: Partial<Supplies>): SummaryViewData[] =>
       quantity: quantity(order.positions),
       description: order.description
     })),
-    A.filter(({ brand, description, quantity }) => (brand === "PsychologicalSupport" || brand === "SewingMaterial" || brand === "Transport" || brand === "Other") ? description !== "" : quantity > 0)
+    A.filter(({ brand, description, quantity }) =>
+      brand === "PsychologicalSupport" || brand === "SewingMaterial" || brand === "Transport" || brand === "Other"
+        ? description !== ""
+        : quantity > 0
+    )
   );

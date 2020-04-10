@@ -4,7 +4,12 @@
       <glovesIcon />
     </template>
     <template v-slot:usageTypes>
-      <UsageTypes brand="Glove" :usageTypes="gloveTypes" :types="sizes" :updateSupplies="updateSupplies" />
+      <UsageTypes
+        brand="Glove"
+        :usageTypes="gloveTypes"
+        :types="sizes"
+        :updateSupplies="updateSupplies"
+      />
     </template>
     <template v-slot:addType>
       <AddType :types="material" :usageTypes.sync="gloveTypes" />
@@ -71,11 +76,3 @@ export default class GloveCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

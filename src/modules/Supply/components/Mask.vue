@@ -4,7 +4,12 @@
       <maskIcon />
     </template>
     <template v-slot:usageTypes>
-      <UsageTypes brand="Mask" :usageTypes="usageTypes" :types="styles" :updateSupplies="updateSupplies" />
+      <UsageTypes
+        brand="Mask"
+        :usageTypes="usageTypes"
+        :types="styles"
+        :updateSupplies="updateSupplies"
+      />
     </template>
     <template v-slot:additionalDesc>
       <AdditionalDesc :description="item.description" @update:description="modifyDesc" />
@@ -63,11 +68,3 @@ export default class MaskCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

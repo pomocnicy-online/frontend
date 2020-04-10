@@ -4,22 +4,30 @@
       <v-text-field
         @focus="deleteType"
         @blur="updatePosition"
-        v-model="type"
+        @input="onTextChange"
+        :value="type"
         label="Rodzaj"
         filled
         hide-details
       ></v-text-field>
     </v-col>
     <v-col cols="4" class="pa-2">
-      <Counter :type="type" :quantity.sync="quantity" :plus="plus" :minus="minus" />
+      <Counter
+        :type="type"
+        :quantity="quantity"
+        @update:quantity="updatePosition"
+        :plus="plus"
+        :minus="minus"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
+import { Shared } from "@/modules/Supply/Supply";
 
 @Component({
   components: {
@@ -27,39 +35,32 @@ import Counter from "@/components/Counter.vue";
   }
 })
 export default class AddTypeWithInput extends Vue {
-  @Prop() readonly updateSupplies!: any;
-  @Prop() readonly deleteSupplies!: any;
+  @Prop() readonly pos!: Shared;
 
-  quantity = 0;
-  type = "";
+  private onTextChange(type: string) {
+    this.$emit("update:pos", { ...this.pos, type });
+  }
 
   private plus() {
-    this.quantity = Number(this.quantity) + 1;
-    this.updatePosition();
+    this.updatePosition(Number(this.pos.quantity) + 1);
   }
 
   private minus() {
-    if (this.quantity >= 1) {
-      this.quantity = Number(this.quantity) - 1;
-      this.updatePosition();
+    if (this.pos.quantity >= 1) {
+      this.updatePosition(Number(this.pos.quantity) - 1);
     }
   }
 
   private deleteType() {
-    this.deleteSupplies(this.type);
+    this.$emit("delete:pos", this.pos.type);
   }
 
-  @Watch("quantity")
-  quantityChanged() {
-    this.updatePosition();
-  }
-
-  private updatePosition() {
-    if (this.quantity === 0) {
+  private updatePosition(quantity: number) {
+    if (quantity === 0) {
       return;
     }
 
-    this.updateSupplies(this.quantity, this.type);
+    this.$emit("update:pos", { ...this.pos, quantity });
   }
 }
 </script>

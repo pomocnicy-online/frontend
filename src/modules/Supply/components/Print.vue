@@ -71,13 +71,6 @@ export default class PrintCard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>
 <style lang="scss">
 .print-card {
   &__types {

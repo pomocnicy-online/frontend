@@ -5,15 +5,15 @@
     </template>
     <template v-slot:usageTypes>
       <AddTypeWithInput
-        v-for="index in cleaningCount"
-        :key="index"
-        brand="Cleaning"
-        :updateSupplies="updateSupplies"
-        :deleteSupplies="deleteSupplies"
+        v-for="pos in item.positions"
+        :key="pos.id"
+        :pos="pos"
+        @update:pos="onSuppliesUpdate"
+        @delete:pos="onSuppliesDelete"
       />
     </template>
     <template v-slot:addType>
-      <AddInputForType :typesCount.sync="cleaningCount" />
+      <AddInputForType @update:typesCount="onTypesCountChange" />
     </template>
   </medical-card>
 </template>
@@ -28,13 +28,14 @@ import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
-
 import cleaningProductsIcon from "@/components/icons/cleaning-products.vue";
 import { AppStore } from "@/root";
-import { Supply, Supplies, SupplyListId } from "../Supply";
+import { M } from "@/common/prelude";
+
+import { Supply, Supplies, SupplyListId, Shared } from "../Supply";
 import { Actions } from "../state";
 
-@Component({
+@Component<CleaningCard>({
   components: {
     cleaningProductsIcon,
     MedicalCard,
@@ -48,9 +49,11 @@ export default class CleaningCard extends Vue {
   @Prop() readonly suppliesListId!: SupplyListId;
   @Inject("rxstore") readonly rxStore!: AppStore;
 
-  cleaningCount = 1;
+  onTypesCountChange() {
+    this.onSuppliesUpdate({ quantity: 0, type: "" });
+  }
 
-  updateSupplies(quantity: number, type: string) {
+  onSuppliesUpdate({ quantity, type }: Shared) {
     const listId = this.suppliesListId;
     const supply = Supply.Cleaning({ type, quantity });
 
@@ -64,23 +67,14 @@ export default class CleaningCard extends Vue {
     this.rxStore.action$.next(action);
   }
 
-  deleteSupplies(type: string) {
-    const id = pipe(
+  onSuppliesDelete(type: string) {
+    pipe(
       this.item.positions,
       A.findFirst(a => a.supply.type === type),
       O.map(a => a.id),
-      O.toUndefined
+      M.tap(id => this.rxStore.action$.next(Actions.REMOVE_SUPPLY({ id, listId: this.suppliesListId })))
     );
-
-    id && this.rxStore.action$.next(Actions.REMOVE_SUPPLY({ id, listId: this.suppliesListId }));
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

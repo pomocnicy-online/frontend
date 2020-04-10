@@ -82,11 +82,3 @@ export default class DisinfectantCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

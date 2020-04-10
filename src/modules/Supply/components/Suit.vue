@@ -4,7 +4,12 @@
       <suitIcon />
     </template>
     <template v-slot:usageTypes>
-      <UsageTypes brand="Suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
+      <UsageTypes
+        brand="Suit"
+        :usageTypes="overallTypes"
+        :types="sizes"
+        :updateSupplies="updateSupplies"
+      />
     </template>
     <template v-slot:additionalDesc>
       <AdditionalDesc :description.sync="item.description" @update:description="modifyDesc" />
@@ -62,11 +67,3 @@ export default class SuitCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

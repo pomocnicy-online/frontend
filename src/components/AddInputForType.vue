@@ -9,14 +9,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class AddInputForType extends Vue {
-  @Prop() typesCount!: number;
-
   private updateCount() {
-    this.$emit("update:typesCount", this.typesCount + 1);
+    this.$emit("update:typesCount");
   }
 }
 </script>
