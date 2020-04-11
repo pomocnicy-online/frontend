@@ -6,13 +6,20 @@
       </v-row>
     </v-col>
     <v-col cols="6" class="pa-2">
-      <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :type="type" :justify="justifyCounter" />
+      <Counter
+        :justify="justifyCounter"
+        :plus="plus"
+        :minus="minus"
+        :type="pos.type"
+        :quantity="pos.quantity"
+        @update:quantity="updatePosition"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
 
@@ -22,37 +29,26 @@ import Counter from "@/components/Counter.vue";
   }
 })
 export default class Types<U extends string, T extends string> extends Vue {
-  @Prop() readonly type!: T;
-  @Prop() readonly usageType!: U;
-  @Prop() readonly updateSupplies: any;
-  // @Prop() readonly order!: Order;
-
+  @Prop() readonly pos!: { quantity: number };
   @Prop({ default: "center" }) readonly justifyTypes!: string;
   @Prop({ default: "center" }) readonly justifyCounter!: string;
 
-  quantity = 0; // TODO: take count from order
-
   private plus() {
-    this.quantity = Number(this.quantity) + 1;
+    this.updatePosition(Number(this.pos.quantity) + 1);
   }
 
   private minus() {
-    if (this.quantity >= 1) {
-      this.quantity = Number(this.quantity) - 1;
+    if (this.pos.quantity >= 1) {
+      this.updatePosition(Number(this.pos.quantity) - 1);
     }
   }
 
-  private updatePosition() {
-    if (this.quantity === 0) {
+  private updatePosition(quantity: number) {
+    if (quantity === 0) {
       return;
     }
 
-    this.updateSupplies(this.quantity, this.type, this.usageType);
-  }
-
-  @Watch("quantity")
-  quantityChanged() {
-    this.updatePosition();
+    this.$emit("update:pos", { ...this.pos, quantity });
   }
 }
 </script>

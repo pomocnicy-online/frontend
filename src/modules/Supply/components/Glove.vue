@@ -5,14 +5,14 @@
     </template>
     <template v-slot:usageTypes>
       <UsageTypes
-        brand="Glove"
-        :usageTypes="gloveTypes"
-        :types="sizes"
-        :updateSupplies="updateSupplies"
+        :usageTypes="usageTypes"
+        :types="types"
+        :getPos="getPos"
+        @update:pos="updateSupplies"
       />
     </template>
     <template v-slot:addType>
-      <AddType :types="material" :usageTypes.sync="gloveTypes" />
+      <AddType :types="availableTypes" @update:types="onTypeAdd" />
     </template>
     <template v-slot:additionalDesc>
       <AdditionalDesc :description.sync="item.description" @update:description="modifyDesc" />
@@ -30,12 +30,11 @@ import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddType from "@/components/AddType.vue";
 import UsageTypes from "@/components/UsageTypes.vue";
-import Types from "@/components/Types.vue";
 import { AppStore } from "@/root";
 
 import glovesIcon from "@/components/icons/gloves.vue";
 
-import { Supply, Size, Material, SupplyListId, Supplies } from "../Supply";
+import { Supply, Size, Material, SupplyListId, Supplies, SupplyCaseOf } from "../Supply";
 import { Actions } from "../state";
 
 @Component({
@@ -44,30 +43,56 @@ import { Actions } from "../state";
     MedicalCard,
     AdditionalDesc,
     AddType,
-    UsageTypes,
-    Types
+    UsageTypes
   }
 })
 export default class GloveCard extends Vue {
-  @Prop() item!: Supplies["Glove"];
+  @Prop() readonly item!: Supplies["Glove"];
   @Prop() readonly suppliesListId!: SupplyListId;
   @Inject("rxstore") readonly rxStore!: AppStore;
 
-  private readonly sizes: Size[] = Object.values(Size);
-  private readonly material: Material[] = Object.values(Material);
-  private readonly gloveTypes: string[] = [Material.Latex];
+  private readonly types: Size[] = Object.values(Size);
+  private readonly availableTypes: Material[] = Object.values(Material);
+
+  get usageTypes(): Material[] {
+    return Array.from(
+      this.item.positions.reduce((acc, curr) => acc.add(curr.supply.material), new Set([Material.Latex]))
+    );
+  }
+
+  getPos(material: Material, size: Size) {
+    return pipe(
+      this.item.positions,
+      A.findFirst(a => a.supply.material === material && a.supply.size === size),
+      O.map(a => a.supply),
+      O.getOrElse(() => Supply.Glove({ size, material, quantity: 0 }))
+    );
+  }
+
+  onTypeAdd(material: Material) {
+    if (this.usageTypes.includes(material)) {
+      return;
+    }
+
+    this.rxStore.action$.next(
+      Actions.ADD_SUPPLY_INTENT({
+        listId: this.suppliesListId,
+        supply: Supply.Glove({ size: Size.XS, material, quantity: 0 })
+      })
+    );
+  }
 
   modifyDesc(text: string) {
     this.rxStore.action$.next(Actions.MODIFY_SUPPLY_TYPE_DESC({ listId: this.suppliesListId, text, brand: "Glove" }));
   }
 
-  updateSupplies(quantity: number, size: Size, material: Material) {
+  updateSupplies(pos: SupplyCaseOf<"Glove">) {
     const listId = this.suppliesListId;
-    const supply = Supply.Glove({ size, material, quantity });
+    const supply = Supply.Glove(pos);
 
     const action = pipe(
       this.item.positions,
-      A.findFirst(a => a.supply.size === size && a.supply.material === material),
+      A.findFirst(a => a.supply.size === pos.size && a.supply.material === pos.material),
       O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
       O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
     );

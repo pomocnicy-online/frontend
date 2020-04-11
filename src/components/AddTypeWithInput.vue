@@ -13,8 +13,8 @@
     </v-col>
     <v-col cols="4" class="pa-2">
       <Counter
-        :type="type"
-        :quantity="quantity"
+        :type="pos.type"
+        :quantity="pos.quantity"
         @update:quantity="updatePosition"
         :plus="plus"
         :minus="minus"

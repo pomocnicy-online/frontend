@@ -5,10 +5,10 @@
     </template>
     <template v-slot:usageTypes>
       <UsageTypes
-        brand="Mask"
         :usageTypes="usageTypes"
-        :types="styles"
-        :updateSupplies="updateSupplies"
+        :types="types"
+        :getPos="getPos"
+        @update:pos="updateSupplies"
       />
     </template>
     <template v-slot:additionalDesc>
@@ -29,7 +29,7 @@ import UsageTypes from "@/components/UsageTypes.vue";
 import maskIcon from "@/components/icons/mask.vue";
 import { AppStore } from "@/root";
 
-import { Supply, Style, UsageType, Supplies, SupplyListId } from "../Supply";
+import { Supply, Style, UsageType, Supplies, SupplyListId, SupplyCaseOf } from "../Supply";
 import { Actions } from "../state";
 
 @Component({
@@ -37,7 +37,6 @@ import { Actions } from "../state";
     maskIcon,
     MedicalCard,
     AdditionalDesc,
-
     UsageTypes
   }
 })
@@ -46,20 +45,29 @@ export default class MaskCard extends Vue {
   @Prop() readonly suppliesListId!: SupplyListId;
   @Inject("rxstore") readonly rxStore!: AppStore;
 
-  private readonly styles: Style[] = Object.values(Style);
+  private readonly types: Style[] = Object.values(Style);
   private readonly usageTypes: UsageType[] = Object.values(UsageType);
 
   modifyDesc(text: string) {
     this.rxStore.action$.next(Actions.MODIFY_SUPPLY_TYPE_DESC({ listId: this.suppliesListId, text, brand: "Mask" }));
   }
 
-  updateSupplies(quantity: number, style: Style, type: UsageType) {
+  getPos(type: UsageType, style: Style) {
+    return pipe(
+      this.item.positions,
+      A.findFirst(a => a.supply.type === type && a.supply.style === style),
+      O.map(a => a.supply),
+      O.getOrElse(() => Supply.Mask({ type, style, quantity: 0 }))
+    );
+  }
+
+  updateSupplies(pos: SupplyCaseOf<"Mask">) {
     const listId = this.suppliesListId;
-    const supply = Supply.Mask({ style, type, quantity });
+    const supply = Supply.Mask(pos);
 
     const action = pipe(
       this.item.positions,
-      A.findFirst(a => a.supply.style === style && a.supply.type === type),
+      A.findFirst(a => a.supply.style === pos.style && a.supply.type === pos.type),
       O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
       O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
     );

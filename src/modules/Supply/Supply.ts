@@ -9,7 +9,7 @@ import { NonEmptyArray } from "fp-ts/es6/NonEmptyArray";
 export const Supply = U.unionize({
   Mask: U.ofType<{ style: Style; type: UsageType; quantity: number }>(),
   Glove: U.ofType<{ size: Size; quantity: number; material: Material }>(),
-  Suit: U.ofType<{ size: Size } & Shared>(),
+  Suit: U.ofType<{ size: Size; type?: UsageType } & Shared>(),
   Disinfectant: U.ofType<Shared>(),
   Cleaning: U.ofType<Shared>(),
   Other: U.ofType<Shared>(),
