@@ -10,6 +10,7 @@
         <Types
           v-for="type in types"
           :pos="getPos(usageType, type)"
+          :type="type"
           :key="type"
           :label="type"
           @update:pos="$emit('update:pos', $event)"

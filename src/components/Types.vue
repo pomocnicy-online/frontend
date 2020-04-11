@@ -8,11 +8,11 @@
     <v-col cols="6" class="pa-2">
       <Counter
         :justify="justifyCounter"
-        :plus="plus"
-        :minus="minus"
-        :type="pos.type"
+        :type="type"
         :quantity="pos.quantity"
         @update:quantity="updatePosition"
+        @plus="plus"
+        @minus="minus"
       />
     </v-col>
   </v-row>
@@ -28,8 +28,9 @@ import Counter from "@/components/Counter.vue";
     Counter
   }
 })
-export default class Types<U extends string, T extends string> extends Vue {
+export default class Types<T extends string> extends Vue {
   @Prop() readonly pos!: { quantity: number };
+  @Prop() readonly type!: T;
   @Prop() readonly label!: string;
   @Prop({ default: "center" }) readonly justifyTypes!: string;
   @Prop({ default: "center" }) readonly justifyCounter!: string;

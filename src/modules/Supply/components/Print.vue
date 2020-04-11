@@ -10,7 +10,8 @@
         :key="type"
         justifyTypes="start"
         justifyCounter="end"
-        :pos="getPos"
+        :pos="getPos(type)"
+        :type="type"
         :label="type"
         @update:pos="updateSupplies"
       />

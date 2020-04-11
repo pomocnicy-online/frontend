@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" :justify="justify" class="counter">
-    <v-btn icon @click="minus" color="primary" :disabled="!type">
+    <v-btn icon @click="$emit('minus')" color="primary" :disabled="!type">
       <v-icon>$backArrow</v-icon>
     </v-btn>
 
@@ -16,7 +16,7 @@
       ></v-text-field>
     </v-col>
 
-    <v-btn icon color="primary" @click="plus" :disabled="!type">
+    <v-btn icon color="primary" @click="$emit('plus')" :disabled="!type">
       <v-icon>$nextArrow</v-icon>
     </v-btn>
   </v-row>
@@ -25,13 +25,10 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component({})
-export default class Counter extends Vue {
+@Component
+export default class Counter<T extends string> extends Vue {
   @Prop() quantity!: number;
-  @Prop() plus!: any;
-  @Prop() minus!: any;
-  @Prop() type!: string;
-
+  @Prop() type!: T;
   @Prop({ default: "center" }) justify!: string;
 }
 </script>

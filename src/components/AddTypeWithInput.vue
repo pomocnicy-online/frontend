@@ -14,8 +14,8 @@
         :type="pos.supply.type"
         :quantity="pos.supply.quantity"
         @update:quantity="updatePosition"
-        :plus="plus"
-        :minus="minus"
+        @plus="plus"
+        @minus="minus"
       />
     </v-col>
   </v-row>
