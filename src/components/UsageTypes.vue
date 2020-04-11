@@ -3,7 +3,7 @@
     <v-row v-for="usageType in usageTypes" :key="usageType" align="start" justify="center">
       <v-col cols="4" justify="start" class="pa-7">
         <v-row align="center" justify="center">
-          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${item}`) }}</h3>
+          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${usageType}`) }}</h3>
         </v-row>
       </v-col>
       <v-col cols="8">
@@ -11,6 +11,7 @@
           v-for="type in types"
           :pos="getPos(usageType, type)"
           :key="type"
+          :label="type"
           @update:pos="$emit('update:pos', $event)"
         />
       </v-col>

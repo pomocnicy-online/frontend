@@ -11,6 +11,7 @@
         justifyTypes="start"
         justifyCounter="end"
         :pos="getPos"
+        :label="type"
         @update:pos="updateSupplies"
       />
     </template>

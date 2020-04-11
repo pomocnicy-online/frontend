@@ -2,7 +2,7 @@
   <v-row align="start" justify="center">
     <v-col cols="6" class="pa-4">
       <v-row align="center" :justify="justifyTypes">
-        <h3 class="body-1 medical-type__title">{{ $vuetify.lang.t(`$vuetify.types.${type}`) }}</h3>
+        <h3 class="body-1 medical-type__title">{{ $vuetify.lang.t(`$vuetify.types.${label}`) }}</h3>
       </v-row>
     </v-col>
     <v-col cols="6" class="pa-2">
@@ -30,6 +30,7 @@ import Counter from "@/components/Counter.vue";
 })
 export default class Types<U extends string, T extends string> extends Vue {
   @Prop() readonly pos!: { quantity: number };
+  @Prop() readonly label!: string;
   @Prop({ default: "center" }) readonly justifyTypes!: string;
   @Prop({ default: "center" }) readonly justifyCounter!: string;
 

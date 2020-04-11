@@ -28,12 +28,12 @@ import MedicalCard from "@/components/MedicalCard.vue";
 import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import AddTypeWithInput from "@/components/AddTypeWithInput.vue";
 import AddInputForType from "@/components/AddInputForType.vue";
-import Icon from "@/componenets/Icon.vue";
+import Icon from "@/components/Icon.vue";
 
 import { AppStore } from "@/root";
 import { M } from "@/common/prelude";
 
-import { Supply, Supplies, SupplyListId, Shared } from "../Supply";
+import { Supply, Supplies, SupplyListId, Shared, SupplyId } from "../Supply";
 import { Actions } from "../state";
 
 type SupportedSupplies = "Cleaning" | "Disinfectant" | "Grocery";
@@ -59,17 +59,21 @@ export default class WithCustomType extends Vue {
     return this.item.positions;
   }
 
-  onTypesCountChange() {
-    this.onSuppliesUpdate({ quantity: 0, type: "" });
+  created() {
+    this.empty();
   }
 
-  onSuppliesUpdate({ quantity, type }: Shared) {
+  onTypesCountChange() {
+    this.empty();
+  }
+
+  onSuppliesUpdate({ quantity, type }: Shared, id?: SupplyId) {
     const listId = this.suppliesListId;
     const supply = Supply[this.brand]({ type, quantity });
 
     const action = pipe(
       this.positions,
-      A.findFirst(a => a.supply.type === type),
+      A.findFirst(a => a.id === id),
       O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
       O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
     );
@@ -77,10 +81,14 @@ export default class WithCustomType extends Vue {
     this.rxStore.action$.next(action);
   }
 
-  onSuppliesDelete(type: string) {
+  empty() {
+    this.onSuppliesUpdate({ quantity: 0, type: "" });
+  }
+
+  onSuppliesDelete(id: SupplyId) {
     pipe(
       this.positions,
-      A.findFirst(a => a.supply.type === type),
+      A.findFirst(a => a.id === id),
       O.map(a => a.id),
       M.tap(id => this.rxStore.action$.next(Actions.REMOVE_SUPPLY({ id, listId: this.suppliesListId })))
     );

@@ -12,7 +12,7 @@ import * as O from "fp-ts/es6/Option";
 
 import { AppState, AppEffect } from "@/root";
 
-import { Supply, Supplies, Brand, brands, Order, OrderPos, SupplyCaseOf } from "../Supply/Supply";
+import { Supply, Supplies, Brand, brands, OrderPos } from "../Supply/Supply";
 
 export type SupplyId = UUID;
 export type SupplyListId = string;
