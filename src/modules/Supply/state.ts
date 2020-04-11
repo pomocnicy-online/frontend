@@ -143,41 +143,10 @@ export const reducer = createReducer(State.empty())<Actions>({
   ADD_SUPPLY_LIST_ID: (s, { payload }) => Lenses.addListId(payload)(s)
 });
 
-export const effect: AppEffect = action$ => {
-  const addSupply$ = action$.pipe(
+export const effect: AppEffect = action$ =>
+  action$.pipe(
     fromActions(Actions.ADD_SUPPLY_INTENT),
     pluck("payload"),
     map(s => ({ ...s, id: UUID.gen() })),
     map(Actions.ADD_SUPPLY)
   );
-
-  // const addSupplyIntent$ = action$.pipe(
-  //   fromActions(Actions.UPDATE_SUPPLY_INTENT),
-  //   pluck("payload"),
-  //   map(({ positions, supply }) => {
-  //     // const comparator = Supply.match({
-  //     //   Cleaning:
-  //     // })(a.supply);
-  //     pipe(
-  //       positions,
-  //       A.findFirst(x =>
-  //         Supply.match({
-  //           Cleaning: a => a.type === (x.supply as SupplyCaseOf<"Cleaning">).type,
-  //           Disinfectant: a => a.type === (x.supply as SupplyCaseOf<"Disinfectant">).type,
-  //           Grocery:  a => a.type === (x.supply as SupplyCaseOf<"Grocery">).type,
-  //           Glove: () => true,
-  //           Mask: () => true,
-  //           Transport: () => true,
-  //           Print: () =>
-  //           default: a => a.type === (x.supply as SupplyCaseOf<"Grocery">).type,
-  //         })(supply)
-  //       )
-  //     );
-
-  //     // return pipe();
-  //     // a.
-  //   })
-  // );
-
-  return merge(addSupply$);
-};
