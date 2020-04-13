@@ -1,3 +1,4 @@
+
 <template>
     <div class="main">
         <div>
@@ -7,7 +8,7 @@
                     Wsparcie placówek medycznych podczas <strong>wspólnej</strong> walki z koronawirusem. Koordynując działania oraz przepływ informacji  zapewnijmy razem ogromne ilości niezbędnych środków takich jak:
                     <br/>
                     <br/>
-                    Maseczki, rękawiczki, ombinezony, Środki do dezynfekcji, Przyłbice, 
+                    Maseczki, rękawiczki, ombinezony, Środki do dezynfekcji, Przyłbice,
                 </p>
             </article>
             <img class="img" src="@/assets/offer-help.svg" alt />
@@ -62,7 +63,7 @@
             grid-template-columns: minmax(auto, 1fr) 1fr;
             padding: 2rem;
 
-            
+
         }
 
          .img-partners {
@@ -90,5 +91,5 @@
         }
     }
 
-   
+
 </style>

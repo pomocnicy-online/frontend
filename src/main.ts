@@ -12,7 +12,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRx);
 
 new Vue({
-    vuetify,
-    router,
-    render: h => h(App)
+  vuetify,
+  router,
+  render: h => h(App)
 }).$mount("#app");

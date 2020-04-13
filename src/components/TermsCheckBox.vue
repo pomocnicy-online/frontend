@@ -17,15 +17,15 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
 export default class TermsCheckBox extends Vue {
-    @Prop() readonly isChecked!: boolean;
+  @Prop() readonly isChecked!: boolean;
 
-    get isCheckedModel() {
-        return this.isChecked;
-    }
+  get isCheckedModel() {
+    return this.isChecked;
+  }
 
-    set isCheckedModel(val: boolean) {
-        this.$emit("update:isChecked", val);
-    }
+  set isCheckedModel(val: boolean) {
+    this.$emit("update:isChecked", val);
+  }
 }
 </script>
 
@@ -33,9 +33,9 @@ export default class TermsCheckBox extends Vue {
 @import "@/common/styles.scss";
 
 .terms-of-service {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
     height: 3rem;
     margin-bottom: 6rem;
