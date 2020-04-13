@@ -3,31 +3,21 @@
     <div>
       <article class="desc">
         <h2>Nasza misja</h2>
-        <p>
-          Naszą wspólną misją jest wsparcie placówek medycznych podczas walki z koronawirusem. Poprzez dobry proces,
-          odpowiednie skoordynowanie działań oraz dobry przepływ informacji możemy dostarczyć ogromne ilości niezbędnych
-          środków takich jak maski, płyny dezynfekujące, rękawiczki, kombinezony, artykuły spożywcze czy nawet niezbędne
-          wsparcie psychologiczne.
-          <br />
-          <br />Dzięki naszej aplikacji każdy będzie mógł wspomóc placówkę w swojej
-          okolicy, niezależnie od rodzaju pomocy.
-          <br />
-          <br />
-        </p>
+                <p>
+                    Wsparcie placówek medycznych podczas <strong>wspólnej</strong> walki z koronawirusem. Koordynując działania oraz przepływ informacji  zapewnijmy razem ogromne ilości niezbędnych środków takich jak:
+                    <br/>
+                    <br/>
+                    Maseczki, rękawiczki, ombinezony, Środki do dezynfekcji, Przyłbice,
+                </p>
       </article>
       <img class="img" src="@/assets/offer-help.svg" alt />
     </div>
     <div>
       <article class="desc">
-        <h2>Chcesz budować aplikację razem z nami?</h2>
-        <p>
-          Nasz zespół składa się z zdolnych programistów, grafików, product ownerów, ale pomagają nawet prawnicy.
-          <br />
-          <br />Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu
-          <a
-            href="mailto:info@pomocnicy.online"
-          >info@pomocnicy.online</a>.
-        </p>
+         <h2>Chcesz budować aplikację razem z nami?</h2>
+          <p>
+              Nasz zespół składa się z zdolnych <strong>programistów, grafików, product ownerów, ale pomagają nawet prawnicy</strong>.<br/><br/> Jeśli chcesz dołączyć do nas lub chciałbyś zadać jakieś pytanie zapraszamy do kontaktu <a href="mailto:info@pomocnicy.online">info@pomocnicy.online</a>.
+          </p>
       </article>
     </div>
   </div>
@@ -53,10 +43,6 @@ export default class HelloWorld extends Vue {}
 
 .main {
   display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
-  grid-gap: 3rem;
-  margin-top: 2rem;
 
   img {
     display: block;
@@ -68,8 +54,8 @@ export default class HelloWorld extends Vue {}
   }
 
   @include at(medium) {
-    margin-top: rem;
-    grid-template-columns: minmax(auto, 1fr) 1fr;
+    margin-top: 7rem;
+    grid-template-columns: 1fr 442px;
     padding: 2rem;
   }
 

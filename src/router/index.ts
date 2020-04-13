@@ -1,3 +1,4 @@
+
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/components/Home.vue";
@@ -17,6 +18,8 @@ import CanHelpSummary from "@/modules/CanHelp/Summary.vue";
 import NotFound from "@/components/NotFound.vue";
 import TermsOfService from "@/components/TermsOfService.vue";
 import Contact from "@/components/Contact.vue";
+import Partners from '@/components/Partners.vue';
+import Instructions  from '@/components/Instructions.vue';
 
 Vue.use(VueRouter);
 
@@ -88,6 +91,14 @@ const routes = [
   {
     path: "/regulamin",
     component: TermsOfService
+  },
+  {
+    path: "/partners",
+    component: Partners
+  },
+  {
+    path: "/instrukcja",
+    component: Instructions
   },
   {
     path: "/kontakt",
