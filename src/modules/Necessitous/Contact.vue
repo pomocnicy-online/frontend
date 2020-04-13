@@ -17,12 +17,14 @@
         :name="contact$.name"
         :addressCity="contact$.city"
         :addressStreet="contact$.street"
+        :postalCode="contact$.postalCode"
         :addressNumber="contact$.building"
         :email="contact$.email"
         :phone="contact$.phone"
         @update:name="updateField('name', $event)"
         @update:addressCity="updateField('city', $event)"
         @update:addressStreet="updateField('street', $event)"
+        @update:postalCode="updateField('postalCode', $event)"
         @update:addressNumber="updateField('building', $event)"
         @update:email="updateField('email', $event)"
         @update:phone="updateField('phone', $event)"
@@ -54,7 +56,7 @@ import { Lenses, Actions } from "./state";
   },
   subscriptions() {
     const { action$, state$ } = this.rxStore;
-    const initialContact = { name: "", city: "", street: "", building: "", email: "", phone: "" };
+    const initialContact = { name: "", city: "", street: "", postalCode: "", building: "", email: "", phone: "" };
 
     const submit$: Observable<void> = this.$createObservableMethod("onSubmit");
     const updateField$: Observable<[string, string]> = this.$createObservableMethod("updateField");
