@@ -23,6 +23,15 @@
             filled
             required
           ></v-text-field>
+          <v-text-field
+              class="form__input form__input--postal-code"
+              :value="postalCode"
+              @input="$emit('update:postalCode', $event)"
+              :rules="[v => !!v || 'Kod pocztowy jest wymagany']"
+              label="Kod pocztowy"
+              filled
+              required
+          ></v-text-field>
         </v-row>
         <v-row v-if="showAddressFields">
           <v-text-field
@@ -34,7 +43,6 @@
             filled
             required
           ></v-text-field>
-
           <v-text-field
             class="form__input form__input--address-num"
             :value="addressNumber"
@@ -92,6 +100,8 @@ export default class ContactForm extends Vue {
   @Prop()
   addressCity?: string;
   @Prop()
+  postalCode?: string;
+  @Prop()
   addressStreet?: string;
   @Prop()
   addressNumber?: string;
@@ -105,7 +115,7 @@ export default class ContactForm extends Vue {
   }
 
   get showAddressCity() {
-    return this.addressCity !== undefined;
+    return this.addressCity !== undefined && this.postalCode !== undefined;
   }
 
   get form(): VForm {
@@ -124,7 +134,6 @@ export default class ContactForm extends Vue {
 @import "@/common/styles.scss";
 
 .form {
-<<<<<<< HEAD
     &__input {
         &--address-num {
             width: 3rem;
@@ -135,14 +144,7 @@ export default class ContactForm extends Vue {
             width: 3rem;
             margin-left: 2rem;
         }
-=======
-  &__input {
-    &--address-num {
-      width: 3rem;
-      margin-left: 2rem;
->>>>>>> 6fe1af93c07f72b5e16df6a5258d631052f39544
     }
-  }
 
   &__disclaimer {
     font-weight: 300;
