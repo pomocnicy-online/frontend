@@ -1,5 +1,6 @@
 import { U, ActionsUnion, createReducer, fromActions } from "@rxsv/core";
 import { map, pluck } from "rxjs/operators";
+import { merge } from "rxjs";
 import { Lens } from "monocle-ts/es6";
 import { indexRecord } from "monocle-ts/es6/Index/Record";
 import { UUID } from "@/common/prelude";
@@ -9,8 +10,9 @@ import { flow, identity } from "fp-ts/es6/function";
 import { pipe } from "fp-ts/es6/pipeable";
 import * as O from "fp-ts/es6/Option";
 
-import { Supply, Supplies, Brand, brands, Order } from "../Supply/Supply";
 import { AppState, AppEffect } from "@/root";
+
+import { Supply, Supplies, Brand, brands, OrderPos } from "../Supply/Supply";
 
 export type SupplyId = UUID;
 export type SupplyListId = string;
@@ -20,7 +22,7 @@ export type SupplyPayload = { listId: SupplyListId } & StoreSupply;
 export type SupplyDescPayload = { listId: SupplyListId; brand: Brand; text: string };
 export type SupplyAddIntentPayload = Omit<SupplyPayload, "id">;
 export type SupplyRemovalPayload = { id: SupplyId; listId: SupplyListId };
-export type UpdateIntendPayload = { order: Order } & SupplyAddIntentPayload;
+export type UpdateIntendPayload = { positions: OrderPos } & SupplyAddIntentPayload;
 
 type DescMap = Record<Brand, SupplyTypeDescription>;
 

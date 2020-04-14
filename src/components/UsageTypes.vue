@@ -1,19 +1,19 @@
 <template>
   <div>
-    <v-row v-for="item in usageTypes" :key="item" align="start" justify="center">
+    <v-row v-for="usageType in usageTypes" :key="usageType" align="start" justify="center">
       <v-col cols="4" justify="start" class="pa-7">
         <v-row align="center" justify="center">
-          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${item}`) }}</h3>
+          <h3 class="body-1 usage-type__title">{{ $vuetify.lang.t(`$vuetify.types.${usageType}`) }}</h3>
         </v-row>
       </v-col>
       <v-col cols="8">
         <Types
           v-for="type in types"
-          :key="type"
+          :pos="getPos(usageType, type)"
           :type="type"
-          :updateSupplies="updateSupplies"
-          :usageType="item"
-          :brand="brand"
+          :key="type"
+          :label="type"
+          @update:pos="$emit('update:pos', $event)"
         />
       </v-col>
     </v-row>
@@ -24,18 +24,16 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 
 import Types from "@/components/Types.vue";
-import { Brand } from "@/modules/Supply/Supply";
 
 @Component({
   components: {
     Types
   }
 })
-export default class UsageTypes<U extends string, T extends string> extends Vue {
+export default class UsageTypes<U extends string, T extends string, S> extends Vue {
   @Prop() readonly types!: T[];
   @Prop() readonly usageTypes!: U[];
-  @Prop() readonly brand!: Brand;
-  @Prop() readonly updateSupplies: any;
+  @Prop() readonly getPos!: (u: U, t: T) => S;
 }
 </script>
 

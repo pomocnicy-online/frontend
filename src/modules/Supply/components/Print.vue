@@ -10,9 +10,10 @@
         :key="type"
         justifyTypes="start"
         justifyCounter="end"
-        :usageType="type"
+        :pos="getPos(type)"
         :type="type"
-        :updateSupplies="updateSupplies"
+        :label="type"
+        @update:pos="updateSupplies"
       />
     </template>
     <template v-slot:additionalDesc>
@@ -32,7 +33,7 @@ import AdditionalDesc from "@/components/AdditionalDesc.vue";
 import Types from "@/components/Types.vue";
 import printIcon from "@/components/icons/print.vue";
 
-import { PrintType, Supplies, SupplyListId, Supply } from "../Supply";
+import { PrintType, Supplies, SupplyListId, Supply, SupplyCaseOf } from "../Supply";
 import { AppStore } from "@/root";
 import { Actions } from "../state";
 
@@ -55,13 +56,22 @@ export default class PrintCard extends Vue {
     this.rxStore.action$.next(Actions.MODIFY_SUPPLY_TYPE_DESC({ listId: this.suppliesListId, text, brand: "Print" }));
   }
 
-  updateSupplies(quantity: number, printType: PrintType) {
+  getPos(printType: PrintType) {
+    return pipe(
+      this.item.positions,
+      A.findFirst(a => a.supply.printType === printType),
+      O.map(a => a.supply),
+      O.getOrElse(() => Supply.Print({ printType, quantity: 0 }))
+    );
+  }
+
+  updateSupplies(pos: SupplyCaseOf<"Print">) {
     const listId = this.suppliesListId;
-    const supply = Supply.Print({ printType, quantity });
+    const supply = Supply.Print(pos);
 
     const action = pipe(
       this.item.positions,
-      A.findFirst(a => a.supply.printType === printType),
+      A.findFirst(a => a.supply.printType === pos.printType),
       O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
       O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
     );
@@ -71,13 +81,6 @@ export default class PrintCard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>
 <style lang="scss">
 .print-card {
   &__types {

@@ -2,24 +2,30 @@
   <v-row align="center" justify="center">
     <v-col cols="7" class="pa-0 pb-2">
       <v-text-field
-        @focus="deleteType"
-        @blur="updatePosition"
-        v-model="type"
+        @input="onTextChange"
+        :value="pos.supply.type"
         label="Rodzaj"
         filled
         hide-details
       ></v-text-field>
     </v-col>
     <v-col cols="4" class="pa-2">
-      <Counter :type="type" :quantity.sync="quantity" :plus="plus" :minus="minus" />
+      <Counter
+        :type="pos.supply.type"
+        :quantity="pos.supply.quantity"
+        @update:quantity="updatePosition"
+        @plus="plus"
+        @minus="minus"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
+import { Shared, SupplyId } from "@/modules/Supply/Supply";
 
 @Component({
   components: {
@@ -27,39 +33,32 @@ import Counter from "@/components/Counter.vue";
   }
 })
 export default class AddTypeWithInput extends Vue {
-  @Prop() readonly updateSupplies!: any;
-  @Prop() readonly deleteSupplies!: any;
+  @Prop() readonly pos!: { supply: Shared; id: SupplyId };
 
-  quantity = 0;
-  type = "";
-
-  private plus() {
-    this.quantity = Number(this.quantity) + 1;
-    this.updatePosition();
+  onTextChange(type: string) {
+    this.$emit("update:pos", { ...this.pos.supply, type }, this.pos.id);
   }
 
-  private minus() {
-    if (this.quantity >= 1) {
-      this.quantity = Number(this.quantity) - 1;
-      this.updatePosition();
+  plus() {
+    this.updatePosition(Number(this.pos.supply.quantity) + 1);
+  }
+
+  minus() {
+    if (this.pos.supply.quantity >= 1) {
+      this.updatePosition(Number(this.pos.supply.quantity) - 1);
     }
   }
 
-  private deleteType() {
-    this.deleteSupplies(this.type);
+  deleteType() {
+    this.$emit("delete:pos", this.pos.id);
   }
 
-  @Watch("quantity")
-  quantityChanged() {
-    this.updatePosition();
-  }
-
-  private updatePosition() {
-    if (this.quantity === 0) {
+  updatePosition(quantity: number) {
+    if (quantity === 0) {
       return;
     }
 
-    this.updateSupplies(this.quantity, this.type);
+    this.$emit("update:pos", { ...this.pos.supply, quantity }, this.pos.id);
   }
 }
 </script>

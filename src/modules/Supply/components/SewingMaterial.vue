@@ -39,11 +39,3 @@ export default class SewingMaterialCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>

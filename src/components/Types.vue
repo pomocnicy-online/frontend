@@ -2,17 +2,24 @@
   <v-row align="start" justify="center">
     <v-col cols="6" class="pa-4">
       <v-row align="center" :justify="justifyTypes">
-        <h3 class="body-1 medical-type__title">{{ $vuetify.lang.t(`$vuetify.types.${type}`) }}</h3>
+        <h3 class="body-1 medical-type__title">{{ $vuetify.lang.t(`$vuetify.types.${label}`) }}</h3>
       </v-row>
     </v-col>
     <v-col cols="6" class="pa-2">
-      <Counter :quantity.sync="quantity" :plus="plus" :minus="minus" :type="type" :justify="justifyCounter" />
+      <Counter
+        :justify="justifyCounter"
+        :type="type"
+        :quantity="pos.quantity"
+        @update:quantity="updatePosition"
+        @plus="plus"
+        @minus="minus"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 import Counter from "@/components/Counter.vue";
 
@@ -21,38 +28,29 @@ import Counter from "@/components/Counter.vue";
     Counter
   }
 })
-export default class Types<U extends string, T extends string> extends Vue {
+export default class Types<T extends string> extends Vue {
+  @Prop() readonly pos!: { quantity: number };
   @Prop() readonly type!: T;
-  @Prop() readonly usageType!: U;
-  @Prop() readonly updateSupplies: any;
-  // @Prop() readonly order!: Order;
-
+  @Prop() readonly label!: string;
   @Prop({ default: "center" }) readonly justifyTypes!: string;
   @Prop({ default: "center" }) readonly justifyCounter!: string;
 
-  quantity = 0; // TODO: take count from order
-
   private plus() {
-    this.quantity = Number(this.quantity) + 1;
+    this.updatePosition(Number(this.pos.quantity) + 1);
   }
 
   private minus() {
-    if (this.quantity >= 1) {
-      this.quantity = Number(this.quantity) - 1;
+    if (this.pos.quantity >= 1) {
+      this.updatePosition(Number(this.pos.quantity) - 1);
     }
   }
 
-  private updatePosition() {
-    if (this.quantity === 0) {
+  private updatePosition(quantity: number) {
+    if (quantity === 0) {
       return;
     }
 
-    this.updateSupplies(this.quantity, this.type, this.usageType);
-  }
-
-  @Watch("quantity")
-  quantityChanged() {
-    this.updatePosition();
+    this.$emit("update:pos", { ...this.pos, quantity });
   }
 }
 </script>

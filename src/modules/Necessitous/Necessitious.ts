@@ -5,7 +5,7 @@ import * as R from "fp-ts/es6/Record";
 import { pipe } from "fp-ts/es6/pipeable";
 import { flow } from "fp-ts/es6/function";
 
-import { ContactData, SummaryData, StepDict, Step } from "./Step";
+import { ContactData, SummaryData, StepDict } from "./Step";
 import { UsageType, Style, Material, Size, PrintType, Supplies, Brand, OrderPos } from "../Supply/Supply";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -129,7 +129,7 @@ export namespace Necessitous {
       sewingSupplies: pipe(supplies.SewingMaterial, O.fromNullable, O.chain(Request.SewingSupplies)),
       prints: pipe(supplies.Print, O.fromNullable, O.chain(Request.Print)),
       others: pipe(supplies.Other, O.fromNullable, O.chain(Request.Other)),
-      transport: pipe(supplies.Transport, O.fromNullable, O.chain(Request.Transport)),
+      transport: pipe(supplies.Transport, O.fromNullable, O.chain(Request.Transport))
     });
   }
 

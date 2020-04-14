@@ -4,7 +4,12 @@
       <suitIcon />
     </template>
     <template v-slot:usageTypes>
-      <UsageTypes brand="Suit" :usageTypes="overallTypes" :types="sizes" :updateSupplies="updateSupplies" />
+      <UsageTypes
+        :usageTypes="usageTypes"
+        :types="types"
+        :getPos="getPos"
+        @update:pos="updateSupplies"
+      />
     </template>
     <template v-slot:additionalDesc>
       <AdditionalDesc :description.sync="item.description" @update:description="modifyDesc" />
@@ -24,7 +29,7 @@ import UsageTypes from "@/components/UsageTypes.vue";
 import suitIcon from "@/components/icons/overalls.vue";
 import { AppStore } from "@/root";
 
-import { Supply, Size, UsageType, Supplies, SupplyListId } from "../Supply";
+import { Supply, Size, UsageType, Supplies, SupplyListId, SupplyCaseOf } from "../Supply";
 import { Actions } from "../state";
 
 @Component({
@@ -40,20 +45,29 @@ export default class SuitCard extends Vue {
   @Prop() readonly suppliesListId!: SupplyListId;
   @Inject("rxstore") readonly rxStore!: AppStore;
 
-  private readonly sizes: Size[] = Object.values(Size);
-  private readonly overallTypes: string[] = [UsageType.Disposable];
+  private readonly types: Size[] = Object.values(Size);
+  private readonly usageTypes: string[] = [UsageType.Disposable];
 
   modifyDesc(text: string) {
     this.rxStore.action$.next(Actions.MODIFY_SUPPLY_TYPE_DESC({ listId: this.suppliesListId, text, brand: "Suit" }));
   }
 
-  updateSupplies(quantity: number, size: Size, type: UsageType) {
+  getPos(type: UsageType, size: Size) {
+    return pipe(
+      this.item.positions,
+      A.findFirst(a => a.supply.size === size && a.supply.type === type),
+      O.map(a => a.supply),
+      O.getOrElse(() => Supply.Suit({ size, type, quantity: 0 }))
+    );
+  }
+
+  updateSupplies(pos: SupplyCaseOf<"Suit">) {
     const listId = this.suppliesListId;
-    const supply = Supply.Suit({ size, type, quantity });
+    const supply = Supply.Suit(pos);
 
     const action = pipe(
       this.item.positions,
-      A.findFirst(a => a.supply.size === size && a.supply.type === type),
+      A.findFirst(a => a.supply.size === pos.size && a.supply.type === pos.type),
       O.map(({ id }) => Actions.UPDATE_SUPPLY({ id, listId, supply })),
       O.getOrElse<Actions>(() => Actions.ADD_SUPPLY_INTENT({ listId, supply }))
     );
@@ -62,11 +76,3 @@ export default class SuitCard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.usage-type {
-  &__title {
-    color: var(--text-primary);
-  }
-}
-</style>
