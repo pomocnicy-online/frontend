@@ -16,11 +16,14 @@
 </template>
 
 <script>
-import heartIcon from "@/components/icons/heart";
-import voiceIcon from "@/components/icons/voice";
 
 import { Component, Vue } from "vue-property-decorator";
 
+@Component({
+  components: {
+
+  }
+})
 export default class Instructions extends Vue {}
 </script>
 
@@ -45,8 +48,8 @@ export default class Instructions extends Vue {}
 }
 
 .main {
-  justify-items: center;
   margin-top: 2rem;
+  grid-template-columns: auto;
 
   img {
     display: block;

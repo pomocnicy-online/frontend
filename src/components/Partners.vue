@@ -4,20 +4,15 @@
             <h2>Partnerzy</h2>
         </div>
         <div class="partners-columns">
-            <div>
-                <article class="desc">
-                    <a href="https://ihelpyou.app/" target="_blank"><img class="img img-partners" src="@/assets/ihelpyou.png" alt /></a>
-                </article>
+           <div class="column">
+                <a href="https://ihelpyou.app/" target="_blank"><img class="img img-partners" src="@/assets/ihelpyou.png" alt /></a>
             </div>
-            <div>
-                <article class="desc">
-                    <a href="https://miejgest.org/" target="_blank"><img class="img img-gest" src="@/assets/gest.png" alt /></a>
-                </article>
+            <div class="column">
+                <a href="https://miejgest.org/" target="_blank"><img class="img img-gest" src="@/assets/gest.png" alt /></a>
             </div>
-             <div>
-                <article class="desc">
-                    <a href="https://skygate.io/" target="_blank"><img class="img" src="@/assets/skygate.svg" alt /></a>
-                </article>
+        
+            <div class="column">
+                <a href="https://skygate.io/" target="_blank"><img class="img" src="@/assets/skygate.svg" alt /></a>
             </div>
         </div>
     </div>
@@ -26,8 +21,11 @@
 
 <script>
 
-import { Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
+@Component({
+  components: {}
+})
 export default class Partners extends Vue {}
 </script>
 
@@ -51,9 +49,17 @@ export default class Partners extends Vue {}
     }
 }
 
+.column {
+  max-width: 31rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+
 .main {
-  justify-items: center;
   margin-top: 2rem;
+    grid-template-columns: auto;
 
   img {
     display: block;
@@ -66,7 +72,6 @@ export default class Partners extends Vue {}
 
   @include at(medium) {
     margin-top: 7rem;
-    grid-template-columns: minmax(auto, 1fr) 1fr;
     padding: 2rem;
   }
 
@@ -80,14 +85,6 @@ export default class Partners extends Vue {}
     font-weight: 300;
     font-size: 16px;
     line-height: 30px;
-  }
-}
-
-.desc {
-  max-width: 31rem;
-
-  h2 {
-    margin-bottom: 1rem;
   }
 }
 </style>
