@@ -24,18 +24,10 @@
 </template>
 
 <script>
-import heartIcon from "@/components/icons/heart";
-import voiceIcon from "@/components/icons/voice";
 
-import { Component, Vue } from "vue-property-decorator";
+import { Vue } from "vue-property-decorator";
 
-@Component({
-  components: {
-    heartIcon,
-    voiceIcon
-  }
-})
-export default class HelloWorld extends Vue {}
+export default class Contact extends Vue {}
 </script>
 
 <style lang="scss" scoped>

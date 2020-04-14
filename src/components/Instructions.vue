@@ -21,13 +21,7 @@ import voiceIcon from "@/components/icons/voice";
 
 import { Component, Vue } from "vue-property-decorator";
 
-@Component({
-  components: {
-    heartIcon,
-    voiceIcon
-  }
-})
-export default class Partners extends Vue {}
+export default class Instructions extends Vue {}
 </script>
 
 <style lang="scss" scoped>
@@ -78,14 +72,6 @@ export default class Partners extends Vue {}
     font-weight: 300;
     font-size: 16px;
     line-height: 30px;
-  }
-}
-
-.desc {
-  max-width: 31rem;
-
-  h2 {
-    margin-bottom: 1rem;
   }
 }
 </style>
