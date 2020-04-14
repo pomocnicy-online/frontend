@@ -53,8 +53,18 @@ export namespace Necessitous {
     });
 
     type SupplyRequest<T> = { description?: string; positions: T[] };
+    type CustomReqType = "Grocery" | "Disinfectant" | "Cleaning";
+    type CustomTypeReq = SupplyRequest<{ quantity: number; description?: string }>;
 
     // TODO: refactor serialization, io-ts ?, move to supplies ?
+
+    const nonEmptyCustomType = <T extends CustomReqType>() => (data: Supplies[T]) => {
+      const positions = (data.positions as Supplies[CustomReqType]["positions"] extends Array<infer T> ? T[] : never)
+        .map(a => ({ quantity: a.supply.quantity, description: a.supply.type }))
+        .filter(a => a.quantity > 0);
+
+      return positions.length > 0 ? O.some({ ...data, positions }) : O.none;
+    };
 
     const nonEmpty = <A extends Brand, B>(fn: (data: Supplies[A]) => B) => (data: Supplies[A]) =>
       data.positions.length > 0 ? O.some(fn(data)) : O.none;
@@ -79,17 +89,17 @@ export namespace Necessitous {
     export type Glove = SupplyRequest<{ material: Material; quantity: number; size: Size }>;
     export const Glove = nonEmpty<"Glove", Glove>(toReq);
 
-    export type Grocery = SupplyRequest<{ quantity: number; description?: string }>;
-    export const Grocery = nonEmpty<"Grocery", Grocery>(toReq);
+    export type Grocery = CustomTypeReq;
+    export const Grocery = nonEmptyCustomType<"Grocery">();
 
-    export type Disinfectant = SupplyRequest<{ quantity: number; description?: string }>;
-    export const Disinfectant = nonEmpty<"Disinfectant", Disinfectant>(toReq);
+    export type Disinfectant = CustomTypeReq;
+    export const Disinfectant = nonEmptyCustomType<"Disinfectant">();
+
+    export type Cleaning = CustomTypeReq;
+    export const Cleaning = nonEmptyCustomType<"Cleaning">();
 
     export type Suite = SupplyRequest<{ material?: Material; quantity: number; size: Size }>;
     export const Suite = nonEmpty<"Suit", Suite>(toReq);
-
-    export type Cleaning = SupplyRequest<{ quantity: number; description?: string }>;
-    export const Cleaning = nonEmpty<"Cleaning", Cleaning>(toReq);
 
     export type PsychologicalSupport = { description: string };
     export const PsychologicalSupport = (data: Supplies["PsychologicalSupport"]) => nonEmptyDesc(data.description);
