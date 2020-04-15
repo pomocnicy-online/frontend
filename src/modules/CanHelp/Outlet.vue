@@ -159,16 +159,15 @@ export default class CanHelpOutlet extends Vue {
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {
-    this.towns = [...this.towns, ...outlets.map(outlet => outlet.city)];
+    this.towns = [...this.towns, ...outlets.map(({ city }) => this.parseCityName(city))];
   }
 
   @Watch("selectedTown", { immediate: true })
   onTownsChange(selectedTown: string) {
-    if (selectedTown === "Wszystkie") {
-      this.filteredOutlets = this.outlets;
-    } else {
-      this.filteredOutlets = this.outlets.filter(outlet => outlet.city.toLowerCase() === selectedTown.toLowerCase());
-    }
+    const filteredOutlets = this.outlets.filter(
+      ({ city }) => this.parseCityName(city) === this.parseCityName(selectedTown)
+    );
+    this.filteredOutlets = selectedTown === "Wszystkie" ? this.outlets : filteredOutlets;
   }
 
   async mounted() {
@@ -184,6 +183,14 @@ export default class CanHelpOutlet extends Vue {
         "Content-Type": "application/json"
       }
     }).then(res => res.json());
+  }
+
+  private parseCityName(cityName: string) {
+    return cityName
+      .split(" ")
+      .map(word => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`)
+      .join(" ")
+      .trim();
   }
 }
 </script>
