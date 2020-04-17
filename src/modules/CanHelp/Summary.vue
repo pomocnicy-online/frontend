@@ -17,7 +17,7 @@
               <Address :contact="address$" />
             </article>
             <article v-else>
-              <h2 class="warn">Brak danych kontakowych</h2>
+              <h2 class="warn">Brak danych kontaktowych</h2>
               <p>
                 by je dodać wróć do
                 <router-link to="/pomagajacy/1">kroku pierwszego</router-link>

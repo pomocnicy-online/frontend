@@ -155,7 +155,7 @@ export default class CanHelpOutlet extends Vue {
   filteredOutlets = [] as ResOutlet[];
   towns = ["Wszystkie"];
   selectedTown = "";
-  path = "/api/requests/";
+  path = "http://localhost:5011/help-request";
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {

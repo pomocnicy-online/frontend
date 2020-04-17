@@ -14,9 +14,9 @@ export type CanHelp = {
   [K in keyof CanHelp.Request]: CanHelp.Request[K];
 }[keyof CanHelp.Request];
 export namespace CanHelp {
-  export const canHelpPath = "/api/offerHelp";
+  export const canHelpPath = "http://localhost:5011/help-offer";
 
-  export type Request = { helper: Request.Helper; requests: Request.SupplyRequest[] };
+  export type Request = { helper: Request.Helper; request: Request.SupplyRequest };
   export namespace Request {
     export type Supplies = Omit<Necessitous.Request, "medicalCentre">;
 
@@ -54,10 +54,10 @@ export namespace CanHelp {
             steps.Outlet.request,
             A.head,
             O.chain(req => Request.SupplyRequest(req, steps.Supply, steps.Summary)),
-            O.map(x => [x])
+            O.map(x => x)
           )
         ),
-        O.map(([helper, requests]) => ({ helper, requests })),
+        O.map(([helper, request]) => ({ helper, request })),
         E.fromOption(() => new Error("Incorrect request format"))
       )
     )
