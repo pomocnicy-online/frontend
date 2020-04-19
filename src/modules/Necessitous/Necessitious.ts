@@ -15,7 +15,7 @@ export type Necessitous = {
 
 export namespace Necessitous {
   // TODO: use URL builder
-  const necessitousPath = "http://localhost:5011/help-request";
+  const necessitousPath = "/api/requests";
 
   // TODO: move supplies to Supply Module
   export type Request = Partial<{
