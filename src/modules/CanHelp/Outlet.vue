@@ -105,6 +105,7 @@ import StepHeader from "@/components/StepHeader.vue";
 
 import { Step } from "./Step";
 import { Actions } from "./state";
+import { API_URL } from "@/common/api-url";
 
 type ResOutlet = {
   legalName: string;
@@ -155,7 +156,7 @@ export default class CanHelpOutlet extends Vue {
   filteredOutlets = [] as ResOutlet[];
   towns = ["Wszystkie"];
   selectedTown = "";
-  path = "/api/requests/";
+  path = API_URL + "requests/";
 
   @Watch("outlets", { immediate: true })
   onOutletsChange(outlets: ResOutlet[]) {

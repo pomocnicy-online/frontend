@@ -25,14 +25,14 @@ services:
     networks:
       - uszyj-maseczke-network
 
-#  backend:
-#    build: ./backend
-#    ports:
-#      - "3000:3000"
-#    depends_on:
-#      - db
-#    networks:
-#      - uszyj-maseczke-network
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - uszyj-maseczke-network
 
   frontend:
     container_name: mask-app-frontend

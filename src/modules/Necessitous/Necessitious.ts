@@ -7,6 +7,7 @@ import { flow } from "fp-ts/es6/function";
 
 import { ContactData, SummaryData, StepDict } from "./Step";
 import { UsageType, Style, Material, Size, PrintType, Supplies, Brand, OrderPos } from "../Supply/Supply";
+import { API_URL } from "@/common/api-url";
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export type Necessitous = {
@@ -15,7 +16,7 @@ export type Necessitous = {
 
 export namespace Necessitous {
   // TODO: use URL builder
-  const necessitousPath = "/api/requests";
+  const necessitousPath = API_URL + "requests";
 
   // TODO: move supplies to Supply Module
   export type Request = Partial<{
