@@ -17,13 +17,22 @@ services:
       - uszyj-maseczke-network
 
   web:
-    build: ./pomocnicy-online-backend
+    build: ./backend-legacy
     ports:
       - "5011:5011"
     depends_on:
       - db
     networks:
       - uszyj-maseczke-network
+
+#  backend:
+#    build: ./backend
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - db
+#    networks:
+#      - uszyj-maseczke-network
 
   frontend:
     container_name: mask-app-frontend
