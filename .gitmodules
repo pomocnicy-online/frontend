@@ -1,3 +1,6 @@
+[submodule "backend-legacy"]
+	path = backend-legacy
+	url = https://github.com/marcinlovescode/uszyj-maseczke.git
 [submodule "backend"]
 	path = backend
-	url = https://github.com/marcinlovescode/uszyj-maseczke.git
+	url = https://github.com/purbanski-deftcode/pomocnicy-online-backend.git

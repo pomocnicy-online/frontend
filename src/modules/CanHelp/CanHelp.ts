@@ -9,12 +9,13 @@ import { M } from "@/common/prelude";
 
 import { Necessitous } from "../Necessitous/Necessitious";
 import { StepDict, ContactData, OutletSupplyRequest, SupplyData, SummaryData } from "./Step";
+import { API_URL } from "@/common/api-url";
 
 export type CanHelp = {
   [K in keyof CanHelp.Request]: CanHelp.Request[K];
 }[keyof CanHelp.Request];
 export namespace CanHelp {
-  export const canHelpPath = "/api/offerHelp";
+  export const canHelpPath = API_URL + "offerHelp";
 
   export type Request = { helper: Request.Helper; requests: Request.SupplyRequest[] };
   export namespace Request {
