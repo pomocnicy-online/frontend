@@ -26,7 +26,7 @@
     "vue-property-decorator": "^8.3.0",
     "vue-router": "^3.1.5",
     "vue-rx": "^6.2.0",
-    "vuetify": "^2.2.18"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@mdi/font": "^5.0.45",
